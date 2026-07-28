@@ -1,4 +1,4 @@
-protocol_version: 3
+protocol_version: 4
 
 task_id: task-001-core-research
 status: changes_requested
@@ -6,35 +6,16 @@ branch: agent/task-001-core-research
 pull_request: 2
 
 objective: >
-  Establish the public, non-sensitive Learning OS core research workflow and
-  produce a first evidence ledger covering source grounding, course/task
-  boundaries, pedagogical action selection, learning-behavior evidence, and
-  the applicability conditions of learner modeling and knowledge tracing.
+  Complete a public, non-sensitive core research ledger for Learning OS covering
+  source grounding, course/task boundaries, pedagogical action selection,
+  learning-behavior evidence, and learner-model applicability.
 
 context:
   authoritative_issue: https://github.com/SoilChalk/LearningOS/issues/1
   review_target: https://github.com/SoilChalk/LearningOS/pull/2
   note: >
-    Issue and PR web access are optional. This file contains the executable
-    task and review contract. Task 001 is not accepted as completed yet.
-
-inputs:
-  - AGENTS.md
-  - agent-control/TASK_PROTOCOL.md
-  - agent-control/CURRENT_TASK.yaml
-  - sources/source-ledger.json
-  - sources/src-001-notebooklm.md
-  - sources/src-002-chatgpt-study-mode.md
-  - sources/src-003-learnlm.md
-  - sources/src-004-tutor-copilot.md
-  - sources/src-005-aleks-kst.md
-  - sources/src-006-bkt-knowledge-tracing.md
-  - sources/src-007-cognitive-tutor-acts.md
-  - sources/src-008-assistments.md
-  - docs/REFERENCE_SYSTEM_MATRIX.md
-  - docs/DESIGN_GATES.md
-  - state/CURRENT_STATE.yaml
-  - agent-control/results/task-001.json
+    PR web access is optional. This file is the executable Review 02 contract.
+    Task 001 is in progress. Gate 1 is not complete.
 
 allowed_paths:
   - AGENTS.md
@@ -43,6 +24,7 @@ allowed_paths:
   - sources/**
   - templates/**
   - state/**
+  - scripts/**
 
 forbidden_paths:
   - private/**
@@ -53,140 +35,100 @@ forbidden_paths:
   - "**/*secret*"
   - "**/*token*"
 
+current_truth:
+  task_status: in_progress
+  gate_1_status: not_met
+  verified_source_count: 5
+  minimum_source_count: 8
+  verified_source_ids:
+    - src-001
+    - src-002
+    - src-003
+    - src-004
+    - src-005
+  removed_evidence_ids:
+    - src-006
+    - src-007
+    - src-008
+
+review_cycle:
+  review_id: task-001-review-02
+  decision: changes_requested
+  required_changes:
+    - >
+      Rebuild docs/REFERENCE_SYSTEM_MATRIX.md entirely from the current five-source
+      ledger. Its header still says eight verified sources and it still cites
+      removed src-006, src-007, and src-008. Remove those evidence rows and claims.
+      Deferred candidates may appear only in an explicitly labeled deferred section.
+    - >
+      Scope negative gap claims to the reviewed sample. Replace claims such as
+      "No system found" with "Not observed in the five verified sources reviewed
+      so far" unless a systematic search supports a broader conclusion.
+    - >
+      Correct all LearnLM percentile wording. Use: "moved from the 50th to the
+      64th percentile (a difference of 14 percentile ranks/positions)". Do not use
+      "14 percentage points" or "+14 percentile points" anywhere.
+    - >
+      Downgrade Study Mode claims. The official page documents available behaviors
+      and explicit user requests, but does not prove that pedagogical selection
+      requires explicit user control or that Socratic behavior is technically
+      opt-in/default-off. Keep the documented interface behavior as direct evidence;
+      label policy conclusions as design inference.
+    - >
+      Fix schema architecture. sources/source-ledger.json currently points its
+      $schema field at a single-record schema although the ledger root is not one
+      record. Create templates/SOURCE_LEDGER.schema.json whose sources.items refers
+      to templates/SOURCE_RECORD.json, and point the ledger to the ledger schema.
+    - >
+      Add deterministic schema validation. Prefer scripts/validate_source_records.py
+      using a real JSON Schema validator. It must validate the ledger root and each
+      source record, return nonzero on failure, and be recorded in task-001.json.
+    - >
+      Keep Stage 2 in progress and Gate 1 not met. Stage 3 may be marked complete
+      only after the matrix is rebuilt from the current ledger. Do not claim Task
+      completion while the source count is below eight.
+    - >
+      Ensure task-001.json, CURRENT_STATE.yaml, DESIGN_GATES.md, the matrix, ledger,
+      and PR body all agree on in_progress, five verified sources, and Gate 1 not met.
+
 required_outputs:
   - docs/RESEARCH_QUESTIONS.md
   - docs/REFERENCE_SYSTEM_MATRIX.md
   - docs/DESIGN_GATES.md
   - sources/source-ledger.json
   - templates/SOURCE_RECORD.json
+  - templates/SOURCE_LEDGER.schema.json
+  - scripts/validate_source_records.py
   - state/CURRENT_STATE.yaml
   - agent-control/results/task-001.json
 
 source_requirements:
   minimum_count: 8
   maximum_count: 15
-  required_fields:
-    - id
-    - title
-    - organization_or_authors
-    - publication_date
-    - source_type
-    - url
-    - accessed_at
-    - research_question_ids
-    - directly_supported_observations
-    - design_implications
-    - limitations_and_non_inferences
-    - decision_affected
-    - verification_status
   rules:
     - Product pages support feature claims, not learning-effect claims.
-    - Search snippets cannot substitute for reading the source.
-    - Papers must be classified as survey, experiment, simulation, or field evaluation.
+    - Search snippets cannot substitute for reading the source body.
+    - Placeholder or aggregate URLs are invalid source URLs.
     - Dates, metrics, and current product claims require an access date.
     - Individual reports must not be generalized into population claims.
-    - Placeholder URLs such as multiple_papers are invalid.
-
-source_retrieval_policy:
-  - An accessible official page in any language may be used; record the observed language when relevant.
-  - For one inaccessible candidate, try at most one alternate official URL or primary publication route, then record the candidate as inaccessible and continue.
-  - Search results may locate sources but cannot serve as evidence; the actual source body must be read.
-  - Prefer eight strong sources over expanding toward fifteen with weak or redundant sources.
-
-execution_stages:
-  stage_1_structure:
-    status: completed_on_task_branch
-  stage_2_core_source_verification:
-    status: revision_required
-    current_count:
-      verified: 5
-      incomplete_candidates: 3
-  stage_3_reference_matrix:
-    status: revision_required
-  stage_4_state_and_gate_closeout:
-    status: revision_required
-  stage_5_result_and_validation:
-    status: revision_required
-
-review_cycle:
-  review_id: task-001-review-01
-  decision: changes_requested
-  required_changes:
-    - >
-      Restore one consistent in-progress state. The ledger says in_progress,
-      while the result, CURRENT_STATE, and gate completion section say completed.
-      Until all evidence and validation issues are fixed, Task 001 and Gate 1
-      must remain in_progress.
-    - >
-      Do not count src-006, src-007, or src-008 as completed evidence records.
-      Their files say full papers were not accessed and evidence came from
-      snippets, abstracts, secondary pages, or remembered literature. Replace
-      each placeholder multiple_papers URL with a concrete primary or
-      high-quality survey URL and read the actual source body, or replace the
-      candidate with an accessible source.
-    - >
-      Make the ledger conform to a declared schema. The current schema requires
-      id, organization_or_authors, publication_date, research_question_ids,
-      evidence arrays, decision_affected, and a valid URI, while the ledger uses
-      different names and omits the evidence arrays. Either store complete
-      records in the ledger, or define an index schema plus validated per-source
-      records. JSON syntax validation alone is insufficient.
-    - >
-      Downgrade unsupported synthesis claims. Treat explicit-user-control,
-      Socratic-opt-in, evidence hierarchy, automatic-pedagogy requirements,
-      no-system-combines-X, and no-system-detects-Y as design inferences or
-      observations limited to this reviewed sample, not established findings.
-    - >
-      Correct version-specific evidence. For Tutor CoPilot, choose one concrete
-      source version and keep its sample and message counts together. Do not mix
-      the later Stanford summary values with arXiv v2 values. For LearnLM, use
-      percentile positions rather than percentage points. For NotebookLM,
-      describe accuracy, transparency, and trust as product framing, not proven
-      effects of citations.
-    - >
-      Run and record every acceptance command, including template JSON parsing
-      and the file listing. Add actual schema validation for source records.
-    - >
-      Remove contradictory completion bookkeeping. task-001.json must not be
-      completed while next_steps still say to run acceptance and create the PR.
-      DESIGN_GATES must not contain simultaneous in-progress and ready-to-exit
-      status sections.
-  completion_rule: >
-    Push corrections to the existing agent/task-001-core-research branch,
-    update the existing Draft PR #2, and stop. Do not merge and do not begin
-    Task 002.
-
-first_vertical_scenario:
-  name: English technical-material reading workspace
-  status: provisional_pending_research
-
-explicitly_out_of_scope:
-  - frontend implementation
-  - full-course knowledge graph
-  - automatic mastery classification
-  - exhaustive QuestionType taxonomy
-  - exhaustive ErrorPattern taxonomy
-  - automatic review scheduler
-  - multi-agent free-form collaboration
-  - provider ranking
-  - complex event-sourced runtime
-  - bulk automatic note generation
+    - Prefer eight strong sources over weak sources added to satisfy the count.
 
 acceptance_commands:
   - python3 -m json.tool sources/source-ledger.json >/dev/null
   - python3 -m json.tool templates/SOURCE_RECORD.json >/dev/null
-  - find . -maxdepth 3 -type f | sort
+  - python3 -m json.tool templates/SOURCE_LEDGER.schema.json >/dev/null
   - python3 scripts/validate_source_records.py
+  - find . -maxdepth 3 -type f | sort
+  - "! grep -R -nE 'Sources: 8 verified|src-006|src-007|src-008|\\+14 percentile points|14 percentile point gain' docs sources state agent-control/results"
 
-completion_conditions:
-  - Agent protocol files are present and internally consistent.
-  - Source evidence contains 8 to 15 directly read, concrete sources.
-  - Every source includes supported observations, design implications, and limitations.
-  - All source records validate against the declared schema.
-  - Reference-system matrix separates direct evidence, design inference, and unknowns.
-  - Design gates and CURRENT_STATE use one consistent phase status.
-  - All acceptance commands exit with code 0 and are recorded in task-001.json.
-  - No implementation code, frontend, private material, or unrelated local content is added.
+review_02_acceptance:
+  - Matrix contains only current verified evidence rows.
+  - Deleted source IDs occur only in explicitly labeled deferred or removed-history records.
+  - No ambiguous percentile-point terminology remains.
+  - Study Mode observations and design inferences are separated.
+  - Ledger root and source records pass deterministic schema validation.
+  - All status-bearing files report in_progress, five verified sources, and Gate 1 not met.
+  - PR remains draft and Task 002 is not started.
 
 stop_conditions:
   - same_required_operation_fails_twice_after_declared_fallback_and_no_equivalent_alternative_exists
@@ -195,12 +137,9 @@ stop_conditions:
   - task_requires_modifying_a_forbidden_path
   - requested_content_is_not_suitable_for_a_public_repository
 
-result_file: agent-control/results/task-001.json
-
 completion_process:
   - Merge origin/main into the existing task branch without discarding task work.
-  - Apply review_cycle.required_changes only; do not expand scope.
-  - Run all acceptance commands and record actual exit codes.
-  - Update the result file with the true status and evidence counts.
-  - Commit and push the existing task branch so Draft PR #2 updates.
+  - Apply review_cycle.required_changes only.
+  - Run every acceptance command and record exact exit codes.
+  - Push the existing branch so Draft PR #2 updates.
   - Stop without merging or starting Task 002.
