@@ -1,4 +1,4 @@
-protocol_version: 1
+protocol_version: 2
 
 task_id: task-001-core-research
 status: ready
@@ -99,6 +99,34 @@ source_requirements:
     - Dates, metrics, and current product claims require an access date.
     - Individual reports must not be generalized into population claims.
 
+source_retrieval_policy:
+  - An accessible official page in any language may be used; record the observed language when relevant.
+  - Failure to fetch an English-language variant is not a blocker when another official-language page is readable.
+  - For one inaccessible candidate, try at most one alternate official URL or primary publication route, then record the candidate as inaccessible and continue.
+  - Failures on different hosts or different source candidates must not be combined into a consecutive-failure count.
+  - Search results may locate sources but cannot serve as evidence; the actual source body must be read.
+  - Prefer eight strong sources over expanding toward fifteen with weak or redundant sources.
+  - Stop for source exhaustion only when a required research dimension lacks any accessible primary or high-quality survey source after three distinct candidates.
+
+execution_stages:
+  stage_1_structure:
+    status: completed_on_task_branch
+    outputs:
+      - docs/RESEARCH_QUESTIONS.md
+      - docs/DESIGN_GATES.md
+      - templates/SOURCE_RECORD.json
+      - sources/source-ledger.json
+      - state/CURRENT_STATE.yaml
+  stage_2_core_source_verification:
+    status: in_progress
+    target: 8_verified_or_partially_verified_core_sources
+  stage_3_reference_matrix:
+    status: pending
+  stage_4_state_and_gate_closeout:
+    status: pending
+  stage_5_result_and_validation:
+    status: pending
+
 first_vertical_scenario:
   name: English technical-material reading workspace
   status: provisional_pending_research
@@ -139,10 +167,18 @@ completion_conditions:
   - No implementation code, frontend, private material, or unrelated local content is added.
 
 stop_conditions:
-  - two_consecutive_tool_failures
-  - source_body_cannot_be_accessed_and_no_primary_alternative_exists
+  - same_required_operation_fails_twice_after_declared_fallback_and_no_equivalent_alternative_exists
+  - required_research_dimension_has_no_accessible_primary_or_high_quality_survey_after_three_distinct_candidates
+  - repository_state_cannot_be_persisted_after_two_attempts
   - task_requires_modifying_a_forbidden_path
   - requested_content_is_not_suitable_for_a_public_repository
+
+non_blocking_conditions:
+  - one_source_candidate_is_inaccessible
+  - two_different_websites_each_fail_once
+  - an_english_page_fails_but_an_official_page_in_another_language_is_accessible
+  - optional_issue_access_fails
+  - session_context_is_low_but_progress_can_be_committed
 
 result_file: agent-control/results/task-001.json
 

@@ -27,6 +27,40 @@ Every task must declare:
 4. Create the task branch specified by the task file.
 5. Execute only the declared task.
 
+## Tool-failure semantics
+
+A failed source fetch is not automatically a task-level tool failure.
+
+Count a failure toward a stop condition only when all of the following are true:
+
+1. the failed operation is required to complete the task;
+2. the same operation has been attempted again using the declared fallback;
+3. no equivalent primary-source or deterministic alternative is available;
+4. continuing would require guessing, lowering the evidence standard, or leaving the task state unpersisted.
+
+Do **not** combine unrelated failures into one consecutive-failure count. In particular:
+
+- failures on two different websites are separate candidate failures;
+- failure to fetch an English page does not block use of an accessible official page in another language;
+- one inaccessible source candidate does not block research when another primary candidate can cover the same question;
+- optional Issue access is not a required operation when `CURRENT_TASK.yaml` contains the executable contract.
+
+For source research, record inaccessible candidates and continue until either the source target is met or the task-specific source-exhaustion condition is reached.
+
+## Progress persistence
+
+Large tasks may span more than one agent session.
+
+If session context is ending but no stop condition is triggered:
+
+1. persist all verified work;
+2. write the result file with `status: in_progress`;
+3. record the last completed stage and exact next action;
+4. commit and push the task branch;
+5. resume from repository state in a later session.
+
+Context length alone is not a blocker and must not be reported as task failure.
+
 ## Completion procedure
 
 1. Run all acceptance commands.
@@ -40,11 +74,13 @@ Every task must declare:
 
 ```json
 {
-  "protocol_version": 1,
+  "protocol_version": 2,
   "task_id": "",
-  "status": "completed | blocked | failed",
+  "status": "in_progress | completed | blocked | failed",
   "branch": "",
   "commit": "",
+  "last_completed_stage": "",
+  "next_action": "",
   "files_changed": [],
   "validation": [
     {
