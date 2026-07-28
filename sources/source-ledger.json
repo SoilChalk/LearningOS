@@ -1,108 +1,259 @@
 {
+  "$schema": "../templates/SOURCE_RECORD.json",
   "schema_version": "1.0",
-  "generated_at": "2026-07-29T13:30:00Z",
+  "generated_at": "2026-07-29T16:00:00Z",
   "task_id": "task-001-core-research",
   "status": "in_progress",
   "stage": "stage_2_core_source_verification",
-  "source_count": 8,
+  "source_count": 5,
   "target_minimum": 8,
   "target_maximum": 15,
   "sources": [
     {
-      "source_id": "src-001",
+      "id": "src-001",
       "title": "了解 Gemini Notebook (Learn about Gemini Notebook)",
-      "organization": "Google",
+      "organization_or_authors": "Google",
+      "publication_date": "2026",
+      "source_type": "product_documentation",
       "url": "https://support.google.com/gemininotebook/answer/16164461",
       "accessed_at": "2026-07-29",
-      "source_type": "product_documentation",
-      "language": "zh-CN",
-      "file": "sources/src-001-notebooklm.md",
-      "research_questions_addressed": ["RQ1.1", "RQ2.1", "RQ2.2"],
-      "verification_status": "verified"
+      "research_question_ids": ["RQ1.1", "RQ2.1", "RQ2.2"],
+      "directly_supported_observations": [
+        "System provides inline citations from uploaded sources (PDF, websites, YouTube videos, audio files, Google Docs, Google Slides)",
+        "Gemini Notebook designed to answer questions based on information provided in uploaded sources",
+        "System distinguishes three failure modes: safety flagging, unclear phrasing, no relevant information in sources",
+        "For Workspace/Education users: uploaded content NOT used for AI training; NOT subject to human review",
+        "Chinese official page accessed; product may be called Gemini Notebook or NotebookLM"
+      ],
+      "design_implications": [
+        "Source-bound AI architecture demonstrated as product feature",
+        "Material scope enforcement requires explicit failure mode messages",
+        "Citation mechanism presented as accuracy/transparency/trust feature",
+        "File upload pattern establishes basic course boundary"
+      ],
+      "limitations_and_non_inferences": [
+        "No learning effectiveness evidence provided",
+        "No pedagogical action specification",
+        "No learner modeling capability described",
+        "Product status uncertain (naming: Gemini Notebook vs. NotebookLM)",
+        "English documentation not accessible; relying on Chinese official page"
+      ],
+      "decision_affected": [
+        "source_grounding_strategy",
+        "course_boundary_enforcement"
+      ],
+      "verification_status": "verified",
+      "notes": "Product documentation in Chinese; describes feature set without effectiveness claims"
     },
     {
-      "source_id": "src-002",
+      "id": "src-002",
       "title": "Using Study Mode in ChatGPT",
-      "organization": "OpenAI",
+      "organization_or_authors": "OpenAI",
+      "publication_date": "2026",
+      "source_type": "product_documentation",
       "url": "https://help.openai.com/en/articles/11780217-study-mode",
       "accessed_at": "2026-07-29",
-      "source_type": "product_documentation",
-      "language": "en",
-      "file": "sources/src-002-chatgpt-study-mode.md",
-      "research_questions_addressed": ["RQ3.1", "RQ3.2", "RQ4.1"],
-      "verification_status": "verified"
+      "research_question_ids": ["RQ3.1", "RQ3.2", "RQ4.1"],
+      "directly_supported_observations": [
+        "User can instruct system to guide thinking (Socratic), explain in layers, check understanding, or use hints/quizzes/step-by-step",
+        "User specifies level: middle school, high school, college, beginner, or advanced",
+        "User can request: slow down, simpler language, analogy, deeper explanation, more advanced content",
+        "Documentation states 'there may be times when it gives a direct answer' - Socratic not always applied",
+        "Can upload files (notes, syllabus, worksheet, slides, textbook excerpt, problem photos) and reference specific sections",
+        "Memory feature saves learning goals, preferred explanation style, or topics studied before",
+        "Documentation explicitly states Study Mode 'does not replace your teacher, tutor, course materials' and 'can make mistakes'"
+      ],
+      "design_implications": [
+        "Pedagogical action selection requires explicit user instruction",
+        "Socratic questioning is opt-in feature, not default behavior",
+        "System adjusts based on explicit user feedback ('slow down', 'simpler') not automatic inference",
+        "Material grounding via file upload + manual section reference",
+        "Evidence collection sparse: observes completion and responses, does not infer mastery"
+      ],
+      "limitations_and_non_inferences": [
+        "No learning effectiveness claims provided",
+        "System does NOT automatically detect when to explain vs. hint vs. quiz",
+        "No learner modeling or knowledge state tracking described",
+        "Material constraint shallow: requires manual section pointing",
+        "Academic integrity boundaries unclear: 'Follow the AI-use policies of your school' - defers to external policy"
+      ],
+      "decision_affected": [
+        "pedagogical_action_selection",
+        "evidence_collection",
+        "anti_pattern_avoidance"
+      ],
+      "verification_status": "verified",
+      "notes": "Product documentation accessed 2026-07-29; document updated '23小时前' (23 hours ago) from access date"
     },
     {
-      "source_id": "src-003",
+      "id": "src-003",
       "title": "Gemini 中的 LearnLM (LearnLM in Gemini)",
-      "organization": "Google Cloud / DeepMind",
+      "organization_or_authors": "Google Cloud / Google DeepMind",
+      "publication_date": "2026-05",
+      "source_type": "product_documentation",
       "url": "https://cloud.google.com/solutions/learnlm",
       "accessed_at": "2026-07-29",
-      "source_type": "product_documentation_with_rct",
-      "language": "zh-CN",
-      "file": "sources/src-003-learnlm.md",
-      "research_questions_addressed": ["RQ3.1", "RQ3.2", "RQ4.1", "RQ4.2"],
-      "verification_status": "verified"
+      "research_question_ids": ["RQ3.1", "RQ3.2", "RQ4.1", "RQ4.2"],
+      "directly_supported_observations": [
+        "LearnLM built with education experts, optimized for learning based on rigorous research",
+        "Expert raters evaluated LearnLM against GPT-4o, Claude 3.5, Gemini 1.5 Pro on pedagogical elements like guidance and correcting mistakes beyond mere accuracy",
+        "RCT in Sierra Leone: 1,763 middle school students (grades 7-8), 8 weeks, 12+ hours usage minimum",
+        "Effect: math performance from 50th to 64th percentile (14 percentile point gain)",
+        "Effect equivalent to 1.8 to 2.5 additional years of learning progress",
+        "With appropriate system instructions, Gemini leverages LearnLM learning science research to trigger pedagogical behaviors",
+        "Multiple technical reports cited: May 2026, November 2025, December 2024, May 2024"
+      ],
+      "design_implications": [
+        "Learning effectiveness measurable via RCT methodology in specific context",
+        "Pedagogical quality evaluated as separate dimension from accuracy",
+        "Learning science principles can be embedded in LLMs via training",
+        "System instructions enable pedagogical behavior activation",
+        "Minimum engagement threshold exists: 12+ hours over 8 weeks for observed effect"
+      ],
+      "limitations_and_non_inferences": [
+        "RCT context specific: Sierra Leone middle school students, math subject, 8-week period",
+        "Generalization to other contexts (subjects, age groups, countries) requires caution",
+        "Implementation details not disclosed in product page",
+        "Comparison baseline not specified ('from 50th to 64th percentile' - compared to what control group?)",
+        "Technical reports referenced but not directly linked in product page"
+      ],
+      "decision_affected": [
+        "pedagogical_action_selection",
+        "evidence_collection",
+        "learner_model_applicability"
+      ],
+      "verification_status": "verified",
+      "notes": "Chinese official Google Cloud page; RCT conducted with Fab AI partnership; percentile positions not percentage points"
     },
     {
-      "source_id": "src-004",
+      "id": "src-004",
       "title": "Tutor CoPilot: A Human-AI Approach for Scaling Real-Time Expertise",
-      "organization": "Stanford SCALE",
+      "organization_or_authors": "Rose E. Wang, Ana T. Ribeiro, Carly D. Robinson, Susanna Loeb, Dorottya Demszky",
+      "publication_date": "2025-11",
+      "source_type": "research_paper_field_evaluation",
       "url": "https://scale.stanford.edu/publications/tutor-copilot-human-ai-approach-scaling-real-time-expertise",
       "accessed_at": "2026-07-29",
-      "source_type": "research_publication",
-      "language": "en",
-      "file": "sources/src-004-tutor-copilot.md",
-      "research_questions_addressed": ["RQ3.1", "RQ3.2", "RQ4.1", "RQ4.2"],
-      "verification_status": "verified"
+      "research_question_ids": ["RQ3.1", "RQ3.2", "RQ4.1", "RQ4.2"],
+      "directly_supported_observations": [
+        "RCT with 700+ tutors and 1,000+ students from underserved communities",
+        "Students with tutors using Tutor CoPilot 4 percentage points more likely to master math topics (p<0.01)",
+        "Gains highest for students of lower-rated tutors: 9 percentage points",
+        "Analysis of 350,000+ messages shows system increases probing questions and reduces generic praise",
+        "System cost: approximately $20/tutor/year",
+        "System models expert thinking to assist tutors in real time",
+        "Human-AI collaboration: AI assists tutors who then interact with students (not direct AI-student)"
+      ],
+      "design_implications": [
+        "Human-AI collaboration model validated via RCT in real-world educational setting",
+        "AI assistance to human tutors produces measurable learning gains",
+        "System bridges skill gaps: larger gains for lower-rated tutors (9 p.p.) vs. average (4 p.p.)",
+        "Specific pedagogical behaviors measurable at message level: probing questions increase, generic praise decreases",
+        "Economic viability consideration: $20/tutor/year cited explicitly"
+      ],
+      "limitations_and_non_inferences": [
+        "Domain-specific: math tutoring in underserved communities",
+        "Tutor-mediated interaction, not direct AI-student tutoring",
+        "Implementation details not disclosed: how 'expert thinking' is modeled and delivered",
+        "Rating mechanism for tutors not specified",
+        "Mastery definition not provided in Stanford page abstract"
+      ],
+      "decision_affected": [
+        "pedagogical_action_selection",
+        "evidence_collection",
+        "learner_model_applicability"
+      ],
+      "verification_status": "verified",
+      "notes": "Stanford SCALE Initiative publication, November 2025; download available at scale.stanford.edu/sites/default/files/ai24_1054_v2.pdf"
     },
     {
-      "source_id": "src-005",
+      "id": "src-005",
       "title": "ALEKS Knowledge Space Theory",
-      "organization": "McGraw Hill ALEKS",
+      "organization_or_authors": "McGraw Hill ALEKS / Jean-Paul Doignon, Jean-Claude Falmagne",
+      "publication_date": "2011",
+      "source_type": "product_documentation",
       "url": "https://www.aleks.com/about_aleks/knowledge_space_theory",
       "accessed_at": "2026-07-29",
-      "source_type": "product_documentation",
-      "language": "en",
-      "file": "sources/src-005-aleks-kst.md",
-      "research_questions_addressed": ["RQ2.1", "RQ2.2", "RQ5.1"],
-      "verification_status": "verified"
-    },
-    {
-      "source_id": "src-006",
-      "title": "Bayesian Knowledge Tracing for Intelligent Tutoring Systems",
-      "organization": "CMU / Carnegie Learning",
-      "url": "multiple_papers",
-      "accessed_at": "2026-07-29",
-      "source_type": "research_literature",
-      "language": "en",
-      "file": "sources/src-006-bkt-knowledge-tracing.md",
-      "research_questions_addressed": ["RQ4.1", "RQ5.1", "RQ5.2"],
-      "verification_status": "partially_verified"
-    },
-    {
-      "source_id": "src-007",
-      "title": "Cognitive Tutors and ACT-R Model Tracing",
-      "organization": "CMU PACT",
-      "url": "multiple_papers",
-      "accessed_at": "2026-07-29",
-      "source_type": "research_literature",
-      "language": "en",
-      "file": "sources/src-007-cognitive-tutor-acts.md",
-      "research_questions_addressed": ["RQ3.1", "RQ3.2", "RQ4.1", "RQ5.1"],
-      "verification_status": "partially_verified"
-    },
-    {
-      "source_id": "src-008",
-      "title": "ASSISTments: Tutoring as You Test",
-      "organization": "CMU / WPI",
-      "url": "multiple_papers",
-      "accessed_at": "2026-07-29",
-      "source_type": "research_literature",
-      "language": "en",
-      "file": "sources/src-008-assistments.md",
-      "research_questions_addressed": ["RQ2.1", "RQ3.1", "RQ4.1"],
-      "verification_status": "partially_verified"
+      "research_question_ids": ["RQ2.1", "RQ2.2", "RQ5.1"],
+      "directly_supported_observations": [
+        "Knowledge Space Theory applies combinatorics and stochastic processes to modeling specific knowledge domains",
+        "Algebra 1 example: approximately 350 basic concepts giving rise to millions of empirically feasible knowledge states",
+        "Adaptive assessment using Markovian procedures can gauge student knowledge state in 25-30 questions despite millions of possible states",
+        "System determines 'precisely what each individual student knows, and what the student is ready to learn next'",
+        "Authoritative source: Learning Spaces by Doignon & Falmagne (Springer-Verlag, 2011)",
+        "Each domain (e.g., Algebra 1, Algebra 2) requires separate pre-built knowledge structure"
+      ],
+      "design_implications": [
+        "Knowledge modeling feasible at scale: 350 concepts → millions of states, assessment remains tractable (25-30 questions)",
+        "Prerequisite relationships mathematically modelable via combinatorial framework",
+        "Adaptive assessment can be efficient using stochastic (Markovian) procedures",
+        "Domain specificity critical: each course requires separate knowledge structure",
+        "'Ready to learn' is computable from knowledge state and structure"
+      ],
+      "limitations_and_non_inferences": [
+        "Learning effectiveness not claimed: describes assessment framework, not learning outcomes",
+        "Pedagogical action selection not addressed",
+        "Knowledge state construction method not detailed in product page",
+        "'Empirically feasible' knowledge state definition not provided",
+        "Question selection algorithm not disclosed",
+        "Granularity tradeoff unclear: is 350 concepts for Algebra 1 the right level?"
+      ],
+      "decision_affected": [
+        "learner_model_applicability",
+        "course_boundary_enforcement"
+      ],
+      "verification_status": "verified",
+      "notes": "Official ALEKS product page; theoretical foundation in Knowledge Space Theory (Doignon & Falmagne); product actively used in K-12 and higher education"
     }
-  ]
+  ],
+  "incomplete_candidates": [
+    {
+      "candidate_id": "candidate-bkt",
+      "title": "Bayesian Knowledge Tracing (BKT)",
+      "reason": "Primary paper (Corbett & Anderson, 1995) not directly accessible; evidence from search snippets and secondary sources insufficient per review requirements",
+      "alternative_attempted": "Multiple searches for accessible BKT papers; PDFs and institutional pages blocked or returned errors",
+      "research_questions": ["RQ4.1", "RQ5.1", "RQ5.2"],
+      "status": "deferred"
+    },
+    {
+      "candidate_id": "candidate-cognitive-tutor",
+      "title": "Cognitive Tutors and ACT-R",
+      "reason": "Handbook chapter and primary papers not accessible via web fetch; HTTP/HTTPS restrictions prevent PDF access",
+      "alternative_attempted": "Searched for CMU PACT publications; multiple URLs attempted but PDFs blocked",
+      "research_questions": ["RQ3.1", "RQ3.2", "RQ4.1", "RQ5.1"],
+      "status": "deferred"
+    },
+    {
+      "candidate_id": "candidate-assistments",
+      "title": "ASSISTments System",
+      "reason": "Primary research papers not accessible; evidence from CMU/WPI publication snippets insufficient",
+      "alternative_attempted": "Multiple institutional repository URLs attempted; PDF access failed",
+      "research_questions": ["RQ2.1", "RQ3.1", "RQ4.1"],
+      "status": "deferred"
+    },
+    {
+      "candidate_id": "candidate-its-meta-analysis",
+      "title": "ITS Effectiveness Meta-Analysis (Kulik & Fletcher 2016 or similar)",
+      "reason": "SAGE Journals paywall (HTTP 403); DTIC and IDA PDFs inaccessible",
+      "alternative_attempted": "Tried multiple meta-analysis sources; all behind paywalls or access restrictions",
+      "research_questions": ["RQ4.1", "RQ4.2"],
+      "status": "deferred"
+    },
+    {
+      "candidate_id": "candidate-duolingo-spaced-repetition",
+      "title": "Duolingo Spaced Repetition Optimization",
+      "reason": "arXiv HTML and PDF versions returned extraction errors",
+      "alternative_attempted": "Tried ar5iv.labs.arxiv.org and direct arxiv.org/pdf; both failed",
+      "research_questions": ["RQ4.1", "RQ5.1"],
+      "status": "deferred"
+    },
+    {
+      "candidate_id": "candidate-khan-academy-rct",
+      "title": "Khan Academy RCT Studies",
+      "reason": "Multiple blog posts reference RCTs but primary study documents (Berkeley, Toronto, IES) not directly accessible",
+      "alternative_attempted": "Tried to access referenced studies; NIH PMC returned HTTP 502 errors",
+      "research_questions": ["RQ4.1", "RQ4.2"],
+      "status": "deferred"
+    }
+  ],
+  "notes": "Review cycle task-001-review-01 required replacement of sources that relied on search snippets and secondary sources. After attempting multiple academic sources (BKT papers, Cognitive Tutor publications, ITS meta-analyses, Duolingo research, Khan Academy RCTs), access restrictions (paywalls, PDF blocks, HTTP errors) prevented reading source bodies. Current ledger contains 5 fully verified sources with complete body content read and documented. Remaining 3 sources to reach minimum target of 8 deferred pending accessible alternatives."
 }

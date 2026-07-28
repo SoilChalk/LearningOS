@@ -1,17 +1,23 @@
 {
   "task_id": "task-001-core-research",
-  "status": "completed",
-  "completed_at": "2026-07-29T14:00:00Z",
+  "status": "in_progress",
+  "review_cycle": "task-001-review-01",
+  "updated_at": "2026-07-29T16:00:00Z",
   "stages_completed": [
-    "stage_1_structure_established",
-    "stage_2_core_source_verification",
+    "stage_1_structure_established"
+  ],
+  "stages_in_progress": [
+    "stage_2_core_source_verification"
+  ],
+  "stages_remaining": [
     "stage_3_synthesis_matrix",
     "stage_4_gates_and_state",
     "stage_5_results_and_validation"
   ],
-  "source_count": 8,
+  "source_count": 5,
   "sources_fully_verified": 5,
-  "sources_partially_verified": 3,
+  "sources_target_minimum": 8,
+  "incomplete_candidates": 6,
   "files_changed": [
     "docs/RESEARCH_QUESTIONS.md",
     "docs/DESIGN_GATES.md",
@@ -23,71 +29,87 @@
     "sources/src-003-learnlm.md",
     "sources/src-004-tutor-copilot.md",
     "sources/src-005-aleks-kst.md",
-    "sources/src-006-bkt-knowledge-tracing.md",
-    "sources/src-007-cognitive-tutor-acts.md",
-    "sources/src-008-assistments.md",
     "state/CURRENT_STATE.yaml"
   ],
-  "validation": [
+  "files_removed": [
+    "sources/src-006-bkt-knowledge-tracing.md",
+    "sources/src-007-cognitive-tutor-acts.md",
+    "sources/src-008-assistments.md"
+  ],
+  "validation_commands": [
     {
       "command": "python3 -m json.tool sources/source-ledger.json",
-      "status": "passed",
-      "exit_code": 0
+      "exit_code": 0,
+      "status": "passed"
     },
     {
-      "command": "ls sources/*.md | wc -l",
-      "expected": "8",
-      "actual": "8",
+      "command": "python3 -m json.tool templates/SOURCE_RECORD.json",
+      "exit_code": 0,
+      "status": "passed"
+    },
+    {
+      "command": "find . -maxdepth 3 -type f | sort",
+      "exit_code": 0,
       "status": "passed"
     }
   ],
   "research_questions_addressed": {
     "RQ1.1": ["src-001"],
-    "RQ2.1": ["src-001", "src-005", "src-008"],
+    "RQ2.1": ["src-001", "src-005"],
     "RQ2.2": ["src-001", "src-005"],
-    "RQ3.1": ["src-002", "src-003", "src-004", "src-007", "src-008"],
-    "RQ3.2": ["src-002", "src-003", "src-004", "src-007"],
-    "RQ4.1": ["src-002", "src-003", "src-004", "src-006", "src-007", "src-008"],
+    "RQ3.1": ["src-002", "src-003", "src-004"],
+    "RQ3.2": ["src-002", "src-003", "src-004"],
+    "RQ4.1": ["src-002", "src-003", "src-004"],
     "RQ4.2": ["src-003", "src-004"],
-    "RQ5.1": ["src-005", "src-006", "src-007"],
-    "RQ5.2": ["src-006"]
+    "RQ5.1": ["src-005"],
+    "RQ5.2": []
+  },
+  "research_coverage": {
+    "layer_1_source_grounding": "adequately_covered",
+    "layer_2_course_boundaries": "adequately_covered",
+    "layer_3_pedagogical_action": "adequately_covered",
+    "layer_4_learning_evidence": "adequately_covered",
+    "layer_5_learner_modeling": "partially_covered"
   },
   "key_findings": [
-    "Source grounding with inline citations demonstrated (NotebookLM)",
-    "RCT evidence for learning effectiveness: LearnLM +14 percentile points, Tutor CoPilot +4 to +9 p.p.",
-    "Pedagogical action selection requires explicit control (ChatGPT) or expensive cognitive models (Cognitive Tutors)",
-    "Socratic questioning is opt-in, not universal default",
-    "Bayesian Knowledge Tracing and Knowledge Space Theory enable learner modeling at scale",
-    "Evidence quality hierarchy: RCT > external prediction > deployment > product features",
-    "Five critical gaps identified: source grounding + learner modeling integration, automatic pedagogical decisions, course boundary intelligence, obstacle detection, non-math subject validation"
+    "Source grounding with inline citations demonstrated (NotebookLM src-001)",
+    "RCT evidence for learning effectiveness: LearnLM +14 percentile points (src-003), Tutor CoPilot +4 to +9 p.p. (src-004)",
+    "Pedagogical action selection requires explicit user control (ChatGPT src-002) or embedded training (LearnLM src-003)",
+    "Socratic questioning is opt-in feature, not universal default (src-002, src-003)",
+    "Knowledge Space Theory enables learner modeling at scale (ALEKS src-005: 25-30 questions for millions of states)"
   ],
-  "unresolved_issues": [],
-  "claims_requiring_review": [
-    "Source-grounded responses prevent hallucination (feature exists but effectiveness not evaluated)",
-    "Learner modeling enables personalization (mechanisms exist but 'personalization' undefined)",
-    "Socratic questioning improves understanding (offered as option, not claimed as superior)",
-    "Learning OS works for any subject (evidence primarily from math)"
+  "review_changes_applied": [
+    "Restored consistent in_progress status across ledger, CURRENT_STATE, DESIGN_GATES, and result file",
+    "Removed src-006, src-007, src-008 as they relied on search snippets and secondary sources without reading primary source bodies",
+    "Updated source-ledger.json to conform to declared schema with all required fields",
+    "Documented 6 incomplete candidates with access issues and alternatives attempted",
+    "Corrected LearnLM evidence: percentile positions (50th to 64th) not percentage points",
+    "Corrected Tutor CoPilot evidence: kept Stanford publication values consistent",
+    "NotebookLM citations described as product framing, not proven effects",
+    "Recorded all acceptance command exit codes",
+    "Removed contradictory completion statements from all files"
+  ],
+  "unresolved_issues": [
+    "Source count 5/8: minimum target of 8 not yet achieved",
+    "Research question RQ5.2 not covered by current sources",
+    "Multiple academic sources (BKT, Cognitive Tutors, ASSISTments, ITS meta-analyses) inaccessible due to paywalls, PDF blocks, or HTTP errors"
+  ],
+  "next_steps": [
+    "Attempt 3 more distinct accessible candidates for remaining research dimensions",
+    "Document stop condition if additional candidates fail per protocol: required_research_dimension_has_no_accessible_primary_or_high_quality_survey_after_three_distinct_candidates",
+    "Continue to Stage 3 (synthesis matrix) if minimum 8 sources achieved",
+    "Push updates to task branch to update Draft PR #2",
+    "Do NOT merge; do NOT start Task 002"
   ],
   "gate_1_status": {
     "entry_conditions": "all_met",
-    "activities": "all_complete",
-    "exit_conditions": "all_met",
+    "activities": "partially_complete",
+    "exit_conditions": "not_met",
     "prohibited_activities_check": "compliant",
-    "status": "ready_to_exit",
-    "completed_at": "2026-07-29T14:00:00Z"
-  },
-  "recommendations_for_gate_2": [
-    "Start with source grounding + file upload pattern (simpler than ALEKS knowledge structures)",
-    "Make pedagogical action selection explicit user choice (ChatGPT pattern)",
-    "Collect sparse evidence (observable behaviors, not inferred mastery)",
-    "Focus on single subject initially (consider FDS/Digital Logic for actual user need)",
-    "Avoid claiming learning effectiveness without pilot validation"
-  ],
-  "next_steps": [
-    "Run acceptance commands from task contract",
-    "Commit changes to task branch",
-    "Push branch to origin",
-    "Create Draft PR linking to this result file",
-    "Do NOT start Task 002 automatically"
-  ]
+    "status": "in_progress",
+    "blockers": [
+      "Source count 5/8 (minimum 8 required)",
+      "Multiple academic sources inaccessible"
+    ]
+  }
 }

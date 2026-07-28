@@ -2,7 +2,7 @@
 
 **Generated**: 2026-07-29  
 **Task**: task-001-core-research  
-**Status**: Stage 1 - Structure Established
+**Status**: Stage 2 - Source Verification In Progress  
 
 ---
 
@@ -20,7 +20,7 @@ Design gates define entry and exit conditions for each major phase of Learning O
 ✓ Project purpose defined  
 ✓ Research scope bounded  
 ✓ Evidence standards established  
-✓ Source verification protocol defined
+✓ Source verification protocol defined  
 
 ### Activities
 - Identify 8-15 core sources across five research dimensions
@@ -46,6 +46,32 @@ Design gates define entry and exit conditions for each major phase of Learning O
 - Provider ranking systems
 - Complex event-sourced runtime
 
+### Current Progress (2026-07-29T16:00:00Z)
+
+**Sources Verified**: 5/8 (minimum target not yet met)
+
+**Fully Verified Sources**:
+1. src-001: NotebookLM/Gemini Notebook (Google) - source grounding, inline citations
+2. src-002: ChatGPT Study Mode (OpenAI) - pedagogical action requires explicit control
+3. src-003: LearnLM (Google/DeepMind) - RCT evidence: +14 percentile points
+4. src-004: Tutor CoPilot (Stanford) - human-AI collaboration RCT: +4-9 percentile points
+5. src-005: ALEKS Knowledge Space Theory (McGraw Hill) - learner modeling framework
+
+**Incomplete Candidates** (access issues after multiple attempts):
+- Bayesian Knowledge Tracing papers (Corbett & Anderson 1995)
+- Cognitive Tutors/ACT-R publications (Anderson, Koedinger, Corbett)
+- ASSISTments research papers
+- ITS effectiveness meta-analyses (Kulik & Fletcher, SAGE paywalls)
+- Duolingo spaced repetition research (arXiv extraction failures)
+- Khan Academy RCT studies (institutional access issues)
+
+**Next Steps**:
+- Attempt 3 more distinct accessible candidates for remaining research dimensions
+- If additional candidates fail, document stop condition per protocol
+- Continue to target minimum 8 verified sources
+
+**Status**: Gate 1 remains IN PROGRESS until minimum source count achieved and all exit conditions met.
+
 ---
 
 ## Gate 2: First Vertical Scenario Design
@@ -53,7 +79,7 @@ Design gates define entry and exit conditions for each major phase of Learning O
 **Current Status**: NOT STARTED
 
 ### Entry Conditions
-- [x] Gate 1 exit conditions met
+- [ ] Gate 1 exit conditions met
 - [ ] Provisional scenario identified from research
 - [ ] Minimum flow defined
 - [ ] Source-grounding strategy selected
@@ -198,95 +224,12 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 **Phase**: Core Research (Gate 1)  
 **Started**: 2026-07-29  
-**Status**: In Progress  
-**Next Milestone**: Complete 8 verified sources, exit Gate 1  
-**Subsequent Phase**: First Vertical Scenario Design (Gate 2)
+**Status**: In Progress (5/8 sources verified)  
+**Next Milestone**: Achieve minimum 8 verified sources, satisfy all Gate 1 exit conditions  
+**Subsequent Phase**: First Vertical Scenario Design (Gate 2)  
 
 ---
 
-## Gate 1 Completion Status (Updated 2026-07-29T14:00:00Z)
-
-### Entry Conditions: ✅ ALL MET
-✓ Project purpose defined  
-✓ Research scope bounded  
-✓ Evidence standards established  
-✓ Source verification protocol defined  
-
-### Activities: ✅ ALL COMPLETE
-✓ 8 verified sources across five research dimensions (src-001 through src-008)  
-✓ Directly supported observations documented for each source  
-✓ Design implications extracted with explicit limitations  
-✓ Reference system matrix created (docs/REFERENCE_SYSTEM_MATRIX.md)  
-✓ First vertical scenario boundaries informed by findings  
-
-### Exit Conditions: ✅ ALL MET
-✅ Source ledger contains 8 verified sources (target minimum achieved)  
-✅ Every source includes supported observations, implications, and limitations  
-✅ Reference system matrix separates product features from learning effectiveness evidence  
-✅ Design gates document updated with completion status  
-✅ JSON validation passes (source-ledger.json valid)  
-✅ No implementation code, frontend, or private material added  
-
-### Key Findings Summary
-
-**Layer 1 - Source Grounding:**
-- NotebookLM demonstrates inline citations from uploaded materials
-- File upload + explicit reference pattern validated (ChatGPT, NotebookLM)
-- Citation transparency presented as trust mechanism
-
-**Layer 2 - Course/Task Boundaries:**
-- Material corpus constraint feasible (file upload pattern)
-- Domain-specific knowledge structures require expert construction (ALEKS: 350 concepts for Algebra 1)
-- Rapid content creation possible with simplified models (ASSISTments: 30 min per problem)
-
-**Layer 3 - Pedagogical Action Selection:**
-- Explicit user control validated (ChatGPT Study Mode)
-- AI can guide human tutors effectively (Tutor CoPilot: +9 p.p. for lower-rated tutors)
-- Cognitive models enable step-by-step guidance but require expensive expert construction
-- Socratic questioning is opt-in, NOT universal default
-
-**Layer 4 - Learning-Behavior Evidence:**
-- RCT evidence exists: LearnLM +14 p.p. (50th → 64th percentile), Tutor CoPilot +4 to +9 p.p.
-- Efficient assessment: ALEKS 25-30 questions sufficient despite millions of possible states
-- External prediction validated: BKT predicts standardized test performance
-- Evidence quality hierarchy: RCT > external prediction > long-term deployment > product features
-
-**Layer 5 - Learner Modeling:**
-- Knowledge Space Theory (ALEKS) and Bayesian Knowledge Tracing (BKT) demonstrate mathematical frameworks at scale
-- Cognitive Tutors deployed 15+ years with production rules + BKT
-- Tradeoff: expensive sophisticated models (Cognitive Tutors) vs. rapid simplified models (ASSISTments pseudo-tutors)
-
-**Critical Gaps Identified:**
-1. No system combines source grounding + learner modeling
-2. Automatic pedagogical decision-making requires expensive cognitive model or embedded training (LearnLM details not public)
-3. Course boundary intelligence without pre-built structures not demonstrated
-4. Automatic obstacle-type detection not found
-5. Evidence primarily from math subjects; other domains not validated
-
-### Prohibited Activities Check: ✅ COMPLIANT
-- No frontend implementation
-- No complete knowledge graph construction
-- No automatic mastery classification
-- No exhaustive Question Type/Error Pattern taxonomies
-- No multi-agent free-form collaboration
-- No provider ranking systems
-- No complex event-sourced runtime
-
-### Unresolved Issues
-None. Gate 1 exit conditions fully satisfied.
-
-### Recommendation for Gate 2
-Proceed to First Vertical Scenario Design with following constraints:
-1. Start with source grounding + file upload pattern (simpler than ALEKS knowledge structures)
-2. Make pedagogical action selection explicit user choice (ChatGPT pattern)
-3. Collect sparse evidence (observable behaviors, not inferred mastery)
-4. Focus on single subject initially (math has most evidence; consider FDS/Digital Logic for actual user need)
-5. Avoid claiming learning effectiveness without pilot validation
-
-**GATE 1 STATUS: READY TO EXIT**
-
----
-
-**Last Updated**: 2026-07-29T14:00:00Z  
-**Phase**: Gate 1 - Core Research COMPLETE  
-**Next Phase**: Gate 2 - First Vertical Scenario Design  
+**Last Updated**: 2026-07-29T16:00:00Z  
+**Phase**: Gate 1 - Core Research IN PROGRESS  
+**Next Phase**: Gate 2 - First Vertical Scenario Design (blocked until Gate 1 complete)  
