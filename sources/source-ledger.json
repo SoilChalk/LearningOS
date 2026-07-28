@@ -17,7 +17,11 @@
       "source_type": "product_documentation",
       "url": "https://support.google.com/gemininotebook/answer/16164461",
       "accessed_at": "2026-07-29",
-      "research_question_ids": ["RQ1.1", "RQ2.1", "RQ2.2"],
+      "research_question_ids": [
+        "RQ1.1",
+        "RQ2.1",
+        "RQ2.2"
+      ],
       "directly_supported_observations": [
         "System provides inline citations from uploaded sources (PDF, websites, YouTube videos, audio files, Google Docs, Google Slides)",
         "Gemini Notebook designed to answer questions based on information provided in uploaded sources",
@@ -53,7 +57,11 @@
       "source_type": "product_documentation",
       "url": "https://help.openai.com/en/articles/11780217-study-mode",
       "accessed_at": "2026-07-29",
-      "research_question_ids": ["RQ3.1", "RQ3.2", "RQ4.1"],
+      "research_question_ids": [
+        "RQ3.1",
+        "RQ3.2",
+        "RQ4.1"
+      ],
       "directly_supported_observations": [
         "User can instruct system to guide thinking (Socratic), explain in layers, check understanding, or use hints/quizzes/step-by-step",
         "User specifies level: middle school, high school, college, beginner, or advanced",
@@ -93,12 +101,17 @@
       "source_type": "product_documentation",
       "url": "https://cloud.google.com/solutions/learnlm",
       "accessed_at": "2026-07-29",
-      "research_question_ids": ["RQ3.1", "RQ3.2", "RQ4.1", "RQ4.2"],
+      "research_question_ids": [
+        "RQ3.1",
+        "RQ3.2",
+        "RQ4.1",
+        "RQ4.2"
+      ],
       "directly_supported_observations": [
         "LearnLM built with education experts, optimized for learning based on rigorous research",
         "Expert raters evaluated LearnLM against GPT-4o, Claude 3.5, Gemini 1.5 Pro on pedagogical elements like guidance and correcting mistakes beyond mere accuracy",
         "RCT in Sierra Leone: 1,763 middle school students (grades 7-8), 8 weeks, 12+ hours usage minimum",
-        "Effect: math performance from 50th to 64th percentile (14 percentile point gain)",
+        "Effect: math performance from 50th to 64th percentile (a difference of 14 percentile ranks)",
         "Effect equivalent to 1.8 to 2.5 additional years of learning progress",
         "With appropriate system instructions, Gemini leverages LearnLM learning science research to trigger pedagogical behaviors",
         "Multiple technical reports cited: May 2026, November 2025, December 2024, May 2024"
@@ -133,7 +146,12 @@
       "source_type": "research_paper_field_evaluation",
       "url": "https://scale.stanford.edu/publications/tutor-copilot-human-ai-approach-scaling-real-time-expertise",
       "accessed_at": "2026-07-29",
-      "research_question_ids": ["RQ3.1", "RQ3.2", "RQ4.1", "RQ4.2"],
+      "research_question_ids": [
+        "RQ3.1",
+        "RQ3.2",
+        "RQ4.1",
+        "RQ4.2"
+      ],
       "directly_supported_observations": [
         "RCT with 700+ tutors and 1,000+ students from underserved communities",
         "Students with tutors using Tutor CoPilot 4 percentage points more likely to master math topics (p<0.01)",
@@ -173,7 +191,11 @@
       "source_type": "product_documentation",
       "url": "https://www.aleks.com/about_aleks/knowledge_space_theory",
       "accessed_at": "2026-07-29",
-      "research_question_ids": ["RQ2.1", "RQ2.2", "RQ5.1"],
+      "research_question_ids": [
+        "RQ2.1",
+        "RQ2.2",
+        "RQ5.1"
+      ],
       "directly_supported_observations": [
         "Knowledge Space Theory applies combinatorics and stochastic processes to modeling specific knowledge domains",
         "Algebra 1 example: approximately 350 basic concepts giving rise to millions of empirically feasible knowledge states",
@@ -211,7 +233,11 @@
       "title": "Bayesian Knowledge Tracing (BKT)",
       "reason": "Primary paper (Corbett & Anderson, 1995) not directly accessible; evidence from search snippets and secondary sources insufficient per review requirements",
       "alternative_attempted": "Multiple searches for accessible BKT papers; PDFs and institutional pages blocked or returned errors",
-      "research_questions": ["RQ4.1", "RQ5.1", "RQ5.2"],
+      "research_questions": [
+        "RQ4.1",
+        "RQ5.1",
+        "RQ5.2"
+      ],
       "status": "deferred"
     },
     {
@@ -219,7 +245,12 @@
       "title": "Cognitive Tutors and ACT-R",
       "reason": "Handbook chapter and primary papers not accessible via web fetch; HTTP/HTTPS restrictions prevent PDF access",
       "alternative_attempted": "Searched for CMU PACT publications; multiple URLs attempted but PDFs blocked",
-      "research_questions": ["RQ3.1", "RQ3.2", "RQ4.1", "RQ5.1"],
+      "research_questions": [
+        "RQ3.1",
+        "RQ3.2",
+        "RQ4.1",
+        "RQ5.1"
+      ],
       "status": "deferred"
     },
     {
@@ -227,7 +258,11 @@
       "title": "ASSISTments System",
       "reason": "Primary research papers not accessible; evidence from CMU/WPI publication snippets insufficient",
       "alternative_attempted": "Multiple institutional repository URLs attempted; PDF access failed",
-      "research_questions": ["RQ2.1", "RQ3.1", "RQ4.1"],
+      "research_questions": [
+        "RQ2.1",
+        "RQ3.1",
+        "RQ4.1"
+      ],
       "status": "deferred"
     },
     {
@@ -235,7 +270,10 @@
       "title": "ITS Effectiveness Meta-Analysis (Kulik & Fletcher 2016 or similar)",
       "reason": "SAGE Journals paywall (HTTP 403); DTIC and IDA PDFs inaccessible",
       "alternative_attempted": "Tried multiple meta-analysis sources; all behind paywalls or access restrictions",
-      "research_questions": ["RQ4.1", "RQ4.2"],
+      "research_questions": [
+        "RQ4.1",
+        "RQ4.2"
+      ],
       "status": "deferred"
     },
     {
@@ -243,7 +281,10 @@
       "title": "Duolingo Spaced Repetition Optimization",
       "reason": "arXiv HTML and PDF versions returned extraction errors",
       "alternative_attempted": "Tried ar5iv.labs.arxiv.org and direct arxiv.org/pdf; both failed",
-      "research_questions": ["RQ4.1", "RQ5.1"],
+      "research_questions": [
+        "RQ4.1",
+        "RQ5.1"
+      ],
       "status": "deferred"
     },
     {
@@ -251,7 +292,10 @@
       "title": "Khan Academy RCT Studies",
       "reason": "Multiple blog posts reference RCTs but primary study documents (Berkeley, Toronto, IES) not directly accessible",
       "alternative_attempted": "Tried to access referenced studies; NIH PMC returned HTTP 502 errors",
-      "research_questions": ["RQ4.1", "RQ4.2"],
+      "research_questions": [
+        "RQ4.1",
+        "RQ4.2"
+      ],
       "status": "deferred"
     }
   ],

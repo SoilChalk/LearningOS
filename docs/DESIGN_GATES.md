@@ -53,7 +53,7 @@ Design gates define entry and exit conditions for each major phase of Learning O
 **Fully Verified Sources**:
 1. src-001: NotebookLM/Gemini Notebook (Google) - source grounding, inline citations
 2. src-002: ChatGPT Study Mode (OpenAI) - pedagogical action requires explicit control
-3. src-003: LearnLM (Google/DeepMind) - RCT evidence: +14 percentile points
+3. src-003: LearnLM (Google/DeepMind) - RCT evidence: moved from 50th to 64th percentile
 4. src-004: Tutor CoPilot (Stanford) - human-AI collaboration RCT: +4-9 percentile points
 5. src-005: ALEKS Knowledge Space Theory (McGraw Hill) - learner modeling framework
 

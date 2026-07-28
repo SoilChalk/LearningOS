@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Learning OS Source Ledger Schema",
+  "description": "Schema for the source ledger containing multiple source records",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at",
+    "task_id",
+    "status",
+    "stage",
+    "source_count",
+    "target_minimum",
+    "target_maximum",
+    "sources"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "Reference to this schema file"
+    },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "description": "Version of the ledger schema format"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when ledger was generated (ISO 8601)"
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Associated task identifier"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["in_progress", "completed", "blocked"],
+      "description": "Current verification status"
+    },
+    "stage": {
+      "type": "string",
+      "description": "Current execution stage"
+    },
+    "source_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of verified sources in ledger"
+    },
+    "target_minimum": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Minimum target source count"
+    },
+    "target_maximum": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Maximum target source count"
+    },
+    "sources": {
+      "type": "array",
+      "description": "Array of verified source records",
+      "items": {
+        "$ref": "./SOURCE_RECORD.json"
+      }
+    },
+    "incomplete_candidates": {
+      "type": "array",
+      "description": "Optional array of deferred or inaccessible candidates",
+      "items": {
+        "type": "object",
+        "properties": {
+          "candidate_id": {"type": "string"},
+          "title": {"type": "string"},
+          "reason": {"type": "string"},
+          "alternative_attempted": {"type": "string"},
+          "research_questions": {"type": "array", "items": {"type": "string"}},
+          "status": {"type": "string"}
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional additional context or metadata"
+    }
+  }
+}

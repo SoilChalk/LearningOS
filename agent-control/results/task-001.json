@@ -54,14 +54,39 @@
     }
   ],
   "research_questions_addressed": {
-    "RQ1.1": ["src-001"],
-    "RQ2.1": ["src-001", "src-005"],
-    "RQ2.2": ["src-001", "src-005"],
-    "RQ3.1": ["src-002", "src-003", "src-004"],
-    "RQ3.2": ["src-002", "src-003", "src-004"],
-    "RQ4.1": ["src-002", "src-003", "src-004"],
-    "RQ4.2": ["src-003", "src-004"],
-    "RQ5.1": ["src-005"],
+    "RQ1.1": [
+      "src-001"
+    ],
+    "RQ2.1": [
+      "src-001",
+      "src-005"
+    ],
+    "RQ2.2": [
+      "src-001",
+      "src-005"
+    ],
+    "RQ3.1": [
+      "src-002",
+      "src-003",
+      "src-004"
+    ],
+    "RQ3.2": [
+      "src-002",
+      "src-003",
+      "src-004"
+    ],
+    "RQ4.1": [
+      "src-002",
+      "src-003",
+      "src-004"
+    ],
+    "RQ4.2": [
+      "src-003",
+      "src-004"
+    ],
+    "RQ5.1": [
+      "src-005"
+    ],
     "RQ5.2": []
   },
   "research_coverage": {
@@ -73,7 +98,7 @@
   },
   "key_findings": [
     "Source grounding with inline citations demonstrated (NotebookLM src-001)",
-    "RCT evidence for learning effectiveness: LearnLM +14 percentile points (src-003), Tutor CoPilot +4 to +9 p.p. (src-004)",
+    "RCT evidence for learning effectiveness: LearnLM moved from 50th to 64th percentile (14 percentile ranks) (src-003), Tutor CoPilot +4 to +9 p.p. (src-004)",
     "Pedagogical action selection requires explicit user control (ChatGPT src-002) or embedded training (LearnLM src-003)",
     "Socratic questioning is opt-in feature, not universal default (src-002, src-003)",
     "Knowledge Space Theory enables learner modeling at scale (ALEKS src-005: 25-30 questions for millions of states)"
