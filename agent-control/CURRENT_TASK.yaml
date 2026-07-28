@@ -1,8 +1,9 @@
-protocol_version: 2
+protocol_version: 3
 
 task_id: task-001-core-research
-status: ready
+status: changes_requested
 branch: agent/task-001-core-research
+pull_request: 2
 
 objective: >
   Establish the public, non-sensitive Learning OS core research workflow and
@@ -12,14 +13,28 @@ objective: >
 
 context:
   authoritative_issue: https://github.com/SoilChalk/LearningOS/issues/1
+  review_target: https://github.com/SoilChalk/LearningOS/pull/2
   note: >
-    Issue access is optional. This file contains the executable task contract.
-    The earlier BCD pilot is terminated because the pilot design did not map to
-    a real learning need and is not a blocker for this task.
+    Issue and PR web access are optional. This file contains the executable
+    task and review contract. Task 001 is not accepted as completed yet.
 
 inputs:
   - AGENTS.md
   - agent-control/TASK_PROTOCOL.md
+  - agent-control/CURRENT_TASK.yaml
+  - sources/source-ledger.json
+  - sources/src-001-notebooklm.md
+  - sources/src-002-chatgpt-study-mode.md
+  - sources/src-003-learnlm.md
+  - sources/src-004-tutor-copilot.md
+  - sources/src-005-aleks-kst.md
+  - sources/src-006-bkt-knowledge-tracing.md
+  - sources/src-007-cognitive-tutor-acts.md
+  - sources/src-008-assistments.md
+  - docs/REFERENCE_SYSTEM_MATRIX.md
+  - docs/DESIGN_GATES.md
+  - state/CURRENT_STATE.yaml
+  - agent-control/results/task-001.json
 
 allowed_paths:
   - AGENTS.md
@@ -47,34 +62,6 @@ required_outputs:
   - state/CURRENT_STATE.yaml
   - agent-control/results/task-001.json
 
-research_scope:
-  source_and_material_grounding:
-    - How explanations remain tied to user-provided sources and anchors
-    - How source-supported content is separated from model additions and inference
-  course_and_task_boundaries:
-    - How course-specific assistants constrain scope and response behavior
-  pedagogical_actions:
-    - When to explain, translate, answer directly, hint, question, or assess
-    - Why Socratic questioning must not be the universal default
-  learning_evidence:
-    - Which interaction events are factual observations
-    - Which learner-state claims are inferences
-  learner_model_applicability:
-    - Data requirements and limits of BKT, DKT, and related knowledge tracing
-    - Whether open reading, debugging, and structured exercises should share one model
-
-reference_candidates:
-  - NotebookLM / Gemini Notebook
-  - CS50 Duck
-  - ChatGPT Study Mode
-  - Khanmigo
-  - LearnLM
-  - ASSISTments
-  - ALEKS
-  - Cognitive Tutor / MATHia
-  - BKT / DKT and knowledge-tracing surveys
-  - Tutor CoPilot
-
 source_requirements:
   minimum_count: 8
   maximum_count: 15
@@ -98,46 +85,80 @@ source_requirements:
     - Papers must be classified as survey, experiment, simulation, or field evaluation.
     - Dates, metrics, and current product claims require an access date.
     - Individual reports must not be generalized into population claims.
+    - Placeholder URLs such as multiple_papers are invalid.
 
 source_retrieval_policy:
   - An accessible official page in any language may be used; record the observed language when relevant.
-  - Failure to fetch an English-language variant is not a blocker when another official-language page is readable.
   - For one inaccessible candidate, try at most one alternate official URL or primary publication route, then record the candidate as inaccessible and continue.
-  - Failures on different hosts or different source candidates must not be combined into a consecutive-failure count.
   - Search results may locate sources but cannot serve as evidence; the actual source body must be read.
   - Prefer eight strong sources over expanding toward fifteen with weak or redundant sources.
-  - Stop for source exhaustion only when a required research dimension lacks any accessible primary or high-quality survey source after three distinct candidates.
 
 execution_stages:
   stage_1_structure:
     status: completed_on_task_branch
-    outputs:
-      - docs/RESEARCH_QUESTIONS.md
-      - docs/DESIGN_GATES.md
-      - templates/SOURCE_RECORD.json
-      - sources/source-ledger.json
-      - state/CURRENT_STATE.yaml
   stage_2_core_source_verification:
-    status: in_progress
-    target: 8_verified_or_partially_verified_core_sources
+    status: revision_required
+    current_count:
+      verified: 5
+      incomplete_candidates: 3
   stage_3_reference_matrix:
-    status: pending
+    status: revision_required
   stage_4_state_and_gate_closeout:
-    status: pending
+    status: revision_required
   stage_5_result_and_validation:
-    status: pending
+    status: revision_required
+
+review_cycle:
+  review_id: task-001-review-01
+  decision: changes_requested
+  required_changes:
+    - >
+      Restore one consistent in-progress state. The ledger says in_progress,
+      while the result, CURRENT_STATE, and gate completion section say completed.
+      Until all evidence and validation issues are fixed, Task 001 and Gate 1
+      must remain in_progress.
+    - >
+      Do not count src-006, src-007, or src-008 as completed evidence records.
+      Their files say full papers were not accessed and evidence came from
+      snippets, abstracts, secondary pages, or remembered literature. Replace
+      each placeholder multiple_papers URL with a concrete primary or
+      high-quality survey URL and read the actual source body, or replace the
+      candidate with an accessible source.
+    - >
+      Make the ledger conform to a declared schema. The current schema requires
+      id, organization_or_authors, publication_date, research_question_ids,
+      evidence arrays, decision_affected, and a valid URI, while the ledger uses
+      different names and omits the evidence arrays. Either store complete
+      records in the ledger, or define an index schema plus validated per-source
+      records. JSON syntax validation alone is insufficient.
+    - >
+      Downgrade unsupported synthesis claims. Treat explicit-user-control,
+      Socratic-opt-in, evidence hierarchy, automatic-pedagogy requirements,
+      no-system-combines-X, and no-system-detects-Y as design inferences or
+      observations limited to this reviewed sample, not established findings.
+    - >
+      Correct version-specific evidence. For Tutor CoPilot, choose one concrete
+      source version and keep its sample and message counts together. Do not mix
+      the later Stanford summary values with arXiv v2 values. For LearnLM, use
+      percentile positions rather than percentage points. For NotebookLM,
+      describe accuracy, transparency, and trust as product framing, not proven
+      effects of citations.
+    - >
+      Run and record every acceptance command, including template JSON parsing
+      and the file listing. Add actual schema validation for source records.
+    - >
+      Remove contradictory completion bookkeeping. task-001.json must not be
+      completed while next_steps still say to run acceptance and create the PR.
+      DESIGN_GATES must not contain simultaneous in-progress and ready-to-exit
+      status sections.
+  completion_rule: >
+    Push corrections to the existing agent/task-001-core-research branch,
+    update the existing Draft PR #2, and stop. Do not merge and do not begin
+    Task 002.
 
 first_vertical_scenario:
   name: English technical-material reading workspace
   status: provisional_pending_research
-  minimum_flow:
-    - import_or_index_material
-    - select_source_passage
-    - provide_source-bound Chinese explanation
-    - preserve English terminology
-    - support local follow-up
-    - save anchor and unresolved question
-    - restore from saved position
 
 explicitly_out_of_scope:
   - frontend implementation
@@ -155,15 +176,16 @@ acceptance_commands:
   - python3 -m json.tool sources/source-ledger.json >/dev/null
   - python3 -m json.tool templates/SOURCE_RECORD.json >/dev/null
   - find . -maxdepth 3 -type f | sort
+  - python3 scripts/validate_source_records.py
 
 completion_conditions:
   - Agent protocol files are present and internally consistent.
-  - Source ledger contains 8 to 15 core sources.
+  - Source evidence contains 8 to 15 directly read, concrete sources.
   - Every source includes supported observations, design implications, and limitations.
-  - Reference-system matrix separates product layer, evidence, implication, and limits.
-  - Design gates define entry and exit conditions for research, MVP, pilot, and review.
-  - CURRENT_STATE.yaml remains in the core-research phase.
-  - All JSON validation commands exit with code 0.
+  - All source records validate against the declared schema.
+  - Reference-system matrix separates direct evidence, design inference, and unknowns.
+  - Design gates and CURRENT_STATE use one consistent phase status.
+  - All acceptance commands exit with code 0 and are recorded in task-001.json.
   - No implementation code, frontend, private material, or unrelated local content is added.
 
 stop_conditions:
@@ -173,19 +195,12 @@ stop_conditions:
   - task_requires_modifying_a_forbidden_path
   - requested_content_is_not_suitable_for_a_public_repository
 
-non_blocking_conditions:
-  - one_source_candidate_is_inaccessible
-  - two_different_websites_each_fail_once
-  - an_english_page_fails_but_an_official_page_in_another_language_is_accessible
-  - optional_issue_access_fails
-  - session_context_is_low_but_progress_can_be_committed
-
 result_file: agent-control/results/task-001.json
 
 completion_process:
+  - Merge origin/main into the existing task branch without discarding task work.
+  - Apply review_cycle.required_changes only; do not expand scope.
   - Run all acceptance commands and record actual exit codes.
-  - Write the result file.
-  - Commit changes on the declared branch.
-  - Push the branch and open a Draft PR against main.
-  - Include files changed, validation results, source count, unresolved issues, and claims requiring review.
+  - Update the result file with the true status and evidence counts.
+  - Commit and push the existing task branch so Draft PR #2 updates.
   - Stop without merging or starting Task 002.
