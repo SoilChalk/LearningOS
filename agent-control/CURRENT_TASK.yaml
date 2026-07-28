@@ -1,0 +1,155 @@
+protocol_version: 1
+
+task_id: task-001-core-research
+status: ready
+branch: agent/task-001-core-research
+
+objective: >
+  Establish the public, non-sensitive Learning OS core research workflow and
+  produce a first evidence ledger covering source grounding, course/task
+  boundaries, pedagogical action selection, learning-behavior evidence, and
+  the applicability conditions of learner modeling and knowledge tracing.
+
+context:
+  authoritative_issue: https://github.com/SoilChalk/LearningOS/issues/1
+  note: >
+    Issue access is optional. This file contains the executable task contract.
+    The earlier BCD pilot is terminated because the pilot design did not map to
+    a real learning need and is not a blocker for this task.
+
+inputs:
+  - AGENTS.md
+  - agent-control/TASK_PROTOCOL.md
+
+allowed_paths:
+  - AGENTS.md
+  - agent-control/**
+  - docs/**
+  - sources/**
+  - templates/**
+  - state/**
+
+forbidden_paths:
+  - private/**
+  - personal/**
+  - raw-course-materials/**
+  - .env
+  - "**/*.key"
+  - "**/*secret*"
+  - "**/*token*"
+
+required_outputs:
+  - docs/RESEARCH_QUESTIONS.md
+  - docs/REFERENCE_SYSTEM_MATRIX.md
+  - docs/DESIGN_GATES.md
+  - sources/source-ledger.json
+  - templates/SOURCE_RECORD.json
+  - state/CURRENT_STATE.yaml
+  - agent-control/results/task-001.json
+
+research_scope:
+  source_and_material_grounding:
+    - How explanations remain tied to user-provided sources and anchors
+    - How source-supported content is separated from model additions and inference
+  course_and_task_boundaries:
+    - How course-specific assistants constrain scope and response behavior
+  pedagogical_actions:
+    - When to explain, translate, answer directly, hint, question, or assess
+    - Why Socratic questioning must not be the universal default
+  learning_evidence:
+    - Which interaction events are factual observations
+    - Which learner-state claims are inferences
+  learner_model_applicability:
+    - Data requirements and limits of BKT, DKT, and related knowledge tracing
+    - Whether open reading, debugging, and structured exercises should share one model
+
+reference_candidates:
+  - NotebookLM / Gemini Notebook
+  - CS50 Duck
+  - ChatGPT Study Mode
+  - Khanmigo
+  - LearnLM
+  - ASSISTments
+  - ALEKS
+  - Cognitive Tutor / MATHia
+  - BKT / DKT and knowledge-tracing surveys
+  - Tutor CoPilot
+
+source_requirements:
+  minimum_count: 8
+  maximum_count: 15
+  required_fields:
+    - id
+    - title
+    - organization_or_authors
+    - publication_date
+    - source_type
+    - url
+    - accessed_at
+    - research_question_ids
+    - directly_supported_observations
+    - design_implications
+    - limitations_and_non_inferences
+    - decision_affected
+    - verification_status
+  rules:
+    - Product pages support feature claims, not learning-effect claims.
+    - Search snippets cannot substitute for reading the source.
+    - Papers must be classified as survey, experiment, simulation, or field evaluation.
+    - Dates, metrics, and current product claims require an access date.
+    - Individual reports must not be generalized into population claims.
+
+first_vertical_scenario:
+  name: English technical-material reading workspace
+  status: provisional_pending_research
+  minimum_flow:
+    - import_or_index_material
+    - select_source_passage
+    - provide_source-bound Chinese explanation
+    - preserve English terminology
+    - support local follow-up
+    - save anchor and unresolved question
+    - restore from saved position
+
+explicitly_out_of_scope:
+  - frontend implementation
+  - full-course knowledge graph
+  - automatic mastery classification
+  - exhaustive QuestionType taxonomy
+  - exhaustive ErrorPattern taxonomy
+  - automatic review scheduler
+  - multi-agent free-form collaboration
+  - provider ranking
+  - complex event-sourced runtime
+  - bulk automatic note generation
+
+acceptance_commands:
+  - python3 -m json.tool sources/source-ledger.json >/dev/null
+  - python3 -m json.tool templates/SOURCE_RECORD.json >/dev/null
+  - find . -maxdepth 3 -type f | sort
+
+completion_conditions:
+  - Agent protocol files are present and internally consistent.
+  - Source ledger contains 8 to 15 core sources.
+  - Every source includes supported observations, design implications, and limitations.
+  - Reference-system matrix separates product layer, evidence, implication, and limits.
+  - Design gates define entry and exit conditions for research, MVP, pilot, and review.
+  - CURRENT_STATE.yaml remains in the core-research phase.
+  - All JSON validation commands exit with code 0.
+  - No implementation code, frontend, private material, or unrelated local content is added.
+
+stop_conditions:
+  - two_consecutive_tool_failures
+  - source_body_cannot_be_accessed_and_no_primary_alternative_exists
+  - task_requires_modifying_a_forbidden_path
+  - requested_content_is_not_suitable_for_a_public_repository
+
+result_file: agent-control/results/task-001.json
+
+completion_process:
+  - Run all acceptance commands and record actual exit codes.
+  - Write the result file.
+  - Commit changes on the declared branch.
+  - Push the branch and open a Draft PR against main.
+  - Include files changed, validation results, source count, unresolved issues, and claims requiring review.
+  - Stop without merging or starting Task 002.
