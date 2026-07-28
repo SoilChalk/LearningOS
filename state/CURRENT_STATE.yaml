@@ -1,0 +1,78 @@
+protocol_version: 1
+updated_at: "2026-07-29T02:15:00Z"
+task_id: task-001-core-research
+phase: core_research
+status: in_progress
+
+current_stage:
+  stage_id: stage_1_structure_established
+  started_at: "2026-07-29T02:15:00Z"
+  completed: true
+  next_stage: stage_2_core_source_verification
+
+stages_completed:
+  - stage_1_structure_established
+
+stages_remaining:
+  - stage_2_core_source_verification
+  - stage_3_synthesis_matrix
+  - stage_4_gates_and_state
+  - stage_5_results_and_validation
+
+research_progress:
+  sources_verified: 0
+  sources_target_min: 8
+  sources_target_max: 15
+  research_questions_defined: 10
+  design_gates_defined: 4
+
+phase_constraints:
+  allowed_claims:
+    - "Core research layer structure established"
+    - "Research questions defined across five dimensions"
+    - "Source verification criteria documented"
+    - "Design gate boundaries specified"
+  
+  forbidden_claims:
+    - "Learning OS architecture validated"
+    - "Learner model implementation ready"
+    - "Learning effectiveness proven"
+    - "System scales to multiple courses"
+    - "Pedagogical actions optimized"
+
+next_action:
+  action: "Begin Stage 2: Core Source Verification"
+  target: "Identify and verify 8 high-quality sources"
+  priority_order:
+    - "Official product/project documentation"
+    - "Original research papers"
+    - "High-quality surveys"
+    - "Field evaluation reports"
+  
+  coverage_required:
+    - source_grounding
+    - course_task_boundaries
+    - pedagogical_action_selection
+    - learning_behavior_evidence
+    - learner_model_applicability
+
+unresolved_issues: []
+
+gate_status:
+  gate_1_core_research:
+    status: in_progress
+    entry_conditions_met: true
+    exit_conditions_met: false
+    blocked: false
+  
+  gate_2_first_scenario:
+    status: not_started
+    entry_conditions_met: false
+  
+  gate_3_mvp_pilot:
+    status: not_started
+    entry_conditions_met: false
+  
+  gate_4_iteration:
+    status: not_started
+    entry_conditions_met: false
