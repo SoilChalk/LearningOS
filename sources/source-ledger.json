@@ -1,11 +1,108 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-07-29T02:15:00Z",
+  "generated_at": "2026-07-29T13:30:00Z",
   "task_id": "task-001-core-research",
   "status": "in_progress",
-  "stage": "stage_1_structure_established",
-  "source_count": 0,
+  "stage": "stage_2_core_source_verification",
+  "source_count": 8,
   "target_minimum": 8,
   "target_maximum": 15,
-  "sources": []
+  "sources": [
+    {
+      "source_id": "src-001",
+      "title": "了解 Gemini Notebook (Learn about Gemini Notebook)",
+      "organization": "Google",
+      "url": "https://support.google.com/gemininotebook/answer/16164461",
+      "accessed_at": "2026-07-29",
+      "source_type": "product_documentation",
+      "language": "zh-CN",
+      "file": "sources/src-001-notebooklm.md",
+      "research_questions_addressed": ["RQ1.1", "RQ2.1", "RQ2.2"],
+      "verification_status": "verified"
+    },
+    {
+      "source_id": "src-002",
+      "title": "Using Study Mode in ChatGPT",
+      "organization": "OpenAI",
+      "url": "https://help.openai.com/en/articles/11780217-study-mode",
+      "accessed_at": "2026-07-29",
+      "source_type": "product_documentation",
+      "language": "en",
+      "file": "sources/src-002-chatgpt-study-mode.md",
+      "research_questions_addressed": ["RQ3.1", "RQ3.2", "RQ4.1"],
+      "verification_status": "verified"
+    },
+    {
+      "source_id": "src-003",
+      "title": "Gemini 中的 LearnLM (LearnLM in Gemini)",
+      "organization": "Google Cloud / DeepMind",
+      "url": "https://cloud.google.com/solutions/learnlm",
+      "accessed_at": "2026-07-29",
+      "source_type": "product_documentation_with_rct",
+      "language": "zh-CN",
+      "file": "sources/src-003-learnlm.md",
+      "research_questions_addressed": ["RQ3.1", "RQ3.2", "RQ4.1", "RQ4.2"],
+      "verification_status": "verified"
+    },
+    {
+      "source_id": "src-004",
+      "title": "Tutor CoPilot: A Human-AI Approach for Scaling Real-Time Expertise",
+      "organization": "Stanford SCALE",
+      "url": "https://scale.stanford.edu/publications/tutor-copilot-human-ai-approach-scaling-real-time-expertise",
+      "accessed_at": "2026-07-29",
+      "source_type": "research_publication",
+      "language": "en",
+      "file": "sources/src-004-tutor-copilot.md",
+      "research_questions_addressed": ["RQ3.1", "RQ3.2", "RQ4.1", "RQ4.2"],
+      "verification_status": "verified"
+    },
+    {
+      "source_id": "src-005",
+      "title": "ALEKS Knowledge Space Theory",
+      "organization": "McGraw Hill ALEKS",
+      "url": "https://www.aleks.com/about_aleks/knowledge_space_theory",
+      "accessed_at": "2026-07-29",
+      "source_type": "product_documentation",
+      "language": "en",
+      "file": "sources/src-005-aleks-kst.md",
+      "research_questions_addressed": ["RQ2.1", "RQ2.2", "RQ5.1"],
+      "verification_status": "verified"
+    },
+    {
+      "source_id": "src-006",
+      "title": "Bayesian Knowledge Tracing for Intelligent Tutoring Systems",
+      "organization": "CMU / Carnegie Learning",
+      "url": "multiple_papers",
+      "accessed_at": "2026-07-29",
+      "source_type": "research_literature",
+      "language": "en",
+      "file": "sources/src-006-bkt-knowledge-tracing.md",
+      "research_questions_addressed": ["RQ4.1", "RQ5.1", "RQ5.2"],
+      "verification_status": "partially_verified"
+    },
+    {
+      "source_id": "src-007",
+      "title": "Cognitive Tutors and ACT-R Model Tracing",
+      "organization": "CMU PACT",
+      "url": "multiple_papers",
+      "accessed_at": "2026-07-29",
+      "source_type": "research_literature",
+      "language": "en",
+      "file": "sources/src-007-cognitive-tutor-acts.md",
+      "research_questions_addressed": ["RQ3.1", "RQ3.2", "RQ4.1", "RQ5.1"],
+      "verification_status": "partially_verified"
+    },
+    {
+      "source_id": "src-008",
+      "title": "ASSISTments: Tutoring as You Test",
+      "organization": "CMU / WPI",
+      "url": "multiple_papers",
+      "accessed_at": "2026-07-29",
+      "source_type": "research_literature",
+      "language": "en",
+      "file": "sources/src-008-assistments.md",
+      "research_questions_addressed": ["RQ2.1", "RQ3.1", "RQ4.1"],
+      "verification_status": "partially_verified"
+    }
+  ]
 }

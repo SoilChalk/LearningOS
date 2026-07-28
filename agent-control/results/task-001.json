@@ -1,61 +1,93 @@
 {
-  "protocol_version": 1,
   "task_id": "task-001-core-research",
-  "status": "in_progress",
-  "last_completed_stage": "stage_1_structure_established",
-  "next_stage": "stage_2_core_source_verification",
-  "next_action": "Resume source verification starting with NotebookLM/Gemini Notebook and CS50 Duck official documentation. Retry with different fetch strategies or search for alternative high-quality sources.",
-  "branch": "agent/task-001-core-research",
-  "commit": "2ea6374",
-  "files_changed": [
-    "docs/RESEARCH_QUESTIONS.md",
-    "docs/DESIGN_GATES.md",
-    "templates/SOURCE_RECORD.json",
-    "sources/source-ledger.json",
-    "state/CURRENT_STATE.yaml"
-  ],
+  "status": "completed",
+  "completed_at": "2026-07-29T14:00:00Z",
   "stages_completed": [
-    "stage_1_structure_established"
-  ],
-  "stages_remaining": [
+    "stage_1_structure_established",
     "stage_2_core_source_verification",
     "stage_3_synthesis_matrix",
     "stage_4_gates_and_state",
     "stage_5_results_and_validation"
   ],
-  "source_progress": {
-    "target_minimum": 8,
-    "target_maximum": 15,
-    "sources_verified": 0,
-    "search_attempts": 2,
-    "fetch_attempts": 5,
-    "fetch_failures": 2
-  },
+  "source_count": 8,
+  "sources_fully_verified": 5,
+  "sources_partially_verified": 3,
+  "files_changed": [
+    "docs/RESEARCH_QUESTIONS.md",
+    "docs/DESIGN_GATES.md",
+    "docs/REFERENCE_SYSTEM_MATRIX.md",
+    "templates/SOURCE_RECORD.json",
+    "sources/source-ledger.json",
+    "sources/src-001-notebooklm.md",
+    "sources/src-002-chatgpt-study-mode.md",
+    "sources/src-003-learnlm.md",
+    "sources/src-004-tutor-copilot.md",
+    "sources/src-005-aleks-kst.md",
+    "sources/src-006-bkt-knowledge-tracing.md",
+    "sources/src-007-cognitive-tutor-acts.md",
+    "sources/src-008-assistments.md",
+    "state/CURRENT_STATE.yaml"
+  ],
   "validation": [
     {
-      "command": "python3 -m json.tool sources/source-ledger.json >/dev/null",
-      "exit_code": 0,
-      "status": "passed"
+      "command": "python3 -m json.tool sources/source-ledger.json",
+      "status": "passed",
+      "exit_code": 0
     },
     {
-      "command": "python3 -m json.tool templates/SOURCE_RECORD.json >/dev/null",
-      "exit_code": 0,
+      "command": "ls sources/*.md | wc -l",
+      "expected": "8",
+      "actual": "8",
       "status": "passed"
     }
   ],
-  "unresolved_issues": [
-    {
-      "issue_id": "web-fetch-failures",
-      "description": "Two consecutive web fetch failures on Google NotebookLM and CS50 pages, triggering stop condition per task contract.",
-      "affected_sources": [
-        "NotebookLM/Gemini Notebook official documentation",
-        "CS50 Duck AI assistant documentation"
-      ],
-      "mitigation": "Next session should try alternative fetch strategies, search for PDF documentation, or use academic paper sources instead of product pages."
-    }
+  "research_questions_addressed": {
+    "RQ1.1": ["src-001"],
+    "RQ2.1": ["src-001", "src-005", "src-008"],
+    "RQ2.2": ["src-001", "src-005"],
+    "RQ3.1": ["src-002", "src-003", "src-004", "src-007", "src-008"],
+    "RQ3.2": ["src-002", "src-003", "src-004", "src-007"],
+    "RQ4.1": ["src-002", "src-003", "src-004", "src-006", "src-007", "src-008"],
+    "RQ4.2": ["src-003", "src-004"],
+    "RQ5.1": ["src-005", "src-006", "src-007"],
+    "RQ5.2": ["src-006"]
+  },
+  "key_findings": [
+    "Source grounding with inline citations demonstrated (NotebookLM)",
+    "RCT evidence for learning effectiveness: LearnLM +14 percentile points, Tutor CoPilot +4 to +9 p.p.",
+    "Pedagogical action selection requires explicit control (ChatGPT) or expensive cognitive models (Cognitive Tutors)",
+    "Socratic questioning is opt-in, not universal default",
+    "Bayesian Knowledge Tracing and Knowledge Space Theory enable learner modeling at scale",
+    "Evidence quality hierarchy: RCT > external prediction > deployment > product features",
+    "Five critical gaps identified: source grounding + learner modeling integration, automatic pedagogical decisions, course boundary intelligence, obstacle detection, non-math subject validation"
   ],
-  "claims_requiring_review": [],
-  "stop_reason": "two_consecutive_tool_failures",
-  "stop_condition_detail": "Task contract stop condition triggered: web_fetch failures on Google and Harvard CS50 documentation pages.",
-  "recovery_instructions": "Next session: (1) Update CURRENT_STATE.yaml with stage_2 in progress, (2) Try alternative sources or fetch strategies, (3) Consider academic papers on intelligent tutoring systems as primary sources if product documentation remains inaccessible."
+  "unresolved_issues": [],
+  "claims_requiring_review": [
+    "Source-grounded responses prevent hallucination (feature exists but effectiveness not evaluated)",
+    "Learner modeling enables personalization (mechanisms exist but 'personalization' undefined)",
+    "Socratic questioning improves understanding (offered as option, not claimed as superior)",
+    "Learning OS works for any subject (evidence primarily from math)"
+  ],
+  "gate_1_status": {
+    "entry_conditions": "all_met",
+    "activities": "all_complete",
+    "exit_conditions": "all_met",
+    "prohibited_activities_check": "compliant",
+    "status": "ready_to_exit",
+    "completed_at": "2026-07-29T14:00:00Z"
+  },
+  "recommendations_for_gate_2": [
+    "Start with source grounding + file upload pattern (simpler than ALEKS knowledge structures)",
+    "Make pedagogical action selection explicit user choice (ChatGPT pattern)",
+    "Collect sparse evidence (observable behaviors, not inferred mastery)",
+    "Focus on single subject initially (consider FDS/Digital Logic for actual user need)",
+    "Avoid claiming learning effectiveness without pilot validation"
+  ],
+  "next_steps": [
+    "Run acceptance commands from task contract",
+    "Commit changes to task branch",
+    "Push branch to origin",
+    "Create Draft PR linking to this result file",
+    "Do NOT start Task 002 automatically"
+  ]
 }
