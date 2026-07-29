@@ -1,4 +1,4 @@
-protocol_version: 6
+protocol_version: 7
 
 task_id: task-001-core-research
 status: changes_requested
@@ -19,7 +19,9 @@ context:
   note: >
     Review 05 remains accepted. The task-001-stage-2-resume-01 stop condition is
     rejected because publicly readable source bodies exist and three failed
-    candidates were not demonstrated for any one required dimension.
+    candidates were not demonstrated for any one required dimension. Protocol 7
+    adds a controlled repair procedure for inherited trailing-whitespace failures;
+    it does not waive or weaken any acceptance command.
 
 allowed_paths:
   - AGENTS.md
@@ -135,6 +137,27 @@ source_requirements:
     - Each accepted source must pass the production JSON Schema validator.
     - A retrieval-tool failure is not evidence that the public source is inaccessible.
 
+whitespace_remediation:
+  trigger: >
+    git diff --check origin/main...HEAD fails only because trailing whitespace
+    already exists in commits on the task branch that predate the current Review 07
+    working-tree changes.
+  required_procedure:
+    - Preserve all current tracked and untracked Review 07 work with git stash push -u.
+    - Identify only the paths reported by git diff --check origin/main...HEAD.
+    - Remove trailing spaces and tabs from those paths without changing substantive content.
+    - Verify the cleanup is whitespace-only using git diff --ignore-space-at-eol --exit-code.
+    - Verify git diff --check passes for the cleanup working tree.
+    - Create one dedicated whitespace-only repair commit.
+    - Re-run git diff --check origin/main...HEAD; it must now exit zero.
+    - Restore the Review 07 work from the stash and resolve any conflict without discarding work.
+    - Before the Review 07 commit, run git diff --check and git diff --cached --check on the working tree/index.
+    - After the Review 07 commit, run every original acceptance command verbatim again.
+  restrictions:
+    - This procedure is not an acceptance waiver.
+    - Do not alter prose, evidence claims, schemas, or behavior in the whitespace-only commit.
+    - Do not commit Review 07 substantive changes until working-tree whitespace checks pass.
+
 acceptance_commands:
   - python3 -m json.tool sources/source-ledger.json >/dev/null
   - python3 -m json.tool templates/SOURCE_RECORD.json >/dev/null
@@ -165,6 +188,7 @@ stop_conditions:
 completion_process:
   - Fetch and merge origin/main into the existing task branch without discarding task work.
   - Read PR Review 07 and execute only required_changes in this contract.
+  - Apply whitespace_remediation only if its trigger is satisfied.
   - Run every acceptance command verbatim and record exact exit codes.
   - Commit and push the existing branch so Draft PR #2 updates.
   - Verify local HEAD equals the remote branch SHA after push.
