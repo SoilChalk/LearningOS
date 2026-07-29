@@ -1,9 +1,9 @@
 # Reference System Matrix
 
-**Generated**: 2026-07-29T17:00:00Z  
-**Task**: task-001-core-research  
-**Sources**: 5 verified sources  
-**Purpose**: Map research findings from verified sources to Learning OS design decisions  
+**Generated**: 2026-07-29T17:00:00Z
+**Task**: task-001-core-research
+**Sources**: 5 verified sources
+**Purpose**: Map research findings from verified sources to Learning OS design decisions
 
 **Note**: This matrix is built from five verified sources reviewed so far. Claims about what systems exist, patterns observed, or gaps identified are limited to this reviewed sample unless explicitly noted otherwise.
 
@@ -214,13 +214,13 @@ The following were not found in the five verified sources reviewed so far. This 
 
 The following claims from earlier analysis have been revised based on review requirements:
 
-1. **"Socratic questioning is opt-in, not universal default"**  
+1. **"Socratic questioning is opt-in, not universal default"**
    - **Revised**: ChatGPT Study Mode documentation describes that "there may be times when it gives a direct answer" and user can request Socratic approach (src-002). This documents interface behavior; whether Socratic is technically "opt-in" or "default-off" is a design inference, not directly stated.
 
-2. **"Pedagogical action selection requires explicit user control"**  
+2. **"Pedagogical action selection requires explicit user control"**
    - **Revised**: ChatGPT Study Mode documents user-requested teaching styles (src-002). LearnLM uses system instructions to trigger behaviors (src-003). Observed pattern in these sources: explicit specification used, but cannot generalize to "requires" as universal constraint.
 
-3. **"No system combines source grounding + learner modeling"**  
+3. **"No system combines source grounding + learner modeling"**
    - **Revised**: Not observed in the five verified sources reviewed so far. Cannot claim exhaustive search without systematic literature review.
 
 ---
@@ -257,6 +257,6 @@ The following candidates were identified but could not be verified due to access
 
 ---
 
-**End of Reference System Matrix**  
-**Last Updated**: 2026-07-29T17:00:00Z  
+**End of Reference System Matrix**
+**Last Updated**: 2026-07-29T17:00:00Z
 **Status**: Built from 5 verified sources; Task 001 in progress (5/8 minimum target)

@@ -1,10 +1,10 @@
 # Source 001: NotebookLM / Gemini Notebook
 
-**Title**: 了解 Gemini Notebook (Learn about Gemini Notebook)  
-**Organization**: Google  
-**URL**: https://support.google.com/gemininotebook/answer/16164461  
-**Accessed**: 2026-07-29  
-**Source Type**: product_documentation  
+**Title**: 了解 Gemini Notebook (Learn about Gemini Notebook)
+**Organization**: Google
+**URL**: https://support.google.com/gemininotebook/answer/16164461
+**Accessed**: 2026-07-29
+**Source Type**: product_documentation
 **Language**: Chinese (official Google support page)
 
 ---
@@ -72,6 +72,6 @@
 
 ## Verification Status
 
-**Status**: verified (Chinese official page)  
-**English fallback**: inaccessible  
+**Status**: verified (Chinese official page)
+**English fallback**: inaccessible
 **Alternative verification**: None attempted (Chinese official page sufficient)

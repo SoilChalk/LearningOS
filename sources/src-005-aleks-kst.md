@@ -1,32 +1,32 @@
 # Source 005: ALEKS Knowledge Space Theory
 
-**Title**: Knowledge Space Theory  
-**Organization**: McGraw Hill ALEKS  
-**URL**: https://www.aleks.com/about_aleks/knowledge_space_theory  
-**Accessed**: 2026-07-29  
-**Source Type**: product_documentation (theoretical foundation)  
-**Language**: English  
+**Title**: Knowledge Space Theory
+**Organization**: McGraw Hill ALEKS
+**URL**: https://www.aleks.com/about_aleks/knowledge_space_theory
+**Accessed**: 2026-07-29
+**Source Type**: product_documentation (theoretical foundation)
+**Language**: English
 
 ---
 
 ## Core Capabilities (Directly Supported)
 
-1. **Mathematical cognitive science foundation**  
+1. **Mathematical cognitive science foundation**
    - ALEKS theoretical basis: Knowledge Space Theory (KST)
    - Applies combinatorics and stochastic processes to modeling specific knowledge domains
    - Mathematical language delineates how knowledge elements combine to form distinct knowledge states
 
-2. **Knowledge structure representation**  
+2. **Knowledge structure representation**
    - Algebra 1 example: ~350 basic concepts giving rise to millions of empirically feasible knowledge states
    - "Knowledge Spaces" created through computer algorithms
    - Domain-specific structures (e.g., separate structure for each math course)
 
-3. **Adaptive assessment based on Markov processes**  
+3. **Adaptive assessment based on Markov processes**
    - Despite millions of possible knowledge states, adaptive assessment can gauge student knowledge state in 25-30 questions
    - Employs Markovian procedures (stochastic processes)
    - Assessment determines "precisely what each individual student knows, and what the student is ready to learn next"
 
-4. **Empirical validation**  
+4. **Empirical validation**
    - Reference to "empirically feasible knowledge states" suggests data-driven validation
    - Authoritative sources: Learning Spaces (Doignon & Falmagne, Springer-Verlag, 2011), Knowledge Spaces (1999)
    - Foundational paper: Falmagne et al., Psychological Review, 1990
@@ -77,8 +77,8 @@
 
 ## Verification Status
 
-**Status**: verified (official ALEKS product page)  
-**Theoretical foundation**: Knowledge Space Theory (Doignon & Falmagne)  
-**Academic references**: Learning Spaces (Springer-Verlag, 2011), Psychological Review (1990)  
-**Product status**: Active (ALEKS currently used in K-12 and higher education)  
-**Note**: This source describes assessment/modeling framework, not pedagogical strategy or learning effectiveness  
+**Status**: verified (official ALEKS product page)
+**Theoretical foundation**: Knowledge Space Theory (Doignon & Falmagne)
+**Academic references**: Learning Spaces (Springer-Verlag, 2011), Psychological Review (1990)
+**Product status**: Active (ALEKS currently used in K-12 and higher education)
+**Note**: This source describes assessment/modeling framework, not pedagogical strategy or learning effectiveness

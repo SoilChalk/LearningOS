@@ -6,11 +6,11 @@ Task 001 (core-research) is **IN PROGRESS**. Stage 1 (structure establishment) c
 
 ## Current Status
 
-**Sources Verified**: 5 of 8 minimum required  
-**Gate 1**: NOT MET  
-**Review Cycle**: task-001-review-03 corrections applied  
-**Branch**: agent/task-001-core-research  
-**PR Status**: Draft  
+**Sources Verified**: 5 of 8 minimum required
+**Gate 1**: NOT MET
+**Review Cycle**: task-001-review-03 corrections applied
+**Branch**: agent/task-001-core-research
+**PR Status**: Draft
 
 ## Files Changed
 
@@ -126,10 +126,10 @@ The following were **not observed in the five verified sources reviewed so far**
 
 ## Gate 1 Status
 
-**Entry Conditions**: ✅ ALL MET  
-**Activities**: 🔄 PARTIALLY COMPLETE (5/8 sources)  
-**Exit Conditions**: ❌ NOT MET  
-**Prohibited Activities Check**: ✅ COMPLIANT  
+**Entry Conditions**: ✅ ALL MET
+**Activities**: 🔄 PARTIALLY COMPLETE (5/8 sources)
+**Exit Conditions**: ❌ NOT MET
+**Prohibited Activities Check**: ✅ COMPLIANT
 **Status**: **IN PROGRESS**
 
 **Blockers**:
@@ -152,8 +152,8 @@ The following were **not observed in the five verified sources reviewed so far**
 
 ---
 
-**Task ID**: task-001-core-research  
-**Status**: IN PROGRESS  
-**Last Updated**: 2026-07-29T06:56:21Z  
-**Branch**: agent/task-001-core-research  
+**Task ID**: task-001-core-research
+**Status**: IN PROGRESS
+**Last Updated**: 2026-07-29T06:56:21Z
+**Branch**: agent/task-001-core-research
 **Review Cycle**: task-001-review-03 corrections applied

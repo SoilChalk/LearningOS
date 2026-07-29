@@ -1,37 +1,37 @@
 # Source 003: Gemini 中的 LearnLM (LearnLM in Gemini)
 
-**Title**: Gemini 中的 LearnLM  
-**Organization**: Google Cloud / Google DeepMind  
-**URL**: https://cloud.google.com/solutions/learnlm  
-**Accessed**: 2026-07-29  
-**Source Type**: product_documentation + research_report  
-**Language**: zh-CN (Chinese official page)  
+**Title**: Gemini 中的 LearnLM
+**Organization**: Google Cloud / Google DeepMind
+**URL**: https://cloud.google.com/solutions/learnlm
+**Accessed**: 2026-07-29
+**Source Type**: product_documentation + research_report
+**Language**: zh-CN (Chinese official page)
 
 ---
 
 ## Core Capabilities (Directly Supported)
 
-1. **Learning science principles integration**  
+1. **Learning science principles integration**
    - LearnLM built "with education experts" and "optimized specifically for learning based on rigorous research"
    - Improvements available directly in Gemini, enhancing educational experiences and applications
    - Multiple technical reports: May 2026, November 2025, December 2024, May 2024
 
-2. **Pedagogical quality validated by expert raters**  
+2. **Pedagogical quality validated by expert raters**
    - Expert pedagogical raters evaluated LearnLM against GPT-4o, Claude 3.5, and Gemini 1.5 Pro
    - Evaluated on "pedagogical elements like guidance and correcting mistakes beyond mere accuracy"
    - LearnLM significantly preferred for pedagogical quality
 
-3. **Learning effectiveness evidence**  
+3. **Learning effectiveness evidence**
    - **Randomized controlled trial** in Sierra Leone with 1,763 middle school students (grades 7-8)
    - Students using Gemini tutoring mode for at least 12 hours over 8 weeks showed significant improvement
    - Effect: math performance from 50th percentile to 64th percentile
    - Equivalent to 1.8 to 2.5 additional years of learning progress
 
-4. **System instructions and prompt engineering**  
+4. **System instructions and prompt engineering**
    - With appropriate system instructions, Gemini can leverage LearnLM's learning science research to trigger pedagogical behaviors
    - Prompt guide provides example instructions and prompts for practical application
 
-5. **Safety and evaluation protocols**  
+5. **Safety and evaluation protocols**
    - Gemini with LearnLM follows model safety policies
    - Built-in education-specific evaluation and red team testing protocols
 
@@ -79,7 +79,7 @@
 
 ## Verification Status
 
-**Status**: verified (Chinese official Google Cloud page)  
-**Publication status**: Multiple technical reports cited (May 2026, Nov 2025, Dec 2024, May 2024)  
-**RCT verification**: Pre-registered RCT with Fab AI, 1,763 students, published May 2026 report  
-**Alternative verification**: Search results confirm arxiv.org paper "Improving Gemini for Learning" (arXiv:2412.16429) but page inaccessible  
+**Status**: verified (Chinese official Google Cloud page)
+**Publication status**: Multiple technical reports cited (May 2026, Nov 2025, Dec 2024, May 2024)
+**RCT verification**: Pre-registered RCT with Fab AI, 1,763 students, published May 2026 report
+**Alternative verification**: Search results confirm arxiv.org paper "Improving Gemini for Learning" (arXiv:2412.16429) but page inaccessible

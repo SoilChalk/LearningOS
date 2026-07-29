@@ -1,10 +1,10 @@
 # Source 002: ChatGPT Study Mode
 
-**Title**: Using Study Mode in ChatGPT  
-**Organization**: OpenAI  
-**URL**: https://help.openai.com/en/articles/11780217-study-mode  
-**Accessed**: 2026-07-29  
-**Source Type**: product_documentation  
+**Title**: Using Study Mode in ChatGPT
+**Organization**: OpenAI
+**URL**: https://help.openai.com/en/articles/11780217-study-mode
+**Accessed**: 2026-07-29
+**Source Type**: product_documentation
 **Language**: English (official OpenAI help documentation)
 
 ---
@@ -80,6 +80,6 @@
 
 ## Verification Status
 
-**Status**: verified  
-**Publication date**: Document updated "23小时前" (23 hours ago) as of 2026-07-29  
+**Status**: verified
+**Publication date**: Document updated "23小时前" (23 hours ago) as of 2026-07-29
 **Product status**: Launched globally across plans

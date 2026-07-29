@@ -40,7 +40,7 @@ phase_constraints:
     - "Source verification criteria documented"
     - "Design gate boundaries specified"
     - "5 sources fully verified with complete body content read"
-  
+
   forbidden_claims:
     - "Learning OS architecture validated"
     - "Learner model implementation ready"
@@ -63,15 +63,15 @@ gate_status:
     exit_conditions_met: false
     blocked: false
     progress: "Stage 1 complete (structure), Stage 2 in progress (5/8 sources)"
-  
+
   gate_2_first_scenario:
     status: not_started
     entry_conditions_met: false
-  
+
   gate_3_mvp_pilot:
     status: not_started
     entry_conditions_met: false
-  
+
   gate_4_iteration:
     status: not_started
     entry_conditions_met: false
