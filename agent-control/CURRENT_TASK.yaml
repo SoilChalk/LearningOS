@@ -1,21 +1,25 @@
-protocol_version: 4
+protocol_version: 5
 
 task_id: task-001-core-research
-status: changes_requested
+status: in_progress
 branch: agent/task-001-core-research
 pull_request: 2
 
 objective: >
-  Complete a public, non-sensitive core research ledger for Learning OS covering
-  source grounding, course/task boundaries, pedagogical action selection,
-  learning-behavior evidence, and learner-model applicability.
+  Continue Task 001 Stage 2 research from the current five verified sources.
+  Add only directly read, concrete, high-quality sources until the minimum of
+  eight verified sources is reached, or document a protocol stop condition.
 
 context:
   authoritative_issue: https://github.com/SoilChalk/LearningOS/issues/1
   review_target: https://github.com/SoilChalk/LearningOS/pull/2
+  prior_review: task-001-review-05
+  prior_review_decision: accepted
+  accepted_head: bafc178370c9bba50769310625e6220299c06e1f
   note: >
-    PR web access is optional. This file is the executable Review 02 contract.
-    Task 001 is in progress. Gate 1 is not complete.
+    Review 05 corrections are accepted. The matrix is current for five verified
+    sources but Stage 3 and Gate 1 remain incomplete. This file replaces the
+    obsolete Review 02 correction contract.
 
 allowed_paths:
   - AGENTS.md
@@ -46,65 +50,61 @@ current_truth:
     - src-003
     - src-004
     - src-005
-  removed_evidence_ids:
-    - src-006
-    - src-007
-    - src-008
+  stage_2_status: in_progress
+  stage_3_artifact_status: current_for_5_verified_sources
+  stage_3_status: incomplete_until_minimum_8_sources
+  task_002_status: not_started
 
-review_cycle:
-  review_id: task-001-review-02
-  decision: changes_requested
-  required_changes:
+execution_cycle:
+  cycle_id: task-001-stage-2-resume-01
+  decision: continue_research
+  scope:
     - >
-      Rebuild docs/REFERENCE_SYSTEM_MATRIX.md entirely from the current five-source
-      ledger. Its header still says eight verified sources and it still cites
-      removed src-006, src-007, and src-008. Remove those evidence rows and claims.
-      Deferred candidates may appear only in an explicitly labeled deferred section.
+      Read the current ledger, source notes, research questions, matrix, design
+      gates, state file, and Task 001 result before searching.
     - >
-      Scope negative gap claims to the reviewed sample. Replace claims such as
-      "No system found" with "Not observed in the five verified sources reviewed
-      so far" unless a systematic search supports a broader conclusion.
+      Prioritize uncovered RQ5.2 and weak evidence dimensions: learner-state
+      change from interaction evidence, source-grounding plus learner-model
+      integration, and evidence-based pedagogical action selection.
     - >
-      Correct all LearnLM percentile wording. Use: "moved from the 50th to the
-      64th percentile (a difference of 14 percentile ranks/positions)". Do not use
-      "14 percentage points" or "+14 percentile points" anywhere.
+      Attempt no more than three distinct accessible candidates per required
+      dimension. Stop early after three additional sources are fully verified.
     - >
-      Downgrade Study Mode claims. The official page documents available behaviors
-      and explicit user requests, but does not prove that pedagogical selection
-      requires explicit user control or that Socratic behavior is technically
-      opt-in/default-off. Keep the documented interface behavior as direct evidence;
-      label policy conclusions as design inference.
+      Count a source only after reading its source body and recording one
+      concrete primary or high-quality survey URL, publication metadata,
+      access date, directly supported observations, design implications,
+      limitations/non-inferences, and affected decisions.
     - >
-      Fix schema architecture. sources/source-ledger.json currently points its
-      $schema field at a single-record schema although the ledger root is not one
-      record. Create templates/SOURCE_LEDGER.schema.json whose sources.items refers
-      to templates/SOURCE_RECORD.json, and point the ledger to the ledger schema.
+      Product pages may support feature claims but not learning-effect claims.
+      Search snippets, aggregate URLs, remembered literature, and inaccessible
+      papers do not count as verified evidence.
     - >
-      Add deterministic schema validation. Prefer scripts/validate_source_records.py
-      using a real JSON Schema validator. It must validate the ledger root and each
-      source record, return nonzero on failure, and be recorded in task-001.json.
+      Update the ledger, one source note per accepted source, the provisional
+      matrix, research coverage, design gates, current state, Task 001 result,
+      and actual PR body. Do not create implementation architecture or code
+      beyond validation/support scripts already in scope.
     - >
-      Keep Stage 2 in progress and Gate 1 not met. Stage 3 may be marked complete
-      only after the matrix is rebuilt from the current ledger. Do not claim Task
-      completion while the source count is below eight.
-    - >
-      Ensure task-001.json, CURRENT_STATE.yaml, DESIGN_GATES.md, the matrix, ledger,
-      and PR body all agree on in_progress, five verified sources, and Gate 1 not met.
+      Do not mark Gate 1 met merely because the source count reaches eight.
+      Evaluate every Gate 1 exit condition explicitly and keep unsupported
+      conclusions scoped to the reviewed sample.
 
 required_outputs:
   - docs/RESEARCH_QUESTIONS.md
   - docs/REFERENCE_SYSTEM_MATRIX.md
   - docs/DESIGN_GATES.md
   - sources/source-ledger.json
+  - sources/src-*.md
   - templates/SOURCE_RECORD.json
   - templates/SOURCE_LEDGER.schema.json
   - scripts/validate_source_records.py
+  - scripts/test_validation_negative.sh
   - state/CURRENT_STATE.yaml
   - agent-control/results/task-001.json
 
 source_requirements:
   minimum_count: 8
   maximum_count: 15
+  target_additional_verified_sources: 3
   rules:
     - Product pages support feature claims, not learning-effect claims.
     - Search snippets cannot substitute for reading the source body.
@@ -112,23 +112,27 @@ source_requirements:
     - Dates, metrics, and current product claims require an access date.
     - Individual reports must not be generalized into population claims.
     - Prefer eight strong sources over weak sources added to satisfy the count.
+    - Each accepted source must pass the production JSON Schema validator.
 
 acceptance_commands:
   - python3 -m json.tool sources/source-ledger.json >/dev/null
   - python3 -m json.tool templates/SOURCE_RECORD.json >/dev/null
   - python3 -m json.tool templates/SOURCE_LEDGER.schema.json >/dev/null
   - python3 scripts/validate_source_records.py
+  - bash scripts/test_validation_negative.sh
   - find . -maxdepth 3 -type f | sort
-  - "! grep -R -nE 'Sources: 8 verified|src-006|src-007|src-008|\\+14 percentile points|14 percentile point gain' docs sources state agent-control/results"
+  - git diff --check origin/main...HEAD
+  - "! grep -R -nE 'Sources: 8 verified|\\+14 percentile points|14 percentile point gain' docs sources state agent-control/results"
 
-review_02_acceptance:
-  - Matrix contains only current verified evidence rows.
-  - Deleted source IDs occur only in explicitly labeled deferred or removed-history records.
-  - No ambiguous percentile-point terminology remains.
-  - Study Mode observations and design inferences are separated.
-  - Ledger root and source records pass deterministic schema validation.
-  - All status-bearing files report in_progress, five verified sources, and Gate 1 not met.
-  - PR remains draft and Task 002 is not started.
+completion_states:
+  reached_minimum:
+    - Ledger contains at least eight fully verified concrete sources.
+    - Matrix and research coverage are rebuilt from the full verified ledger.
+    - All status-bearing artifacts agree on source count and gate status.
+  stopped_below_minimum:
+    - Each remaining required dimension has three documented distinct candidate attempts.
+    - Inaccessible or rejected candidates are not counted as evidence.
+    - Result and PR body state the exact stop condition and unresolved gap.
 
 stop_conditions:
   - same_required_operation_fails_twice_after_declared_fallback_and_no_equivalent_alternative_exists
@@ -138,8 +142,10 @@ stop_conditions:
   - requested_content_is_not_suitable_for_a_public_repository
 
 completion_process:
-  - Merge origin/main into the existing task branch without discarding task work.
-  - Apply review_cycle.required_changes only.
-  - Run every acceptance command and record exact exit codes.
-  - Push the existing branch so Draft PR #2 updates.
+  - Fetch and merge origin/main into the existing task branch without discarding task work.
+  - Execute only this Stage 2 research cycle.
+  - Run every acceptance command verbatim and record exact exit codes.
+  - Commit and push the existing branch so Draft PR #2 updates.
+  - Verify local HEAD equals the remote branch SHA after push.
+  - Update the actual PR body with truthful source count, gate state, and outcome.
   - Stop without merging or starting Task 002.
