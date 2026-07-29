@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Validate source ledger and individual source records against JSON schemas.
+Validate source ledger and individual source records using JSON Schema.
 Returns 0 on success, nonzero on validation failure.
 """
 
@@ -8,12 +8,34 @@ import json
 import sys
 from pathlib import Path
 
+try:
+    import jsonschema
+    from jsonschema import validate, ValidationError, RefResolver
+except ImportError:
+    print("ERROR: jsonschema library not installed. Run: pip install jsonschema", file=sys.stderr)
+    sys.exit(1)
+
 def validate_source_ledger():
-    """Validate source ledger structure and individual source records."""
+    """Validate source ledger and records using actual JSON Schema validation."""
     repo_root = Path(__file__).parent.parent
     ledger_path = repo_root / "sources" / "source-ledger.json"
+    ledger_schema_path = repo_root / "templates" / "SOURCE_LEDGER.schema.json"
+    record_schema_path = repo_root / "templates" / "SOURCE_RECORD.json"
     
-    errors = []
+    # Load schemas
+    try:
+        with open(ledger_schema_path) as f:
+            ledger_schema = json.load(f)
+    except Exception as e:
+        print(f"ERROR: Failed to load ledger schema: {e}", file=sys.stderr)
+        return 1
+    
+    try:
+        with open(record_schema_path) as f:
+            record_schema = json.load(f)
+    except Exception as e:
+        print(f"ERROR: Failed to load record schema: {e}", file=sys.stderr)
+        return 1
     
     # Load ledger
     try:
@@ -23,99 +45,39 @@ def validate_source_ledger():
         print(f"ERROR: Failed to load source ledger: {e}", file=sys.stderr)
         return 1
     
-    # Basic ledger structure validation
-    required_ledger_fields = [
-        "schema_version", "generated_at", "task_id", "status",
-        "stage", "source_count", "target_minimum", "target_maximum", "sources"
-    ]
+    # Set up resolver for $ref
+    schema_store = {
+        ledger_schema.get("$id", str(ledger_schema_path.resolve())): ledger_schema,
+        record_schema.get("$id", str(record_schema_path.resolve())): record_schema,
+        "./SOURCE_RECORD.json": record_schema,
+        "../templates/SOURCE_RECORD.json": record_schema
+    }
+    resolver = RefResolver.from_schema(ledger_schema, store=schema_store)
     
-    for field in required_ledger_fields:
-        if field not in ledger:
-            errors.append(f"Ledger missing required field: {field}")
-    
-    # Validate source count matches array length
-    if "sources" in ledger and "source_count" in ledger:
-        actual_count = len(ledger["sources"])
-        declared_count = ledger["source_count"]
-        if actual_count != declared_count:
-            errors.append(
-                f"Source count mismatch: declared {declared_count}, "
-                f"but found {actual_count} sources"
-            )
+    # Validate ledger against ledger schema
+    try:
+        validate(instance=ledger, schema=ledger_schema, resolver=resolver)
+        print("✓ Ledger structure validated against SOURCE_LEDGER.schema.json")
+    except ValidationError as e:
+        print(f"VALIDATION FAILED: Ledger structure invalid", file=sys.stderr)
+        print(f"  Path: {' -> '.join(str(p) for p in e.path)}", file=sys.stderr)
+        print(f"  Error: {e.message}", file=sys.stderr)
+        return 1
     
     # Validate each source record
-    required_record_fields = [
-        "id", "title", "organization_or_authors", "publication_date",
-        "source_type", "url", "accessed_at", "research_question_ids",
-        "directly_supported_observations", "design_implications",
-        "limitations_and_non_inferences", "decision_affected",
-        "verification_status"
-    ]
-    
-    valid_source_types = [
-        "product_documentation", "research_paper_survey",
-        "research_paper_experiment", "research_paper_simulation",
-        "research_paper_field_evaluation", "technical_report",
-        "project_repository", "official_blog_post"
-    ]
-    
-    valid_decisions = [
-        "source_grounding_strategy", "course_boundary_enforcement",
-        "pedagogical_action_selection", "evidence_collection",
-        "learner_model_applicability", "first_scenario_scope",
-        "state_schema_design", "anti_pattern_avoidance"
-    ]
-    
+    source_count = len(ledger.get("sources", []))
     for i, source in enumerate(ledger.get("sources", [])):
         source_id = source.get("id", f"source_{i}")
-        
-        # Check required fields
-        for field in required_record_fields:
-            if field not in source:
-                errors.append(f"{source_id}: missing required field '{field}'")
-        
-        # Validate source_type
-        if "source_type" in source:
-            if source["source_type"] not in valid_source_types:
-                errors.append(
-                    f"{source_id}: invalid source_type '{source['source_type']}'"
-                )
-        
-        # Validate decision_affected
-        if "decision_affected" in source:
-            for decision in source["decision_affected"]:
-                if decision not in valid_decisions:
-                    errors.append(
-                        f"{source_id}: invalid decision '{decision}'"
-                    )
-        
-        # Validate arrays are not empty
-        array_fields = [
-            "research_question_ids", "directly_supported_observations",
-            "design_implications", "limitations_and_non_inferences",
-            "decision_affected"
-        ]
-        for field in array_fields:
-            if field in source:
-                if not isinstance(source[field], list) or len(source[field]) == 0:
-                    errors.append(f"{source_id}: '{field}' must be non-empty array")
-        
-        # Validate ID format
-        if "id" in source:
-            if not source["id"].startswith("src-"):
-                errors.append(f"{source_id}: ID must start with 'src-'")
+        try:
+            validate(instance=source, schema=record_schema)
+        except ValidationError as e:
+            print(f"VALIDATION FAILED: {source_id} invalid", file=sys.stderr)
+            print(f"  Path: {' -> '.join(str(p) for p in e.path)}", file=sys.stderr)
+            print(f"  Error: {e.message}", file=sys.stderr)
+            return 1
     
-    # Report results
-    if errors:
-        print("VALIDATION FAILED:", file=sys.stderr)
-        for error in errors:
-            print(f"  - {error}", file=sys.stderr)
-        return 1
-    else:
-        print("✓ Source ledger validation passed")
-        print(f"✓ Ledger structure valid")
-        print(f"✓ {len(ledger.get('sources', []))} source records validated")
-        return 0
+    print(f"✓ {source_count} source records validated against SOURCE_RECORD.json")
+    return 0
 
 if __name__ == "__main__":
     sys.exit(validate_source_ledger())

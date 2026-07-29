@@ -1,5 +1,5 @@
 {
-  "$schema": "../templates/SOURCE_RECORD.json",
+  "$schema": "../templates/SOURCE_LEDGER.schema.json",
   "schema_version": "1.0",
   "generated_at": "2026-07-29T16:00:00Z",
   "task_id": "task-001-core-research",

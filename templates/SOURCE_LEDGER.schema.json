@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Learning OS Source Ledger Schema",
-  "description": "Schema for the source ledger containing multiple source records",
+  "description": "Schema for the complete source ledger containing multiple source records and metadata",
   "type": "object",
   "required": [
     "schema_version",
@@ -17,72 +17,101 @@
   "properties": {
     "$schema": {
       "type": "string",
-      "format": "uri",
       "description": "Reference to this schema file"
     },
     "schema_version": {
       "type": "string",
-      "pattern": "^[0-9]+\\.[0-9]+$",
-      "description": "Version of the ledger schema format"
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Version of the ledger schema (e.g., 1.0)"
     },
     "generated_at": {
       "type": "string",
       "format": "date-time",
-      "description": "Timestamp when ledger was generated (ISO 8601)"
+      "description": "ISO 8601 timestamp when ledger was last updated"
     },
     "task_id": {
       "type": "string",
-      "description": "Associated task identifier"
+      "pattern": "^task-[0-9]{3}-[a-z-]+$",
+      "description": "Task identifier (e.g., task-001-core-research)"
     },
     "status": {
       "type": "string",
-      "enum": ["in_progress", "completed", "blocked"],
-      "description": "Current verification status"
+      "enum": ["not_started", "in_progress", "completed", "blocked"],
+      "description": "Overall task status"
     },
     "stage": {
       "type": "string",
-      "description": "Current execution stage"
+      "pattern": "^stage_\\d+_[a-z_]+$",
+      "description": "Current task stage (e.g., stage_2_core_source_verification)"
     },
     "source_count": {
       "type": "integer",
       "minimum": 0,
-      "description": "Number of verified sources in ledger"
+      "description": "Number of verified sources in this ledger"
     },
     "target_minimum": {
       "type": "integer",
-      "minimum": 0,
-      "description": "Minimum target source count"
+      "minimum": 1,
+      "description": "Minimum number of sources required"
     },
     "target_maximum": {
       "type": "integer",
-      "minimum": 0,
-      "description": "Maximum target source count"
+      "minimum": 1,
+      "description": "Maximum number of sources to collect"
     },
     "sources": {
       "type": "array",
-      "description": "Array of verified source records",
       "items": {
         "$ref": "./SOURCE_RECORD.json"
-      }
+      },
+      "description": "Array of verified source records"
     },
     "incomplete_candidates": {
       "type": "array",
-      "description": "Optional array of deferred or inaccessible candidates",
       "items": {
         "type": "object",
+        "required": ["candidate_id", "title", "reason", "alternative_attempted", "research_questions", "status"],
         "properties": {
-          "candidate_id": {"type": "string"},
-          "title": {"type": "string"},
-          "reason": {"type": "string"},
-          "alternative_attempted": {"type": "string"},
-          "research_questions": {"type": "array", "items": {"type": "string"}},
-          "status": {"type": "string"}
+          "candidate_id": {
+            "type": "string",
+            "description": "Unique identifier for incomplete candidate"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Title of the candidate source"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Why this candidate could not be verified"
+          },
+          "alternative_attempted": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Alternative approaches attempted"
+          },
+          "research_questions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^RQ[1-5]\\.[1-2]$"
+            },
+            "minItems": 1,
+            "description": "Research questions this candidate would address"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["deferred", "failed", "abandoned"],
+            "description": "Status of this incomplete candidate"
+          }
         }
-      }
+      },
+      "description": "Candidates that could not be verified due to access issues"
     },
     "notes": {
       "type": "string",
-      "description": "Optional additional context or metadata"
+      "description": "Optional additional context about the ledger state"
     }
   }
 }

@@ -1,8 +1,13 @@
 {
+  "protocol_version": 2,
   "task_id": "task-001-core-research",
   "status": "in_progress",
-  "review_cycle": "task-001-review-01",
-  "updated_at": "2026-07-29T16:00:00Z",
+  "branch": "agent/task-001-core-research",
+  "commit": "",
+  "review_cycle": "task-001-review-02",
+  "updated_at": "2026-07-29T18:00:00Z",
+  "last_completed_stage": "stage_1_structure_established",
+  "next_action": "Continue stage_2_core_source_verification: attempt 3 more distinct accessible candidates for remaining research dimensions, or document stop condition if source exhaustion reached",
   "stages_completed": [
     "stage_1_structure_established"
   ],
@@ -23,34 +28,41 @@
     "docs/DESIGN_GATES.md",
     "docs/REFERENCE_SYSTEM_MATRIX.md",
     "templates/SOURCE_RECORD.json",
+    "templates/SOURCE_LEDGER.schema.json",
+    "scripts/validate_source_records.py",
     "sources/source-ledger.json",
     "sources/src-001-notebooklm.md",
     "sources/src-002-chatgpt-study-mode.md",
     "sources/src-003-learnlm.md",
     "sources/src-004-tutor-copilot.md",
     "sources/src-005-aleks-kst.md",
-    "state/CURRENT_STATE.yaml"
+    "state/CURRENT_STATE.yaml",
+    "agent-control/results/task-001.json"
   ],
-  "files_removed": [
-    "sources/src-006-bkt-knowledge-tracing.md",
-    "sources/src-007-cognitive-tutor-acts.md",
-    "sources/src-008-assistments.md"
-  ],
-  "validation_commands": [
+  "validation": [
     {
-      "command": "python3 -m json.tool sources/source-ledger.json",
-      "exit_code": 0,
-      "status": "passed"
+      "command": "python3 -m json.tool sources/source-ledger.json >/dev/null",
+      "exit_code": 0
     },
     {
-      "command": "python3 -m json.tool templates/SOURCE_RECORD.json",
-      "exit_code": 0,
-      "status": "passed"
+      "command": "python3 -m json.tool templates/SOURCE_RECORD.json >/dev/null",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m json.tool templates/SOURCE_LEDGER.schema.json >/dev/null",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_source_records.py",
+      "exit_code": 0
     },
     {
       "command": "find . -maxdepth 3 -type f | sort",
-      "exit_code": 0,
-      "status": "passed"
+      "exit_code": 0
+    },
+    {
+      "command": "! grep -R -nE '<prohibited_terms>' docs sources state agent-control/results",
+      "exit_code": 0
     }
   ],
   "research_questions_addressed": {
@@ -98,43 +110,40 @@
   },
   "key_findings": [
     "Source grounding with inline citations demonstrated (NotebookLM src-001)",
-    "RCT evidence for learning effectiveness: LearnLM moved from 50th to 64th percentile (14 percentile ranks) (src-003), Tutor CoPilot +4 to +9 p.p. (src-004)",
-    "Pedagogical action selection requires explicit user control (ChatGPT src-002) or embedded training (LearnLM src-003)",
-    "Socratic questioning is opt-in feature, not universal default (src-002, src-003)",
+    "RCT evidence: LearnLM moved from 50th to 64th percentile (a difference of 14 percentile ranks) (src-003)",
+    "RCT evidence: Tutor CoPilot +4 to +9 percentage points (src-004)",
+    "ChatGPT Study Mode documents user-requested teaching styles; whether pedagogical selection requires explicit control is a design inference (src-002)",
+    "ChatGPT Study Mode documentation states Socratic questioning as opt-in behavior; 'there may be times when it gives a direct answer' (src-002)",
     "Knowledge Space Theory enables learner modeling at scale (ALEKS src-005: 25-30 questions for millions of states)"
   ],
-  "review_changes_applied": [
-    "Restored consistent in_progress status across ledger, CURRENT_STATE, DESIGN_GATES, and result file",
-    "Removed src-006, src-007, src-008 as they relied on search snippets and secondary sources without reading primary source bodies",
-    "Updated source-ledger.json to conform to declared schema with all required fields",
-    "Documented 6 incomplete candidates with access issues and alternatives attempted",
-    "Corrected LearnLM evidence: percentile positions (50th to 64th) not percentage points",
-    "Corrected Tutor CoPilot evidence: kept Stanford publication values consistent",
-    "NotebookLM citations described as product framing, not proven effects",
-    "Recorded all acceptance command exit codes",
-    "Removed contradictory completion statements from all files"
+  "review_02_changes_applied": [
+    "Matrix rebuilt from five-source ledger; removed all references to removed sources",
+    "Negative gap claims scoped to reviewed sample: 'Not observed in the five verified sources' instead of 'No system found'",
+    "LearnLM percentile wording corrected throughout: 'moved from 50th to 64th percentile (a difference of 14 percentile ranks)'",
+    "Study Mode claims downgraded: separated documented interface behavior from design inferences about technical requirements",
+    "Schema architecture fixed: created SOURCE_LEDGER.schema.json with sources.items pointing to SOURCE_RECORD.json",
+    "Deterministic schema validation added: validate_source_records.py using jsonschema library",
+    "Stage 2 kept in progress, Gate 1 status kept as not_met",
+    "All status files synchronized: in_progress, 5 sources, Gate 1 not_met"
   ],
   "unresolved_issues": [
     "Source count 5/8: minimum target of 8 not yet achieved",
     "Research question RQ5.2 not covered by current sources",
-    "Multiple academic sources (BKT, Cognitive Tutors, ASSISTments, ITS meta-analyses) inaccessible due to paywalls, PDF blocks, or HTTP errors"
+    "Multiple academic sources inaccessible: BKT (Corbett & Anderson 1995), Cognitive Tutors/ACT-R (CMU PACT), ASSISTments, ITS meta-analyses (SAGE paywalls), Duolingo research (arXiv errors), Khan Academy RCTs (institutional access)"
   ],
-  "next_steps": [
-    "Attempt 3 more distinct accessible candidates for remaining research dimensions",
-    "Document stop condition if additional candidates fail per protocol: required_research_dimension_has_no_accessible_primary_or_high_quality_survey_after_three_distinct_candidates",
-    "Continue to Stage 3 (synthesis matrix) if minimum 8 sources achieved",
-    "Push updates to task branch to update Draft PR #2",
-    "Do NOT merge; do NOT start Task 002"
+  "claims_requiring_review": [
+    "Matrix deferred candidates section lists inaccessible sources; these are explicitly labeled as deferred, not cited as evidence",
+    "Study Mode pedagogical inference claims now labeled as design inferences from documented behavior, not direct observations",
+    "Negative gap claims now explicitly scoped to 'five verified sources reviewed so far'"
   ],
   "gate_1_status": {
     "entry_conditions": "all_met",
     "activities": "partially_complete",
     "exit_conditions": "not_met",
-    "prohibited_activities_check": "compliant",
     "status": "in_progress",
     "blockers": [
       "Source count 5/8 (minimum 8 required)",
-      "Multiple academic sources inaccessible"
+      "6 incomplete candidates due to access restrictions"
     ]
   }
 }

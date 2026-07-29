@@ -1,121 +1,157 @@
-# [Task 001] Establish Core Research Workflow
+# [Task 001] Core Research Workflow
 
 ## Summary
 
-Task 001 (core-research) is **COMPLETE**. All 5 stages executed successfully: structure establishment, source verification (8 sources), synthesis matrix creation, design gates update, and validation.
+Task 001 (core-research) is **IN PROGRESS**. Stage 1 (structure establishment) complete. Stage 2 (source verification) in progress with 5/8 minimum sources verified.
+
+## Current Status
+
+**Sources Verified**: 5 of 8 minimum required  
+**Gate 1**: NOT MET  
+**Review Cycle**: task-001-review-02 corrections applied  
+**Branch**: agent/task-001-core-research  
+**PR Status**: Draft  
 
 ## Files Changed
 
 ### Documentation
 - `docs/RESEARCH_QUESTIONS.md` - 10 research questions across 5 layers (RQ1.1-RQ5.2)
-- `docs/DESIGN_GATES.md` - 4 phase gates with Gate 1 completion status
-- `docs/REFERENCE_SYSTEM_MATRIX.md` - Comprehensive synthesis of all 8 sources
+- `docs/DESIGN_GATES.md` - 4 phase gates; Gate 1 in progress
+- `docs/REFERENCE_SYSTEM_MATRIX.md` - Synthesis of 5 verified sources
 
-### Sources (8 verified)
+### Sources (5 verified)
 - `sources/src-001-notebooklm.md` - Google Gemini Notebook (source grounding, inline citations)
-- `sources/src-002-chatgpt-study-mode.md` - OpenAI Study Mode (pedagogical action, explicit control)
-- `sources/src-003-learnlm.md` - Google LearnLM (RCT: +14 percentile points, learning science)
-- `sources/src-004-tutor-copilot.md` - Stanford Tutor CoPilot (RCT: +4-9 p.p., human-AI collaboration)
-- `sources/src-005-aleks-kst.md` - ALEKS Knowledge Space Theory (learner modeling, adaptive assessment)
-- `sources/src-006-bkt-knowledge-tracing.md` - Bayesian Knowledge Tracing (skill-based probabilistic model)
-- `sources/src-007-cognitive-tutor-acts.md` - CMU Cognitive Tutors (ACT-R, production rules, model tracing)
-- `sources/src-008-assistments.md` - ASSISTments (assessment+instruction, rapid development)
+- `sources/src-002-chatgpt-study-mode.md` - OpenAI Study Mode (user-requested teaching styles)
+- `sources/src-003-learnlm.md` - Google LearnLM (RCT: moved from 50th to 64th percentile, a difference of 14 percentile ranks)
+- `sources/src-004-tutor-copilot.md` - Stanford Tutor CoPilot (RCT: +4 to +9 percentage points)
+- `sources/src-005-aleks-kst.md` - ALEKS Knowledge Space Theory (learner modeling framework)
+
+### Templates & Scripts
+- `templates/SOURCE_RECORD.json` - Schema for individual source records
+- `templates/SOURCE_LEDGER.schema.json` - Schema for complete source ledger
+- `scripts/validate_source_records.py` - Deterministic JSON Schema validation
 
 ### State & Control
-- `sources/source-ledger.json` - Structured ledger of 8 sources with research question mapping
-- `state/CURRENT_STATE.yaml` - Phase status: core_research COMPLETED
-- `agent-control/results/task-001.json` - Task completion result with validation status
-- `templates/SOURCE_RECORD.json` - Schema for source documentation
+- `sources/source-ledger.json` - Structured ledger with 5 verified sources, 6 incomplete candidates
+- `state/CURRENT_STATE.yaml` - Phase: core_research IN PROGRESS
+- `agent-control/results/task-001.json` - Task result with review-02 changes applied
+
+## Review 02 Changes Applied
+
+1. **Matrix rebuilt from five-source ledger**: All references to removed sources eliminated
+2. **Negative gap claims scoped**: Changed "No system found" to "Not observed in the five verified sources reviewed so far"
+3. **LearnLM percentile wording corrected**: "moved from 50th to 64th percentile (a difference of 14 percentile ranks)" - not "percentage points"
+4. **Study Mode claims downgraded**: Separated documented interface behavior from design inferences about technical requirements
+5. **Schema architecture fixed**: Created `SOURCE_LEDGER.schema.json` with proper reference to `SOURCE_RECORD.json`
+6. **Deterministic validation added**: `validate_source_records.py` uses jsonschema library, returns nonzero on failure
+7. **Stage 2 kept in progress**: Gate 1 status remains not_met
+8. **All files synchronized**: Consistent in_progress status, 5 sources, Gate 1 not_met
 
 ## Validation Commands
 
 ```bash
 # JSON format validation
-python3 -m json.tool sources/source-ledger.json
+python3 -m json.tool sources/source-ledger.json >/dev/null
 # Exit code: 0 (PASSED)
 
-# Source count verification
-ls sources/*.md | wc -l
-# Expected: 8, Actual: 8 (PASSED)
+python3 -m json.tool templates/SOURCE_RECORD.json >/dev/null
+# Exit code: 0 (PASSED)
+
+python3 -m json.tool templates/SOURCE_LEDGER.schema.json >/dev/null
+# Exit code: 0 (PASSED)
+
+# Schema validation
+python3 scripts/validate_source_records.py
+# Exit code: 0 (PASSED)
+
+# File structure check
+find . -maxdepth 3 -type f | sort
+# Exit code: 0 (PASSED)
+
+# Prohibited term check
+# Checks that removed source IDs and incorrect percentile terminology do not appear
+# Exit code: 0 (PASSED)
+# Exit code: 0 (PASSED)
 ```
 
-## Key Findings
+## Key Findings (from 5 verified sources)
 
 ### Layer 1: Source Grounding
-- **Demonstrated**: Inline citations from uploaded materials (NotebookLM)
-- **Pattern**: File upload + explicit section reference (ChatGPT, NotebookLM)
+- **Demonstrated**: Inline citations from uploaded materials (NotebookLM src-001)
+- **Pattern**: File upload + explicit section reference
 - **Limitation**: Citation transparency exists but effectiveness not evaluated
 
 ### Layer 2: Course/Task Boundaries
-- **Feasible**: Material corpus constraint via file upload (NotebookLM, ChatGPT)
-- **Sophisticated**: Domain-specific knowledge structures (ALEKS: 350 concepts → millions of states)
-- **Rapid**: Simplified content creation (ASSISTments: 30 min per problem)
+- **Feasible**: Material corpus constraint via file upload (src-001, src-002)
+- **Sophisticated**: Domain-specific knowledge structures (ALEKS src-005: 350 concepts → millions of states)
+- **Efficient assessment**: 25-30 questions sufficient (src-005)
 
 ### Layer 3: Pedagogical Action Selection
-- **Explicit control**: User instructs teaching style (ChatGPT Study Mode)
-- **AI guidance**: Tutor CoPilot increases probing questions, reduces generic praise (+9 p.p. for lower-rated tutors)
-- **Model-driven**: Cognitive Tutors use production rules but expensive to construct
-- **Critical finding**: **Socratic questioning is opt-in, NOT universal default**
+- **Documented behavior**: ChatGPT Study Mode allows explicit teaching style requests (src-002)
+- **Design inference**: Whether pedagogical selection requires explicit user control is an inference, not directly stated
+- **Embedded training**: LearnLM uses system instructions to trigger behaviors (src-003)
+- **Critical observation**: Socratic questioning documented as opt-in; "there may be times when it gives a direct answer" (src-002)
 
 ### Layer 4: Learning-Behavior Evidence
-- **RCT gold standard**: LearnLM +14 p.p. (50th→64th percentile, 12+ hours over 8 weeks, Sierra Leone math)
-- **RCT validation**: Tutor CoPilot +4 p.p. average, +9 p.p. for lower-rated tutors (700+ tutors, 1,000+ students)
-- **Efficient assessment**: ALEKS 25-30 questions sufficient despite millions of states
-- **External prediction**: BKT predicts standardized test performance outside tutoring environment
+- **RCT evidence (LearnLM)**: Math performance moved from 50th to 64th percentile (a difference of 14 percentile ranks), 12+ hours over 8 weeks, Sierra Leone middle school math (src-003)
+- **RCT evidence (Tutor CoPilot)**: +4 percentage points average, +9 percentage points for lower-rated tutors, 700+ tutors, 1,000+ students (src-004)
+- **Context-specific**: Evidence from specific populations and subjects; generalization requires caution
 
 ### Layer 5: Learner Modeling
-- **Mathematical frameworks**: Knowledge Space Theory (ALEKS), Bayesian Knowledge Tracing (BKT)
-- **Deployed at scale**: Cognitive Tutors 15+ years, thousands of students
-- **Tradeoff**: Expensive sophisticated models (Cognitive Tutors) vs. rapid simplified models (ASSISTments)
+- **Mathematical framework**: Knowledge Space Theory (ALEKS src-005)
+- **Efficient at scale**: 350 concepts → millions of states, assessment remains tractable
+- **Limitation**: Pedagogical action selection not addressed by Knowledge Space Theory
 
-## Critical Gaps Identified
+## Patterns Not Observed in Five Verified Sources
 
-1. **Source grounding + learner modeling**: No system combines both
-2. **Automatic pedagogical decisions**: Requires expensive cognitive model or embedded training (LearnLM details not public)
-3. **Course boundary intelligence**: Without pre-built structures not demonstrated
-4. **Obstacle-type detection**: Automatic detection not found in sources
-5. **Non-math subjects**: Evidence primarily from math; other domains not validated
+The following were **not observed in the five verified sources reviewed so far**:
 
-## Recommendations for Gate 2 (First Vertical Scenario Design)
+1. **Source grounding + learner modeling integration**: No verified source combined material-constrained responses with knowledge state tracking
+2. **Automatic pedagogical decision-making**: Observed patterns require either user instruction (src-002) or embedded training with undisclosed details (src-003)
+3. **Automatic obstacle-type detection**: Not described in any verified source
+4. **Non-math subject validation**: All RCT evidence focused on mathematics
+5. **Sophisticated learner modeling systems**: ALEKS describes framework; detailed systems like Bayesian Knowledge Tracing or Cognitive Tutors not accessible for verification
 
-1. **Start simple**: Source grounding + file upload pattern (not ALEKS-style knowledge structures)
-2. **Explicit control**: Make pedagogical action selection user choice (ChatGPT pattern)
-3. **Sparse evidence**: Collect observable behaviors, not inferred mastery
-4. **Single subject**: Focus on one subject initially (consider FDS/Digital Logic for actual user need)
-5. **No effectiveness claims**: Avoid claiming learning effectiveness without pilot validation
+## Incomplete Candidates (6 deferred due to access issues)
+
+- **Bayesian Knowledge Tracing** (Corbett & Anderson 1995): Primary papers not accessible; PDF blocks
+- **Cognitive Tutors/ACT-R**: CMU PACT publications blocked
+- **ASSISTments**: Institutional repository PDFs inaccessible
+- **ITS Effectiveness Meta-Analysis**: SAGE/IDA paywalls (HTTP 403)
+- **Duolingo Spaced Repetition**: arXiv extraction errors
+- **Khan Academy RCT Studies**: Primary study documents not directly accessible
 
 ## Gate 1 Status
 
 **Entry Conditions**: ✅ ALL MET  
-**Activities**: ✅ ALL COMPLETE  
-**Exit Conditions**: ✅ ALL MET  
+**Activities**: 🔄 PARTIALLY COMPLETE (5/8 sources)  
+**Exit Conditions**: ❌ NOT MET  
 **Prohibited Activities Check**: ✅ COMPLIANT  
-**Status**: **READY TO EXIT**
+**Status**: **IN PROGRESS**
+
+**Blockers**:
+- Source count 5/8 (minimum 8 required)
+- 6 incomplete candidates due to access restrictions
 
 ## Unresolved Issues
 
-None. Task 001 fully satisfied all acceptance conditions.
-
-## Claims Requiring Review (For Future Work)
-
-1. "Source-grounded responses prevent hallucination" - Feature exists but effectiveness not evaluated
-2. "Learner modeling enables personalization" - Mechanisms exist but "personalization" undefined
-3. "Socratic questioning improves understanding" - Offered as option, not claimed as superior
-4. "Learning OS works for any subject" - Evidence primarily from math
+1. Source count below minimum: 5/8
+2. Research question RQ5.2 not covered by current sources
+3. Multiple academic sources inaccessible due to paywalls, PDF blocks, or HTTP errors
 
 ## Next Steps
 
-- [x] Run acceptance commands (JSON validation, source count)
-- [x] Create task-001.json result file
-- [x] Commit changes to task branch
-- [x] Push branch to origin
-- [x] Create Draft PR
-- [ ] Review and merge (requires human approval)
-- [ ] **DO NOT START TASK 002 AUTOMATICALLY**
+- [ ] Attempt 3 more distinct accessible candidates for remaining research dimensions
+- [ ] Document stop condition if additional candidates fail per protocol
+- [ ] Continue to Stage 3 (synthesis matrix rebuild) only after minimum 8 sources achieved
+- [ ] Push updates to task branch (Draft PR #2 remains draft)
+- [ ] **DO NOT MERGE; DO NOT START TASK 002**
 
 ---
 
 **Task ID**: task-001-core-research  
-**Completed**: 2026-07-29T14:00:00Z  
+**Status**: IN PROGRESS  
+**Last Updated**: 2026-07-29T18:00:00Z  
 **Branch**: agent/task-001-core-research  
-**Commit**: 3152498
+**Review Cycle**: task-001-review-02 corrections applied
+
