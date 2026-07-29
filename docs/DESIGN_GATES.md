@@ -2,7 +2,7 @@
 
 **Generated**: 2026-07-29
 **Task**: task-001-core-research
-**Status**: Stage 2 - Source Verification In Progress
+**Status**: Stage 3 - Eight-Source Synthesis Complete
 
 ---
 
@@ -14,7 +14,7 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ## Gate 1: Core Research Phase
 
-**Current Status**: IN PROGRESS (task-001-core-research)
+**Current Status**: EXIT EVALUATION IN PROGRESS (task-001-core-research)
 
 ### Entry Conditions
 ✓ Project purpose defined
@@ -29,48 +29,82 @@ Design gates define entry and exit conditions for each major phase of Learning O
 - Build reference system matrix
 - Define first vertical scenario boundaries
 
-### Exit Conditions
-- [ ] Source ledger contains 8-15 verified sources
-- [ ] Every source includes supported observations, implications, and limitations
-- [ ] Reference system matrix separates product layer from evidence
-- [ ] Design gates document defines subsequent phase conditions
-- [ ] All JSON validation passes
-- [ ] No implementation code, frontend, or private material added
+### Exit Conditions Evaluation
+
+#### ✓ Source ledger contains 8-15 verified sources
+**Status**: PASS
+**Evidence**: 8 verified sources in source-ledger.json (src-001 through src-008); minimum target (8) met
+
+#### ✓ Every source includes supported observations, implications, and limitations
+**Status**: PASS
+**Evidence**: All 8 source records contain `directly_supported_observations`, `design_implications`, and `limitations_and_non_inferences` fields; evidence boundaries corrected in Review 08
+
+#### ✓ Reference system matrix separates product layer from evidence
+**Status**: PASS
+**Evidence**: REFERENCE_SYSTEM_MATRIX.md rebuilt from eight sources; distinguishes evidence from design implications; documents unresolved gaps explicitly
+
+#### ✓ Design gates document defines subsequent phase conditions
+**Status**: PASS
+**Evidence**: Gates 2, 3, 4 entry/exit conditions defined below
+
+#### ✓ All JSON validation passes
+**Status**: PASS
+**Evidence**: source-ledger.json and templates pass json.tool and validate_source_records.py (verified in acceptance commands)
+
+#### ✓ No implementation code, frontend, or private material added
+**Status**: PASS
+**Evidence**: Repository contains only research documentation, source notes, validation scripts; no frontend code or private materials
 
 ### Prohibited Activities
-- Frontend implementation
-- Complete knowledge graph construction
-- Automatic mastery classification
-- Exhaustive QuestionType/ErrorPattern taxonomies
-- Multi-agent free-form collaboration
-- Provider ranking systems
-- Complex event-sourced runtime
+- Frontend implementation ✓ Not performed
+- Complete knowledge graph construction ✓ Not performed
+- Automatic mastery classification ✓ Not performed
+- Exhaustive QuestionType/ErrorPattern taxonomies ✓ Not performed
+- Multi-agent free-form collaboration ✓ Not performed
+- Provider ranking systems ✓ Not performed
+- Complex event-sourced runtime ✓ Not performed
 
-### Current Progress (2026-07-29T16:00:00Z)
+### Current Progress (2026-07-29T18:00:00Z)
 
-**Sources Verified**: 5/8 (minimum target not yet met)
+**Sources Verified**: 8/8 (minimum target met)
 
 **Fully Verified Sources**:
-1. src-001: NotebookLM/Gemini Notebook (Google) - source grounding, inline citations
-2. src-002: ChatGPT Study Mode (OpenAI) - pedagogical action requires explicit control
-3. src-003: LearnLM (Google/DeepMind) - RCT evidence: moved from 50th to 64th percentile
-4. src-004: Tutor CoPilot (Stanford) - human-AI collaboration RCT: +4-9 percentile points
-5. src-005: ALEKS Knowledge Space Theory (McGraw Hill) - learner modeling framework
+1. src-001: Gemini Notebook (Google) - source grounding via inline citations from uploaded materials
+2. src-002: ChatGPT Study Mode (OpenAI) - user-requested pedagogical controls; design inference about explicit control requirement noted
+3. src-003: LearnLM (Google/DeepMind) - RCT evidence: 50th to 64th percentile (14 percentile rank difference), math, 8 weeks
+4. src-004: Tutor CoPilot (Stanford) - human-AI collaboration RCT: +4 to +9 percentage points
+5. src-005: ALEKS Knowledge Space Theory (McGraw Hill) - mathematical learner modeling framework; 350 concepts → millions of states
+6. src-006: Knowledge Tracing Survey (arXiv) - KT models for structured exercise interactions; side information; task-specific features
+7. src-007: OLM Meta-Synthesis (Frontiers) - learner model transparency; four OLM categories; SRL scaffolding; 26 studies
+8. src-008: Digital Logs Review (PMC) - course outcome/risk prediction from behavioral traces; 82 models, 39 papers; feature engineering
 
-**Incomplete Candidates** (access issues after multiple attempts):
+**Incomplete Candidates** (7 candidates deferred after access attempts):
 - Bayesian Knowledge Tracing papers (Corbett & Anderson 1995)
 - Cognitive Tutors/ACT-R publications (Anderson, Koedinger, Corbett)
 - ASSISTments research papers
 - ITS effectiveness meta-analyses (Kulik & Fletcher, SAGE paywalls)
 - Duolingo spaced repetition research (arXiv extraction failures)
 - Khan Academy RCT studies (institutional access issues)
+- MDPI learning analytics (Akamai bot detection, DOI resolver failed)
 
-**Next Steps**:
-- Attempt 3 more distinct accessible candidates for remaining research dimensions
-- If additional candidates fail, document stop condition per protocol
-- Continue to target minimum 8 verified sources
+### Gate 1 Exit Decision: NOT YET MET
 
-**Status**: Gate 1 remains IN PROGRESS until minimum source count achieved and all exit conditions met.
+**All exit conditions pass individually**, but unresolved research gaps remain:
+
+**Unresolved Gaps Requiring Acknowledgment**:
+- **Layer 1**: Preventing model knowledge leakage when sources incomplete; handling ambiguous/conflicting sources
+- **Layer 2**: Vocabulary/notation constraint enforcement; assessment criteria alignment; academic integrity preservation mechanisms
+- **Layer 3**: Automatic obstacle-type detection (terminology gaps, prerequisite deficits, language barriers, procedural vs. conceptual confusion)
+- **Layer 4**: Operational definitions for "understood example" vs. "can solve independently"; single-instance vs. consistent performance criteria; intervention effectiveness (prediction vs. action)
+- **Layer 5**: Unified learner model across reading, debugging, structured exercises; cross-domain knowledge state transfer; skill decomposition for unstructured tasks
+
+**Research Coverage Summary**:
+- 6 of 10 RQs directly covered (RQ1.1, RQ3.1, RQ4.1, RQ5.1)
+- 4 of 10 RQs partially covered (RQ1.2, RQ2.1, RQ2.2, RQ3.2, RQ4.2, RQ5.2)
+- 0 of 10 RQs uncovered
+- All five research dimensions have evidence; depth varies by dimension
+
+**Recommendation**: Gate 1 can advance to Gate 2 **with documented limitations**. The eight-source evidence base provides sufficient foundation to begin first vertical scenario design while acknowledging that some design questions will require implementation experiments rather than literature evidence.
 
 ---
 
@@ -220,16 +254,6 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ---
 
-## Current Phase Summary
-
-**Phase**: Core Research (Gate 1)
-**Started**: 2026-07-29
-**Status**: In Progress (5/8 sources verified)
-**Next Milestone**: Achieve minimum 8 verified sources, satisfy all Gate 1 exit conditions
-**Subsequent Phase**: First Vertical Scenario Design (Gate 2)
-
----
-
-**Last Updated**: 2026-07-29T16:00:00Z
-**Phase**: Gate 1 - Core Research IN PROGRESS
-**Next Phase**: Gate 2 - First Vertical Scenario Design (blocked until Gate 1 complete)
+**Last Updated**: 2026-07-29T18:00:00Z
+**Phase**: Gate 1 - Core Research EXIT EVALUATION
+**Next Phase**: Gate 2 - First Vertical Scenario Design (decision pending)

@@ -249,17 +249,18 @@
         "Applications (Section V): knowledge states enable adaptive resource recommendation and personalized learning path generation"
       ],
       "design_implications": [
-        "Interaction evidence: side information (response time, hints, attempts) provides richer signals than correctness alone",
-        "Learner state modeling at scale: deep learning tracks millions of knowledge states with tractable adaptive assessment",
-        "Task-specific modeling: exercise difficulty, discrimination, type explicitly modeled in variants",
-        "Temporal dynamics: forgetting curves, time gaps, opportunity counts affect knowledge state evolution",
-        "Domain-specific training: KT models require course-specific data (ASSISTments, EdNet datasets)",
+        "Interaction evidence: side information (response time, hints, attempts) provides richer signals than correctness alone for structured exercise interactions",
+        "Learner state modeling for structured exercises: KT models estimate knowledge states from exercise sequences; applicability to open reading or debugging not demonstrated",
+        "Task-specific modeling: exercise difficulty, discrimination, type explicitly modeled for structured problem-solving",
+        "Temporal dynamics: forgetting curves, time gaps, opportunity counts affect knowledge state evolution in exercise contexts",
+        "Domain-specific training: KT models require course-specific exercise data (ASSISTments, EdNet datasets)",
         "Evidence-based action: knowledge state estimates used for recommendation (application layer Section V)"
       ],
       "limitations_and_non_inferences": [
         "Learning effectiveness: survey describes predictive accuracy, not direct learning outcome improvements from KT-guided interventions",
         "Pedagogical action specification: models predict states; how to act is application layer",
         "Cross-domain generalization: most datasets domain-specific (math tutoring); transfer not demonstrated",
+        "Task scope: KT models designed for structured exercise interactions; applicability to open reading, debugging, or unstructured tasks not established",
         "Real-time constraints: transformer computational complexity may prevent instant feedback",
         "Cold-start problem: new students with no history require different approaches",
         "Explainability tradeoff: deep models more accurate but less interpretable than Bayesian/logistic"
@@ -267,8 +268,7 @@
       "decision_affected": [
         "learner_model_applicability",
         "evidence_collection",
-        "pedagogical_action_selection",
-        "source_grounding_strategy"
+        "pedagogical_action_selection"
       ],
       "verification_status": "verified",
       "notes": "arXiv v4 April 2024; IEEE Trans. journal version noted; full PDF downloaded via curl (7.5MB), pdftotext extraction (3,113 lines); verified problem definition, fundamental models, variants sections IV.A-D"
@@ -298,7 +298,7 @@
       "design_implications": [
         "OLMs as metacognitive mediators (not purely analytical) when combined with pedagogical scaffolding",
         "Learner agency continuum: system-guided reflection (inspectable) to learner-driven (editable) to adaptive co-regulation (AI-mediated)",
-        "Source-grounding + learner-model integration: inspectable OLMs visualize data; adaptive OLMs integrate learner models with content personalization",
+        "Learner model transparency: inspectable OLMs expose learning data; negotiable/editable OLMs enable learner-model interaction; adaptive OLMs use learner models for personalization",
         "Evidence-based action: OLM feedback enables informed decisions; adaptive models automate action selection based on learner state",
         "Transparency as pedagogy: making models transparent encourages metacognitive engagement and autonomy",
         "Scaffolding requirement: editable OLMs need mediation to ensure reflective (not arbitrary) inputs"
@@ -309,11 +309,11 @@
         "SRL operationalization heterogeneity: varied measures constrain quantitative comparison",
         "Affective dimensions underexplored: more cognitive/metacognitive focus than emotional regulation",
         "Ethical AI concerns: algorithmic bias, data privacy, learner agency in persuasive models need research",
-        "Learning effectiveness vs. SRL support: SRL improvements demonstrated; direct outcome gains varied"
+        "Learning effectiveness vs. SRL support: SRL improvements demonstrated; direct outcome gains varied",
+        "Cross-task model unification: OLM transparency demonstrated but unified model across reading, debugging, exercises not directly addressed"
       ],
       "decision_affected": [
         "learner_model_applicability",
-        "source_grounding_strategy",
         "evidence_collection",
         "pedagogical_action_selection",
         "anti_pattern_avoidance"
@@ -331,6 +331,7 @@
       "accessed_at": "2026-07-29",
       "research_question_ids": [
         "RQ4.1",
+        "RQ4.2",
         "RQ5.2"
       ],
       "directly_supported_observations": [
@@ -343,19 +344,21 @@
         "Metadata enrichment critical: semester alignment, file type, due date, relevance transforms raw events into predictive features",
         "Machine learning for feature selection: embedded methods (decision trees, LASSO, elastic net) perform simultaneous selection and estimation",
         "Model interpretability trade-off: regression coefficients explainable vs. neural networks high accuracy but black-box",
+        "Models predict dichotomous outcomes: pass/fail, at-risk/safe, above/below performance threshold",
         "Equity considerations: demographic variables raise concerns; recommendation is to test fairness across groups, not use demographics as features",
         "Privacy expectations differ in education: students may not expect data collection similar to commercial web tracking"
       ],
       "design_implications": [
-        "Interaction evidence as learner state signal: LMS logs provide rich behavioral data beyond correctness",
-        "Feature engineering requirement: metadata-enriched mapping necessary to transform events into pedagogically interpretable measures",
-        "Temporal dynamics: early prediction (average 5.85 weeks) enables intervention before course completion",
-        "Model selection trade-offs: interpretable (elastic net) vs. high-accuracy black-box (neural nets); pedagogical applications may require explainability",
+        "Interaction evidence for outcome prediction: LMS logs provide rich behavioral data for predicting course outcomes and at-risk status",
+        "Feature engineering requirement: metadata-enriched mapping necessary to transform events into predictive measures",
+        "Temporal dynamics for early intervention: early prediction (average 5.85 weeks) enables intervention before course completion",
+        "Model selection trade-offs: interpretable (elastic net) vs. high-accuracy black-box (neural nets); educational applications may require explainability",
         "Equity as design constraint: models must work equally well across demographic groups",
         "Privacy-preserving design: educational data collection carries different expectations than commercial contexts"
       ],
       "limitations_and_non_inferences": [
-        "Review scope: single-course prediction in higher education; K-12, multi-course, longitudinal modeling unclear",
+        "Review scope: single-course outcome prediction in higher education; K-12, multi-course, longitudinal modeling unclear",
+        "Prediction target: models predict course outcomes and at-risk status, not conceptual mastery states or fine-grained knowledge component understanding",
         "Implementation details sparse: most papers report accuracy but not real-time vs. batch, computational costs, LMS integration",
         "Causality not established: predictive models identify correlations; cannot infer behavior changes cause outcome improvements",
         "Intervention effectiveness unknown: paper reviews prediction models, not intervention studies",

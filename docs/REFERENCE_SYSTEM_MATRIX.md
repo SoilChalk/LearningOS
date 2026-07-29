@@ -1,262 +1,312 @@
-# Reference System Matrix
+# Learning OS Reference System Matrix
 
-**Generated**: 2026-07-29T17:00:00Z
+**Generated**: 2026-07-29
 **Task**: task-001-core-research
-**Sources**: 5 verified sources
-**Purpose**: Map research findings from verified sources to Learning OS design decisions
-
-**Note**: This matrix is built from five verified sources reviewed so far. Claims about what systems exist, patterns observed, or gaps identified are limited to this reviewed sample unless explicitly noted otherwise.
+**Stage**: Stage 3 - Eight-Source Synthesis
+**Sources**: 8 verified
 
 ---
 
-## Verified Sources Summary
+## Purpose
 
-| ID | Title | Organization | Type | Language |
-|----|-------|--------------|------|----------|
-| src-001 | 了解 Gemini Notebook | Google | Product Documentation | zh-CN |
-| src-002 | Using Study Mode in ChatGPT | OpenAI | Product Documentation | en |
-| src-003 | Gemini 中的 LearnLM | Google Cloud/DeepMind | Product Documentation | zh-CN |
-| src-004 | Tutor CoPilot | Stanford SCALE | Research Paper (Field Evaluation) | en |
-| src-005 | ALEKS Knowledge Space Theory | McGraw Hill / Doignon & Falmagne | Product Documentation | en |
+This matrix synthesizes evidence from eight verified sources to inform Learning OS design decisions. Each layer corresponds to a research dimension; each cell maps source evidence to design implications within proper evidence boundaries.
 
 ---
 
-## Layer 1: Source Grounding
+## Source Summary
 
-### Directly Supported Observations
-
-**src-001 (NotebookLM/Gemini Notebook)**:
-- System provides inline citations from uploaded sources (PDF, websites, YouTube videos, audio files, Google Docs, Google Slides)
-- Gemini Notebook designed to answer questions based on information provided in uploaded sources
-- System distinguishes three failure modes: safety flagging, unclear phrasing, no relevant information in sources
-- For Workspace/Education users: uploaded content NOT used for AI training; NOT subject to human review
-
-### Design Implications (from reviewed sample)
-
-- Source-bound AI architecture demonstrated as product feature (src-001)
-- Material scope enforcement requires explicit failure mode messages (src-001)
-- Citation mechanism presented as accuracy/transparency/trust feature (src-001)
-- File upload pattern establishes basic course boundary (src-001, src-002)
-
-### Limitations Observed
-
-- No learning effectiveness evidence provided in product documentation (src-001)
-- Citation transparency exists as feature but effectiveness not evaluated (src-001)
-- English documentation for NotebookLM not accessible; relying on Chinese official page (src-001)
+| ID | Title | Type | Key Contribution |
+|----|-------|------|------------------|
+| src-001 | Google Gemini Notebook | Product documentation | Source-grounding via inline citations from uploaded materials |
+| src-002 | OpenAI Study Mode | Product documentation | User-requested pedagogical controls; file upload + section reference |
+| src-003 | Google LearnLM | Product documentation + RCT | RCT evidence: 50th to 64th percentile (14 percentile rank difference), math, 8 weeks |
+| src-004 | Stanford Tutor CoPilot | Research paper - field evaluation | RCT evidence: +4 to +9 percentage points; human-AI collaboration model |
+| src-005 | ALEKS Knowledge Space Theory | Product documentation | Mathematical framework for learner modeling; 350 concepts → millions of states, 25-30 questions |
+| src-006 | Knowledge Tracing Survey | Research paper - survey | KT models for structured exercise interactions; side information; task-specific features |
+| src-007 | OLM Meta-Synthesis | Research paper - survey | Four OLM categories (26 studies); learner model transparency; SRL scaffolding |
+| src-008 | LMS Digital Logs Review | Research paper - survey | Course outcome/risk prediction from behavioral traces (82 models, 39 papers); feature engineering |
 
 ---
 
-## Layer 2: Course/Task Boundaries
+## Layer 1: Source and Material Grounding
 
-### Directly Supported Observations
+### RQ1.1: Source-Bound Explanations
 
-**src-001 (NotebookLM)**:
-- System distinguishes "in-source" vs. "out-of-scope" queries
-- Explicit failure modes for different types of query failures
+**Evidence:**
+- **src-001** (Gemini Notebook): System provides inline citations from uploaded sources (PDF, websites, YouTube, audio, Google Docs, Slides); designed to answer questions based on uploaded materials; distinguishes failure modes (safety, unclear phrasing, no relevant information)
+- **src-002** (Study Mode): File upload (notes, syllabus, worksheet, slides, textbook, problem photos) + manual section reference; documentation states system "does not replace teacher, tutor, course materials"
 
-**src-002 (ChatGPT Study Mode)**:
-- Can upload files (notes, syllabus, worksheet, slides, textbook excerpt, problem photos)
-- User must reference specific sections manually
+**Design Implications:**
+- Source-grounding via inline citations is demonstrated as a product feature (src-001)
+- Material constraint pattern: file upload + manual section pointing (src-001, src-002)
+- Explicit failure mode messages support scope enforcement (src-001)
 
-**src-005 (ALEKS)**:
-- Algebra 1 modeled as approximately 350 basic concepts giving rise to millions of empirically feasible knowledge states
-- Each domain (e.g., Algebra 1, Algebra 2) requires separate pre-built knowledge structure
-- Adaptive assessment using Markovian procedures can gauge student knowledge state in 25-30 questions
+**Limitations:**
+- No learning effectiveness evidence for citation-based systems (src-001, src-002)
+- Shallow material constraint: requires manual section reference (src-002)
+- No evidence on handling ambiguous or conflicting source content (both sources)
 
-### Design Implications (from reviewed sample)
+### RQ1.2: Material Scope Control
 
-- Material corpus constraint feasible via file upload (src-001, src-002)
-- Domain-specific knowledge structures enable fine-grained modeling but require expert construction (src-005)
-- Efficient assessment possible: 25-30 questions sufficient despite millions of states (src-005)
+**Evidence:**
+- **src-001**: System constrained to uploaded materials; explicit failure message when no relevant information in sources
+- **src-002**: File upload establishes basic course boundary; memory feature saves learning goals and topics
+- **src-005** (ALEKS): Each domain (Algebra 1, Algebra 2) requires separate pre-built knowledge structure; domain-specific constraint demonstrated
 
-### Limitations Observed
+**Design Implications:**
+- Material corpus can be defined via file upload (src-001, src-002)
+- Domain-specific knowledge structures enable course boundary enforcement (src-005)
+- Explicit out-of-scope detection possible (src-001 failure modes)
 
-- Material constraint in ChatGPT Study Mode is shallow: requires manual section pointing (src-002)
-- ALEKS granularity tradeoff unclear: is 350 concepts for Algebra 1 the right level? (src-005)
-- Knowledge state construction method not detailed in product page (src-005)
+**Limitations:**
+- No evidence on preventing model knowledge leakage when sources incomplete
+- Academic integrity boundaries unclear: "Follow AI-use policies of your school" (src-002)
+- Cross-domain transfer not demonstrated (src-005)
+
+---
+
+## Layer 2: Course and Task Boundaries
+
+### RQ2.1: Course-Specific Constraint Enforcement
+
+**Evidence:**
+- **src-001**: File upload pattern establishes basic course boundary; safety flagging and scope detection present
+- **src-005** (ALEKS): Domain-specific knowledge structures; Algebra 1 example with ~350 concepts; each course requires separate pre-built structure
+
+**Design Implications:**
+- Course boundaries enforceable via domain-specific knowledge structures (src-005)
+- Knowledge modeling feasible at scale: 350 concepts → millions of states, assessment remains tractable with 25-30 questions (src-005)
+
+**Limitations:**
+- No evidence on vocabulary/notation constraint enforcement
+- Assessment criteria alignment not addressed in verified sources
+- Academic integrity preservation mechanisms unclear (src-002 defers to external policy)
+
+### RQ2.2: Task Context Preservation
+
+**Evidence:**
+- **src-002**: Memory feature saves learning goals, preferred explanation style, or topics studied before
+
+**Design Implications:**
+- Basic session continuity via memory feature (src-002)
+
+**Limitations:**
+- No evidence on learning position recovery across interrupted sessions
+- Unresolved question tracking not demonstrated
+- Multi-session context mechanisms not detailed (src-002 provides existence claim only)
 
 ---
 
 ## Layer 3: Pedagogical Action Selection
 
-### Directly Supported Observations
+### RQ3.1: Teaching Action Taxonomy
 
-**src-002 (ChatGPT Study Mode)**:
-- User can instruct system to guide thinking (Socratic), explain in layers, check understanding, or use hints/quizzes/step-by-step
-- User specifies level: middle school, high school, college, beginner, or advanced
-- User can request: slow down, simpler language, analogy, deeper explanation, more advanced content
-- Documentation states "there may be times when it gives a direct answer"
+**Evidence:**
+- **src-002** (Study Mode): User can instruct system to guide thinking (Socratic), explain in layers, check understanding, or use hints/quizzes/step-by-step; documentation states "there may be times when it gives a direct answer"; user specifies level (middle school, high school, college, beginner, advanced); user can request adjustments (slow down, simpler language, analogy, deeper explanation, more advanced content)
+- **src-003** (LearnLM): Expert raters evaluated pedagogical elements (guidance, correcting mistakes) beyond accuracy; with system instructions, Gemini leverages LearnLM to trigger pedagogical behaviors; built with education experts based on rigorous research
+- **src-004** (Tutor CoPilot): Analysis of 350,000+ messages shows system increases probing questions and reduces generic praise; system models expert thinking to assist tutors in real time
+- **src-007** (OLM): Four OLM categories embed pedagogical strategies: inspectable (transparency/feedback), negotiable (confidence calibration/dialogic feedback), editable (goal-setting/self-assessment), adaptive (AI-driven personalized feedback/nudges)
 
-**src-003 (LearnLM)**:
-- With appropriate system instructions, Gemini leverages LearnLM learning science research to trigger pedagogical behaviors
-- Expert raters evaluated LearnLM on pedagogical elements like guidance and correcting mistakes beyond mere accuracy
+**Design Implications:**
+- User-requested controls documented: Socratic, layered explanation, hints, quizzes (src-002)
+- Pedagogical quality evaluable as separate dimension from accuracy (src-003)
+- Specific behaviors measurable: probing questions increase, generic praise decreases (src-004)
+- Pedagogical strategies: goal-setting, reflective monitoring, confidence calibration, adaptive feedback, dialogic negotiation, performance visualization (src-007)
 
-**src-004 (Tutor CoPilot)**:
-- System models expert thinking to assist tutors in real time
-- Analysis of 350,000+ messages shows system increases probing questions and reduces generic praise
-- Human-AI collaboration: AI assists tutors who then interact with students
+**Design Inferences (not direct findings):**
+- Whether explicit user instruction is technically required vs. available option not directly stated (src-002)
+- Whether Socratic is opt-in/default-off vs. context-dependent not technically specified (src-002)
+- Whether automatic adjustment never occurs vs. not documented (src-002)
 
-### Design Implications (from reviewed sample)
+**Limitations:**
+- System does NOT automatically detect when to explain vs. hint vs. quiz (src-002)
+- Implementation details not disclosed (src-003, src-004)
+- How "expert thinking" is modeled and delivered not specified (src-004)
 
-- Observed interface pattern: ChatGPT Study Mode documents user-requested teaching styles (src-002)
-- System instructions can trigger pedagogical behaviors when principles embedded via training (src-003)
-- AI can guide pedagogical behaviors of human tutors with measurable effects (src-004)
-- Pedagogical quality evaluated as separate dimension from accuracy (src-003)
+### RQ3.2: Obstacle-Specific Adaptation
 
-### Limitations Observed
+**Evidence:**
+- **src-002**: Documentation mentions possible direct answers alongside Socratic guidance; unclear phrasing identified as failure mode by src-001
+- **src-007**: Negotiable OLMs provide dialogic feedback and confidence calibration; adaptive OLMs use AI/ML for personalized feedback aligned with learner needs
 
-- ChatGPT Study Mode documents available behaviors but does not prove that pedagogical selection requires explicit user control as a technical constraint (src-002)
-- Implementation details not disclosed: how LearnLM principles embedded or how Tutor CoPilot models expert thinking (src-003, src-004)
-- Tutor-mediated interaction in src-004, not direct AI-student tutoring
+**Design Implications:**
+- System responses can vary (direct answer vs. Socratic) but automatic detection not claimed (src-002)
+- Adaptive scaffolding acts as co-regulator anticipating learner needs (src-007)
+
+**Limitations:**
+- No evidence on terminology gap detection
+- Prerequisite knowledge deficit handling not demonstrated
+- Language/translation barrier adaptation not addressed
+- Procedural vs. conceptual confusion differentiation not shown
+- Lost context recovery not detailed
 
 ---
 
 ## Layer 4: Learning-Behavior Evidence
 
-### Directly Supported Observations
+### RQ4.1: Factual Observation vs. Inference
 
-**src-002 (ChatGPT Study Mode)**:
-- Memory feature saves learning goals, preferred explanation style, or topics studied before
-- Documentation states Study Mode "does not replace your teacher, tutor, course materials" and "can make mistakes"
+**Evidence:**
+- **src-002**: System observes completion and responses; does not infer mastery; documentation states system "can make mistakes"
+- **src-003** (LearnLM): RCT in Sierra Leone with 1,763 middle school students (grades 7-8), 8 weeks, 12+ hours minimum usage; math performance from 50th to 64th percentile (14 percentile rank difference); effect equivalent to 1.8-2.5 additional years of learning progress
+- **src-004** (Tutor CoPilot): RCT with 700+ tutors, 1,000+ students from underserved communities; students with tutors using system 4 percentage points more likely to master topics (p<0.01); gains highest for lower-rated tutors: 9 percentage points; cost ~$20/tutor/year
+- **src-006** (KT Survey): Side information recorded in structured exercise contexts: response time, opportunity count, tutor intervention, engagement metrics provide richer signals than correctness alone; individualization variants model different learning rates and prior knowledge
+- **src-007** (OLM): OLMs collect behavioral data (time-on-task, page views, interaction patterns) + self-reported confidence/goals; 26 studies demonstrate consistent gains in engagement, persistence, outcomes for inspectable OLMs
+- **src-008** (Digital Logs): LMS systems capture fine-grained activities with timestamps: frequency, time, patterns; 82 predictive models from 39 papers, average accuracy 0.72 (SD=0.10) after 5.85 weeks; behavioral trace data (views, downloads, submissions, forum contributions) orthogonal to summative performance
 
-**src-003 (LearnLM)**:
-- RCT in Sierra Leone: 1,763 middle school students (grades 7-8), 8 weeks, 12+ hours usage minimum
-- Effect: math performance moved from the 50th to the 64th percentile (a difference of 14 percentile ranks)
-- Effect equivalent to 1.8 to 2.5 additional years of learning progress
+**Design Implications:**
+- Directly observable: completion, time spent, attempts, explicit requests, response time, opportunity count, engagement metrics (src-002, src-006, src-008)
+- RCT evidence for learning effectiveness exists in specific contexts (src-003: Sierra Leone middle school math; src-004: underserved community math tutoring)
+- Side information provides richer evidence than correctness alone in structured exercise contexts (src-006)
+- Behavioral traces enable outcome prediction before summative assessment (src-008: average 5.85 weeks)
+- Feature engineering transforms raw logs into predictive measures (src-008)
 
-**src-004 (Tutor CoPilot)**:
-- RCT with 700+ tutors and 1,000+ students from underserved communities
-- Students with tutors using Tutor CoPilot 4 percentage points more likely to master math topics (p<0.01)
-- Gains highest for students of lower-rated tutors: 9 percentage points
-- System cost: approximately $20/tutor/year
+**Limitations:**
+- Evidence collection sparse: observes completion/responses, does not infer mastery (src-002)
+- RCT context-specific: generalization to other subjects, age groups, countries requires caution (src-003, src-004)
+- Tutor-mediated interaction, not direct AI-student tutoring (src-004)
+- KT models designed for structured exercise interactions; applicability to open reading, debugging, unstructured tasks not established (src-006)
+- Prediction models identify correlations; causality not established (src-008)
 
-**src-005 (ALEKS)**:
-- Adaptive assessment: 25-30 questions sufficient to gauge knowledge state despite millions of possible states
-- System determines "precisely what each individual student knows, and what the student is ready to learn next"
+### RQ4.2: Evidence-Driven State Updates
 
-### Design Implications (from reviewed sample)
+**Evidence:**
+- **src-003**: Minimum engagement threshold exists: 12+ hours over 8 weeks for observed effect
+- **src-006**: Forgetting variants model knowledge decay; temporal gap between interactions affects retention; opportunity count tracked
+- **src-007**: Negotiable OLMs improve confidence and self-assessment accuracy through calibration; editable OLMs require scaffolding to prevent misjudgment
 
-- Learning effectiveness measurable via RCT methodology in specific contexts (src-003, src-004)
-- Minimum engagement threshold observed: 12+ hours over 8 weeks for LearnLM effect (src-003)
-- AI assistance to human tutors bridges skill gaps: larger gains for lower-rated tutors (src-004)
-- Efficient assessment demonstrated: 25-30 questions for complete picture (src-005)
-- Economic viability consideration: $20/tutor/year for Tutor CoPilot (src-004)
+**Design Implications:**
+- Minimum engagement threshold observable for effectiveness (src-003)
+- Temporal dynamics matter: forgetting curves, time gaps, opportunity counts affect state evolution in exercise contexts (src-006)
+- Confidence calibration improves self-assessment accuracy (src-007)
 
-### Limitations Observed
-
-- RCT contexts specific: Sierra Leone middle school math (src-003), tutoring organizations underserved communities math (src-004)
-- Generalization to other subjects, age groups, or countries requires caution (src-003, src-004)
-- ChatGPT Study Mode: sparse evidence collection, no mastery inference mentioned (src-002)
-- ALEKS: describes assessment framework, not learning outcomes (src-005)
-
----
-
-## Layer 5: Learner Modeling / Knowledge Tracing Applicability
-
-### Directly Supported Observations
-
-**src-005 (ALEKS)**:
-- Knowledge Space Theory applies combinatorics and stochastic processes to modeling specific knowledge domains
-- Mathematical framework for knowledge states: prerequisite relationships modelable
-- "Ready to learn" is computable from knowledge state and structure
-- Domain specificity critical: each course requires separate knowledge structure
-- Authoritative source: Learning Spaces by Doignon & Falmagne (Springer-Verlag, 2011)
-
-### Design Implications (from reviewed sample)
-
-- Knowledge modeling feasible at scale: 350 concepts → millions of states, assessment remains tractable (src-005)
-- Prerequisite relationships mathematically modelable via combinatorial framework (src-005)
-- Adaptive assessment can be efficient using stochastic (Markovian) procedures (src-005)
-
-### Limitations Observed
-
-- Pedagogical action selection not addressed by Knowledge Space Theory (src-005)
-- "Empirically feasible" knowledge state definition not provided (src-005)
-- Question selection algorithm not disclosed (src-005)
+**Limitations:**
+- "Understood example" vs. "can solve independently" distinction not addressed
+- Single-instance success vs. consistent performance criteria not specified
+- Intervention effectiveness unknown: prediction models reviewed, not intervention studies (src-008)
 
 ---
 
-## Cross-Source Observations
+## Layer 5: Learner Model Applicability
 
-### Pedagogical Quality vs. Accuracy
+### RQ5.1: Knowledge Tracing Data Requirements
 
-- LearnLM evaluation: "pedagogical elements like guidance and correcting mistakes beyond mere accuracy" (src-003)
-- Tutor CoPilot: probing questions ↑, generic praise ↓ (specific behaviors measured) (src-004)
-- **Observation from sample**: Pedagogy evaluated as separate dimension from correctness in reviewed sources
+**Evidence:**
+- **src-005** (ALEKS): Knowledge Space Theory applies combinatorics and stochastic processes; ~350 concepts for Algebra 1 → millions of empirically feasible knowledge states; adaptive assessment using Markovian procedures gauges state in 25-30 questions; system determines "what student knows and ready to learn next"
+- **src-006** (KT Survey): Three model categories: Bayesian (BKT, DBKT), Logistic (LFA, PFA, KTM), Deep Learning (DKT, transformers); KT monitors evolving knowledge states during problem-solving; learning sequence formulated as interactions with exercises, KCs, correctness, side information; exercise-level modeling: difficulty and discrimination parameters; forgetting variants integrate exponential decay
+- **src-007** (OLM): Four OLM categories: Inspectable (view-only dashboards), Negotiable (confidence calibration), Editable (learner modifies profile), Persuasive/Adaptive (AI/ML personalization); 26 empirical studies in higher education; adaptive OLMs integrate intelligent tutoring, cognitive mapping, recommender algorithms
 
-### Human-AI Collaboration Models Observed
+**Design Implications:**
+- Knowledge modeling feasible at scale: efficient assessment with Markovian procedures (src-005)
+- Prerequisite relationships mathematically modelable (src-005)
+- Domain specificity critical: each course requires separate knowledge structure (src-005)
+- KT demonstrates scalable knowledge state modeling for structured exercise interactions (src-006)
+- Exercise-level features (difficulty, discrimination) improve model performance (src-006)
+- Learner model transparency demonstrated across 26 studies in higher education (src-007)
 
-- Direct AI interaction with user-controlled pedagogy: ChatGPT Study Mode (src-002), LearnLM (src-003)
-- AI-assisted human tutoring: Tutor CoPilot (src-004)
-- **Observation from sample**: Multiple collaboration models exist in reviewed sources
+**Limitations:**
+- Learning effectiveness not claimed: ALEKS describes assessment framework, not outcomes (src-005)
+- KT survey describes predictive accuracy, not learning outcome improvements from KT-guided interventions (src-006)
+- Cold-start problem: new students with no history require different approaches (src-006)
+- Explainability tradeoff: deep models more accurate but less interpretable (src-006)
+- Domain specificity: STEM predominance may limit humanities/social sciences transferability (src-007)
 
-### Evidence Quality in Reviewed Sample
+### RQ5.2: Task-Type-Specific Modeling
 
-- **RCT with external assessment**: LearnLM Sierra Leone study, Tutor CoPilot study (src-003, src-004)
-- **Product features described**: Not ebookLM, ChatGPT Study Mode, ALEKS (src-001, src-002, src-005)
-- **Observation**: Learning effectiveness claims supported by RCT in specific contexts; product pages describe features without effectiveness evidence
+**Evidence:**
+- **src-006**: Exercise-level modeling with difficulty and discrimination parameters; task-specific modeling demonstrated for structured problem-solving; KT models designed for structured exercise interactions
+- **src-007**: Adaptive OLMs personalize based on task type, learner state, and domain; studies demonstrate adaptation in multiple higher education contexts
+- **src-008**: Models predict dichotomous outcomes (pass/fail, at-risk/safe, above/below threshold); prediction target is course outcomes, not conceptual mastery states
 
----
+**Design Implications:**
+- Task-specific modeling feasible for structured exercises (src-006)
+- Adaptive personalization demonstrated across task types in higher education (src-007)
+- Behavioral feature engineering enables outcome prediction (src-008)
 
-## Patterns Not Observed in Five Verified Sources
-
-The following were not found in the five verified sources reviewed so far. This does not mean they do not exist in the broader literature—only that they were not present in this specific sample:
-
-1. **Source grounding + learner modeling integration**: No verified source combined material-constrained responses with probabilistic knowledge state tracking
-2. **Automatic pedagogical decision-making**: Observed patterns require either user instruction (src-002) or embedded training with undisclosed details (src-003)
-3. **Automatic obstacle-type detection**: Not described in any verified source
-4. **Non-math subject validation**: All RCT evidence in reviewed sources focused on mathematics (src-003, src-004)
-5. **Sophisticated learner modeling systems**: ALEKS describes framework (src-005) but detailed systems like Bayesian Knowledge Tracing or Cognitive Tutors not accessible for verification
-
----
-
-## Claims Requiring Qualification
-
-The following claims from earlier analysis have been revised based on review requirements:
-
-1. **"Socratic questioning is opt-in, not universal default"**
-   - **Revised**: ChatGPT Study Mode documentation describes that "there may be times when it gives a direct answer" and user can request Socratic approach (src-002). This documents interface behavior; whether Socratic is technically "opt-in" or "default-off" is a design inference, not directly stated.
-
-2. **"Pedagogical action selection requires explicit user control"**
-   - **Revised**: ChatGPT Study Mode documents user-requested teaching styles (src-002). LearnLM uses system instructions to trigger behaviors (src-003). Observed pattern in these sources: explicit specification used, but cannot generalize to "requires" as universal constraint.
-
-3. **"No system combines source grounding + learner modeling"**
-   - **Revised**: Not observed in the five verified sources reviewed so far. Cannot claim exhaustive search without systematic literature review.
+**Limitations:**
+- Partial coverage: KT limited to structured exercises, not open reading or debugging (src-006)
+- Cross-task model unification not directly addressed (src-007)
+- Prediction models target outcomes/risk, not fine-grained conceptual mastery or cross-task unified states (src-008)
+- Transfer assumptions across task types not demonstrated (no source)
+- Unified model across reading, debugging, structured exercises not established (all sources)
 
 ---
 
-## Deferred Candidates
+## Cross-Layer Integration Patterns
 
-The following candidates were identified but could not be verified due to access restrictions:
+### Evidence-Based Pedagogical Action
+- Knowledge state estimates enable adaptive resource recommendation (src-006: Application Section V)
+- OLM feedback enables informed learning decisions; adaptive models automate action selection (src-007)
+- Early prediction (5.85 weeks average) enables proactive intervention (src-008)
 
-| Candidate | Reason | Research Questions |
-|-----------|--------|-------------------|
-| Bayesian Knowledge Tracing (Corbett & Anderson 1995) | Primary papers not accessible; PDF blocks | RQ4.1, RQ5.1, RQ5.2 |
-| Cognitive Tutors/ACT-R | CMU PACT publications blocked | RQ3.1, RQ3.2, RQ4.1, RQ5.1 |
-| ASSISTments | Institutional repository PDFs inaccessible | RQ2.1, RQ3.1, RQ4.1 |
-| ITS Effectiveness Meta-Analysis | SAGE/IDA paywalls (HTTP 403) | RQ4.1, RQ4.2 |
-| Duolingo Spaced Repetition | arXiv extraction errors | RQ4.1, RQ5.1 |
-| Khan Academy RCT Studies | Primary study documents not directly accessible | RQ4.1, RQ4.2 |
+### Learner Model Transparency
+- Four OLM categories form learner agency continuum: system-guided reflection → learner-driven → adaptive co-regulation (src-007)
+- Transparency as pedagogical tool: making models transparent encourages metacognitive engagement (src-007)
 
----
-
-## Design Recommendations (from reviewed sample)
-
-### Based on Verified Evidence
-
-1. **Source grounding pattern demonstrated**: File upload + inline citation feasible (src-001)
-2. **RCT evidence exists for specific contexts**: LearnLM +14 percentile ranks in Sierra Leone middle school math; Tutor CoPilot +4-9 percentage points in tutoring organizations (src-003, src-004)
-3. **User-controlled pedagogy documented**: ChatGPT Study Mode interface allows explicit teaching style requests (src-002)
-4. **Efficient assessment demonstrated**: ALEKS shows 25-30 questions sufficient for millions of states (src-005)
-
-### Inferences from Reviewed Sample
-
-1. **Consider explicit pedagogical controls**: Observed pattern in src-002 and src-003 suggests explicit specification over automatic inference
-2. **Consider human-AI collaboration**: Tutor CoPilot shows larger gains for lower-rated tutors (src-004)
-3. **Consider material corpus constraint**: Simpler than pre-built knowledge structures (src-001, src-002 vs. src-005)
+### Domain-Specific Training
+- KT models require course-specific exercise data (ASSISTments, EdNet) (src-006)
+- Each course requires separate knowledge structure (src-005)
+- Context specificity affects model performance (src-008)
 
 ---
 
-**End of Reference System Matrix**
-**Last Updated**: 2026-07-29T17:00:00Z
-**Status**: Built from 5 verified sources; Task 001 in progress (5/8 minimum target)
+## Unresolved Gaps
+
+### Layer 1: Source and Material Grounding
+- Preventing model knowledge leakage when sources incomplete
+- Handling ambiguous or conflicting source content
+- Quantifying citation accuracy and completeness
+
+### Layer 2: Course and Task Boundaries
+- Vocabulary and notation constraint enforcement mechanisms
+- Assessment criteria alignment methods
+- Academic integrity preservation beyond external policy
+
+### Layer 3: Pedagogical Action Selection
+- Automatic obstacle-type detection (terminology gaps, prerequisite deficits, language barriers)
+- Procedural vs. conceptual confusion differentiation
+- Lost context recovery strategies
+
+### Layer 4: Learning-Behavior Evidence
+- "Understood example" vs. "can solve independently" operational definitions
+- Single-instance success vs. consistent performance criteria
+- Intervention effectiveness: whether acting on predictions improves outcomes
+
+### Layer 5: Learner Model Applicability
+- Unified learner model across reading, debugging, and structured exercises
+- Transfer assumptions across task types
+- Skill decomposition granularity for unstructured tasks
+- Cross-domain knowledge state transfer
+
+---
+
+## Summary: Eight-Source Evidence Base
+
+**Demonstrated:**
+1. Source-grounding via inline citations (src-001)
+2. RCT evidence for learning effectiveness in specific contexts (src-003, src-004)
+3. Knowledge modeling at scale for structured exercises (src-005, src-006)
+4. Learner model transparency approaches (src-007)
+5. Course outcome prediction from behavioral traces (src-008)
+6. User-requested pedagogical controls (src-002)
+7. Side information enriches structured exercise modeling (src-006)
+8. Feature engineering transforms raw interactions into predictive measures (src-008)
+
+**Partially Addressed:**
+- Material scope control (file upload pattern, domain structures; leakage prevention unclear)
+- Task context preservation (memory feature exists; multi-session mechanisms not detailed)
+- Obstacle-specific adaptation (adaptive scaffolding exists; automatic detection not demonstrated)
+- Evidence-driven state updates (temporal dynamics modeled; transition criteria not operational)
+- Task-type-specific modeling (structured exercises demonstrated; cross-task unification not established)
+
+**Not Addressed:**
+- Unified learner model across reading, debugging, exercises
+- Automatic obstacle-type detection (terminology, prerequisite, language, conceptual)
+- Vocabulary/notation constraint enforcement
+- Academic integrity preservation mechanisms
+- Cross-domain knowledge state transfer
+- Intervention effectiveness (prediction vs. action)
+
+---
+
+**Status**: Stage 3 complete (eight-source synthesis). Matrix ready for Gate 1 exit evaluation.

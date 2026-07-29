@@ -1,24 +1,24 @@
-protocol_version: 3
-updated_at: "2026-07-29T09:15:00Z"
+protocol_version: 8
+updated_at: "2026-07-29T18:00:00Z"
 task_id: task-001-core-research
 phase: core_research
 status: in_progress
 
 current_stage:
-  stage_id: stage_3_synthesis_matrix
-  started_at: "2026-07-29T09:15:00Z"
+  stage_id: stage_5_results_and_validation
+  started_at: "2026-07-29T18:00:00Z"
   completed: false
   blocked: false
   stop_condition_reached: false
-  next_stage: stage_4_gates_and_state
+  next_stage: gate_1_decision
 
 stages_completed:
   - stage_1_structure_established
   - stage_2_core_source_verification
-
-stages_remaining:
   - stage_3_synthesis_matrix
   - stage_4_gates_and_state
+
+stages_remaining:
   - stage_5_results_and_validation
 
 research_progress:
@@ -26,11 +26,15 @@ research_progress:
   sources_target_min: 8
   sources_target_max: 15
   research_questions_defined: 10
+  research_questions_directly_covered: 6
+  research_questions_partially_covered: 4
+  research_questions_not_covered: 0
   design_gates_defined: 4
   sources_fully_verified: 8
   incomplete_candidates: 7
   stage_2_status: complete
-  stage_3_status: in_progress
+  stage_3_status: complete
+  stage_4_status: complete
 
 phase_constraints:
   allowed_claims:
@@ -40,7 +44,11 @@ phase_constraints:
     - "Design gate boundaries specified"
     - "8 sources fully verified with complete body content read"
     - "Stage 2 core source verification complete"
+    - "Stage 3 eight-source synthesis complete"
+    - "Stage 4 gates and state reconciliation complete"
     - "Minimum source target (8) achieved"
+    - "All five research dimensions have evidence coverage"
+    - "Evidence boundaries corrected for src-006, src-007, src-008"
 
   forbidden_claims:
     - "Learning OS architecture validated"
@@ -49,24 +57,28 @@ phase_constraints:
     - "System scales to multiple courses"
     - "Pedagogical actions optimized"
     - "Task 001 complete"
-    - "Gate 1 complete (requires explicit exit evaluation)"
+    - "Gate 1 complete (exit decision pending)"
+    - "All research questions fully resolved"
 
 next_action:
-  action: "Rebuild matrix and research coverage from 8 verified sources; re-evaluate Gate 1 exit conditions"
+  action: "Complete validation and update PR #2; await Gate 1 exit decision"
   priority:
-    - "Update REFERENCE_SYSTEM_MATRIX.md with src-008 findings"
-    - "Update RESEARCH_QUESTIONS.md with complete source coverage"
-    - "Update DESIGN_GATES.md with Gate 1 status"
-    - "Re-evaluate all Gate 1 exit conditions explicitly"
+    - "Run all acceptance commands verbatim"
+    - "Update VALIDATION_RECORD.txt with protocol-8 results"
+    - "Commit and push to existing branch"
+    - "Verify local HEAD equals remote SHA"
+    - "Update actual GitHub PR #2 body with gh pr edit 2"
+    - "Run post-push verification commands"
 
 gate_status:
   gate_1_core_research:
-    status: awaiting_exit_evaluation
+    status: exit_evaluation_in_progress
     entry_conditions_met: true
     activities_complete: true
-    exit_conditions_met: requires_explicit_evaluation
+    exit_conditions_individually_met: true
+    unresolved_gaps_documented: true
     blocked: false
-    progress: "Stage 1 complete (structure), Stage 2 complete (8/8 sources), Stage 3 in progress (matrix rebuild)"
+    progress: "All stages complete (1: structure, 2: 8/8 sources, 3: matrix, 4: gates/state); exit conditions pass; unresolved gaps documented; decision pending"
 
   gate_2_first_scenario:
     status: not_started

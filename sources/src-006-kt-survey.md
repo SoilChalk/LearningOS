@@ -57,12 +57,12 @@
 
 ## Design Implications
 
-1. **Interaction evidence collection**: Side information (response time, hints, attempts) provides richer evidence than correctness alone
-2. **Learner state modeling at scale**: Deep learning enables tracking millions of knowledge states with adaptive assessment remaining tractable
-3. **Task-specific modeling feasible**: Exercise difficulty, discrimination, and type can be explicitly modeled
-4. **Temporal dynamics matter**: Forgetting curves, time gaps, and opportunity counts affect knowledge state evolution
-5. **Source-grounding strategy**: KT models trained on specific course/domain data (ASSISTments, EdNet datasets)
-6. **Evidence-based pedagogical action**: Knowledge state estimates used for personalized resource recommendation and adaptive learning path generation
+1. **Interaction evidence collection**: Side information (response time, hints, attempts) provides richer evidence than correctness alone for structured exercise interactions
+2. **Learner state modeling for structured exercises**: KT models estimate knowledge states from exercise sequences; applicability to open reading or debugging tasks not demonstrated
+3. **Task-specific modeling feasible**: Exercise difficulty, discrimination, and type can be explicitly modeled for structured problem-solving
+4. **Temporal dynamics matter**: Forgetting curves, time gaps, and opportunity counts affect knowledge state evolution in exercise contexts
+5. **Domain-specific training**: KT models trained on specific course/domain exercise data (ASSISTments, EdNet datasets)
+6. **Evidence-based pedagogical action**: Knowledge state estimates used for personalized resource recommendation and adaptive learning path generation (Applications Section V)
 
 ---
 
@@ -71,27 +71,27 @@
 1. **Learning effectiveness**: Survey describes KT models' predictive accuracy, not direct learning outcome improvements from KT-guided interventions
 2. **Pedagogical action specification**: Models predict knowledge states; how to act on predictions is application layer (Section V)
 3. **Generalization across domains**: Most KT datasets domain-specific (math tutoring systems); cross-domain transfer not demonstrated
-4. **Real-time constraints**: Computational complexity varies; transformer models may be too slow for instant feedback
-5. **Cold-start problem**: New students with no history require different approaches (mentioned but not solved)
-6. **Explainability tradeoff**: Deep learning models more accurate but less interpretable than Bayesian/logistic models
+4. **Task scope**: KT models designed for structured exercise interactions; applicability to open reading, debugging, or unstructured learning tasks not established
+5. **Real-time constraints**: Computational complexity varies; transformer models may be too slow for instant feedback
+6. **Cold-start problem**: New students with no history require different approaches (mentioned but not solved)
+7. **Explainability tradeoff**: Deep learning models more accurate but less interpretable than Bayesian/logistic models
 
 ---
 
 ## Affected Decisions
 
-- learner_model_applicability: Demonstrates scalable knowledge state modeling with interaction sequences
-- evidence_collection: Side information (time, hints, attempts) provides critical learning signals
+- learner_model_applicability: Demonstrates scalable knowledge state modeling for structured exercise interactions
+- evidence_collection: Side information (time, hints, attempts) provides critical learning signals in exercise contexts
 - task_type_specific_modeling: Exercise-level features (difficulty, discrimination) improve model performance
-- source_grounding_strategy: KT models require domain-specific training data for specific courses
 - pedagogical_action_selection: Knowledge states enable adaptive resource recommendation (Applications Section V)
 
 ---
 
 ## Research Questions Addressed
 
-- **RQ5.1** (learner state modeling): Comprehensive coverage of knowledge state representation methods
-- **RQ5.2** (task-type-specific modeling): Exercise-level features and difficulty parameters explicitly modeled
-- **RQ4.1** (interaction evidence): Side information (response time, hints, engagement) utilized for richer modeling
+- **RQ5.1** (learner state modeling): Comprehensive coverage of knowledge state representation methods for structured exercise interactions
+- **RQ5.2** (task-type-specific modeling): Exercise-level features and difficulty parameters explicitly modeled; partial coverage limited to structured exercises, not open reading or debugging
+- **RQ4.1** (interaction evidence): Side information (response time, hints, engagement) utilized for richer modeling in exercise contexts
 
 ---
 

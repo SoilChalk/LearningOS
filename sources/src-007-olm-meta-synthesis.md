@@ -68,7 +68,7 @@
 
 1. **OLM-pedagogical strategy integration**: OLMs are metacognitive mediators (not purely analytical systems) when combined with pedagogical scaffolding
 2. **Learner agency continuum**: System-guided reflection (inspectable) → learner-driven regulation (editable) → adaptive co-regulation (AI-mediated)
-3. **Source-grounding + learner-model integration**: OLMs visualize learning data (inspectable) and integrate with adaptive systems that personalize content (persuasive/adaptive)
+3. **Learner model transparency**: Inspectable OLMs expose learning data; negotiable/editable OLMs enable learner-model interaction; adaptive OLMs use learner models for personalization
 4. **Evidence-based pedagogical action**: OLM feedback enables informed learning decisions; adaptive models automate action selection based on learner state
 5. **Transparency as pedagogical tool**: Making learning models transparent encourages metacognitive engagement and autonomous learning
 6. **Scaffolding requirement**: Editable OLMs need pedagogical mediation to ensure reflective (not arbitrary) inputs
@@ -89,7 +89,7 @@
 ## Affected Decisions
 
 - learner_model_applicability: OLMs demonstrated across higher education in multiple contexts (26 studies)
-- source_grounding_plus_learner_model_integration: Inspectable OLMs visualize source-based data; adaptive OLMs integrate learner models with content personalization
+- learner_model_transparency: Four OLM categories (inspectable, negotiable, editable, adaptive) enable varying degrees of model exposure and interaction
 - evidence_collection: OLMs collect behavioral data (time-on-task, page views, interaction patterns) + self-reported confidence/goals
 - pedagogical_action_selection: Adaptive OLMs automate action selection; editable/negotiable OLMs support learner-driven action planning
 - anti_pattern_avoidance: Transparency and learner control (negotiable/editable) mitigate over-reliance on AI automation
@@ -98,10 +98,10 @@
 
 ## Research Questions Addressed
 
-- **RQ5.2** (task-type-specific modeling): Adaptive OLMs personalize based on task type, learner state, and domain
+- **RQ5.2** (task-type-specific modeling): Adaptive OLMs personalize based on task type, learner state, and domain; partial coverage as cross-task model unification not directly addressed
 - **RQ4.1** (interaction evidence): OLMs collect interaction data (engagement, time, behavioral patterns) to model learning
 - **RQ3.1** (pedagogical strategies): Four OLM categories embed distinct pedagogical strategies (transparency, calibration, goal-setting, adaptation)
-- Layer 5 (learner modeling + source grounding integration): Adaptive OLMs integrate transparent data visualization with personalized content delivery
+- **RQ5.1** (learner modeling): Comprehensive coverage of learner model transparency approaches in higher education
 
 ---
 

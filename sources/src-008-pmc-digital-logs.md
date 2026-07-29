@@ -37,24 +37,27 @@
 - Data privacy concerns: merging datasets across institutions, using data across systems within one institution
 - Ethical considerations: algorithmic bias, discrimination potential, need for transparency in feature selection and model decisions
 
-### Learning Analytics Applications
+### Course Outcome and Risk Prediction
 - LMS digital trace data enables early identification of at-risk students in STEM courses for timely intervention
 - Prediction allows targeted support: once students identified, interventions to prevent attrition can be deployed
 - Higher education context: STEM disciplines have high attrition rates, making early prediction particularly important
 - Behavioral predictors provide signals before summative assessments: enable proactive rather than reactive intervention
+- Models predict dichotomous outcomes: pass/fail, at-risk/safe, above/below performance threshold
+- Average prediction timing: 5.85 weeks into semester enables mid-course intervention
 
 ## Design Implications
 
-- **Interaction evidence as learner state signal**: Fine-grained LMS logs provide rich behavioral data beyond correctness; frequency, timing, patterns of interaction theorized to reflect engagement, self-regulation, and learning processes
-- **Feature engineering requirement**: Raw interaction logs not immediately meaningful; metadata-enriched feature mapping necessary to transform events into psychologically or pedagogically interpretable measures
-- **Temporal dynamics**: Early prediction (average 5.85 weeks) enables intervention before course completion; trade-off between prediction accuracy and intervention timing
-- **Model selection trade-offs**: Interpretable models (elastic net, regression) vs. black-box high-accuracy models (neural networks, SVMs); pedagogical applications may require explainability
+- **Interaction evidence for outcome prediction**: Fine-grained LMS logs provide rich behavioral data beyond correctness; frequency, timing, patterns of interaction predict course outcomes and at-risk status
+- **Feature engineering requirement**: Raw interaction logs not immediately meaningful; metadata-enriched feature mapping necessary to transform events into predictive measures
+- **Temporal dynamics for early intervention**: Early prediction (average 5.85 weeks) enables intervention before course completion; trade-off between prediction accuracy and intervention timing
+- **Model selection trade-offs**: Interpretable models (elastic net, regression) vs. black-box high-accuracy models (neural networks, SVMs); educational applications may require explainability
 - **Equity as design constraint**: Predictive models must work equally well across demographic groups; algorithmic fairness testing required
 - **Privacy-preserving design**: Educational data collection carries different expectations than commercial contexts; transparent data use policies and student consent critical
 
 ## Limitations and Non-Inferences
 
-- **Review scope**: Literature review focused on single-course prediction in higher education; generalization to K-12, multi-course, or longitudinal modeling unclear
+- **Review scope**: Literature review focused on single-course outcome prediction in higher education; generalization to K-12, multi-course, or longitudinal modeling unclear
+- **Prediction target**: Models predict course outcomes and at-risk status, not conceptual mastery states or fine-grained knowledge component understanding
 - **Implementation details sparse**: Most reviewed papers report accuracy but not implementation specifics (real-time vs. batch, computational costs, integration with LMS)
 - **Causality not established**: Predictive models identify correlations between behaviors and outcomes; cannot infer that changing behaviors causes outcome improvements
 - **Intervention effectiveness unknown**: Paper reviews prediction models, not intervention studies; whether acting on predictions improves outcomes is separate question
@@ -65,13 +68,14 @@
 
 ## Research Questions Addressed
 
-- **RQ4.1** (Learning Evidence Collection): Demonstrates how LMS interaction logs provide behavioral evidence for learning state inference; review shows 82 models across 39 papers using digital trace data
-- **RQ5.2** (Learner State from Interaction): Shows how fine-grained interaction evidence (clicks, timing, patterns) can be transformed into learner state estimates via machine learning; average 72% accuracy in predicting course outcomes from behavioral features
+- **RQ4.1** (Learning Evidence Collection): Demonstrates how LMS interaction logs provide behavioral evidence for course outcome prediction; review shows 82 models across 39 papers using digital trace data
+- **RQ4.2** (Evidence for Learning Effectiveness): With limitations - models predict outcomes, enabling early intervention; intervention effectiveness not evaluated in reviewed studies
+- **RQ5.2** (Learner State from Interaction): Partial coverage - shows how behavioral features predict course outcomes and at-risk status; does not address fine-grained conceptual mastery states or cross-task model unification
 
 ## Decision Areas Affected
 
-- **evidence_collection**: LMS interaction logs as primary evidence source; fine-grained timestamped events enable rich behavioral feature engineering
-- **learner_model_applicability**: Machine learning models can infer learner state (at-risk vs. on-track) from interaction patterns; requires course-specific training data
+- **evidence_collection**: LMS interaction logs as evidence source for outcome prediction; fine-grained timestamped events enable rich behavioral feature engineering
+- **learner_model_applicability**: Machine learning models can predict course outcomes and at-risk status from interaction patterns; requires course-specific training data; does not address conceptual mastery state estimation
 - **pedagogical_action_selection**: Early prediction enables proactive intervention; but paper does not specify which interventions to apply based on predictions
 - **anti_pattern_avoidance**: Equity considerations require demographic-blind prediction or explicit fairness testing; privacy expectations in education differ from commercial contexts
 
