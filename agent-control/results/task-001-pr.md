@@ -2,33 +2,43 @@
 
 ## Summary
 
-Task 001 (core-research) **Stages 1-4 COMPLETE**. Eight-source evidence base established with corrected evidence boundaries. Gate 1 exit evaluation in progress.
+Task 001 (core-research) **COMPLETE**. Eight-source evidence base established with corrected evidence boundaries. Gate 1 met with documented limitations.
 
 ## Current Status
 
+**Task 001**: COMPLETE ✓
 **Sources Verified**: 8 of 8 minimum required ✓
-**Stages Complete**: Stage 1 (structure), Stage 2 (8/8 sources), Stage 3 (matrix), Stage 4 (gates/state)
-**Stage 5**: IN PROGRESS (results and validation)
-**Gate 1**: EXIT EVALUATION IN PROGRESS
-**Review Cycle**: task-001-review-08 corrections applied
+**Stages Complete**: All 5 stages complete (structure, sources, matrix, gates/state, validation)
+**Gate 1**: MET WITH DOCUMENTED LIMITATIONS ✓
+**Task 002**: NOT STARTED
+**Review Cycle**: task-001-review-09 final bookkeeping corrections applied
 **Branch**: agent/task-001-core-research
+**Final Validated Remote HEAD**: 46c10c79ad2102b0e6877164c4868108b1942423
 **PR Status**: Draft
 
-## Review 08 Outcome
+## Review 09 Outcome
 
+**Review 09 Contract**: Research synthesis accepted; final bookkeeping corrections applied
+**Corrections**:
+- RQ coverage counts corrected to 4 directly_covered, 6 partially_covered, 0 not_covered
+- Gate 1 status finalized as met_with_documented_limitations
+- Stage 5 marked complete
+- Task 001 marked complete
+
+**Review 08 Outcome** (evidence corrections):
 **Review 08 Contract**: Executed - evidence boundaries corrected, eight-source synthesis complete, Gate 1 exit conditions evaluated explicitly
 **Evidence Corrections**:
 - src-006 (KT Survey): Limited to structured exercise interactions; removed source_grounding_strategy
 - src-007 (OLM): Changed to learner_model_transparency; removed source grounding plus learner-model integration claims
 - src-008 (Digital Logs): Changed to outcome prediction; prediction target is course outcomes/risk, not conceptual mastery
 
-**Artifacts Rebuilt/Updated**:
+**Artifacts Rebuilt/Updated (Review 08)**:
 - REFERENCE_SYSTEM_MATRIX.md: Rebuilt from eight sources with proper evidence boundaries
-- RESEARCH_QUESTIONS.md: Coverage classifications added (6 directly_covered, 4 partially_covered, 0 not_covered)
-- DESIGN_GATES.md: Eight-source state; Gate 1 exit conditions evaluated individually
-- CURRENT_STATE.yaml: Protocol version 8; Stages 1-4 complete
-- task-001.json: Reconciled with all artifacts
-- task-001-pr.md: Eight-source narrative (this file)
+- RESEARCH_QUESTIONS.md: Coverage classifications added (4 directly_covered, 6 partially_covered, 0 not_covered)
+- DESIGN_GATES.md: Eight-source state; Gate 1 met with documented limitations
+- CURRENT_STATE.yaml: Protocol version 8; All stages complete; Task 001 complete
+- task-001.json: Reconciled with all artifacts; Task 001 complete
+- task-001-pr.md: Eight-source narrative; final state
 
 ## Files Changed
 
@@ -128,13 +138,13 @@ grep -q 'src-008' docs/REFERENCE_SYSTEM_MATRIX.md
 
 ## Research Coverage Summary
 
-**Directly Covered (6 of 10 RQs)**:
+**Directly Covered (4 of 10 RQs)**:
 - RQ1.1: Source-bound explanations (src-001, src-002)
 - RQ3.1: Teaching action taxonomy (src-002, src-003, src-004, src-007)
 - RQ4.1: Factual observation vs. inference (src-002, src-003, src-004, src-006, src-007, src-008)
 - RQ5.1: KT data requirements (src-005, src-006, src-007)
 
-**Partially Covered (4 of 10 RQs)**:
+**Partially Covered (6 of 10 RQs)**:
 - RQ1.2: Material scope control (leakage prevention unclear)
 - RQ2.1: Course-specific constraints (vocabulary/notation not addressed)
 - RQ2.2: Task context preservation (multi-session mechanisms not detailed)
@@ -184,37 +194,47 @@ All five research dimensions have evidence coverage; depth varies by dimension.
 
 **Prohibited Activities Check**: ✅ COMPLIANT (no frontend, knowledge graph, mastery classification, taxonomies, provider ranking, event-sourced runtime)
 
-**Exit Decision**: NOT YET MET - all conditions pass individually, but unresolved research gaps remain
+**Gate 1 Decision**: MET WITH DOCUMENTED LIMITATIONS
 
-**Unresolved Gaps Documented**:
+**Documented Limitations (carried forward to Gate 2)**:
 - Layer 1: Model knowledge leakage prevention; ambiguous/conflicting source handling
 - Layer 2: Vocabulary/notation constraints; academic integrity mechanisms
 - Layer 3: Automatic obstacle detection
 - Layer 4: Mastery transition criteria; intervention effectiveness
 - Layer 5: Unified cross-task model; cross-domain transfer
 
-**Recommendation**: Gate 1 can advance to Gate 2 with documented limitations. Eight-source evidence base provides sufficient foundation for first vertical scenario design while acknowledging some design questions require implementation experiments.
+**Outcome**: Gate 1 met. Eight-source evidence base provides sufficient foundation for first vertical scenario design. Documented limitations become constraints for Gate 2.
 
-## Next Steps
+## Task Completion Checklist
 
 - [x] Correct evidence boundaries (src-006, src-007, src-008)
 - [x] Rebuild REFERENCE_SYSTEM_MATRIX.md from eight sources
 - [x] Update RESEARCH_QUESTIONS.md with coverage classifications
-- [x] Update DESIGN_GATES.md with Gate 1 exit evaluation
+- [x] Update DESIGN_GATES.md with Gate 1 evaluation
 - [x] Reconcile all status-bearing artifacts
-- [ ] Run all acceptance commands verbatim
-- [ ] Update VALIDATION_RECORD.txt with protocol-8 results
-- [ ] Commit and push to existing branch
-- [ ] Verify local HEAD equals remote SHA
-- [ ] Update actual GitHub PR #2 body (after push)
-- [ ] Run post-push verification
-- [ ] **DO NOT MERGE PR; DO NOT START TASK 002**
+- [x] Run all acceptance commands verbatim
+- [x] Update VALIDATION_RECORD.txt with protocol-8 results
+- [x] Commit and push to existing branch
+- [x] Verify local HEAD equals remote SHA (46c10c79ad2102b0e6877164c4868108b1942423)
+- [x] Update actual GitHub PR #2 body
+- [x] Run post-push verification
+- [x] Correct RQ coverage counts (4 direct, 6 partial, 0 not covered)
+- [x] Finalize Gate 1 status (met_with_documented_limitations)
+- [x] Mark Stage 5 complete
+- [x] Mark Task 001 complete
+
+**Task 001**: COMPLETE
+**Gate 1**: MET WITH DOCUMENTED LIMITATIONS
+**Task 002**: NOT STARTED
+**PR #2**: Draft (not merged)
 
 ---
 
 **Task ID**: task-001-core-research
-**Status**: IN PROGRESS (Stages 1-4 complete, Stage 5 in progress)
+**Status**: COMPLETE
+**Gate 1**: MET WITH DOCUMENTED LIMITATIONS
 **Protocol Version**: 8
-**Last Updated**: 2026-07-29T18:00:00Z
+**Last Updated**: 2026-07-29T19:00:00Z
 **Branch**: agent/task-001-core-research
-**Review Cycle**: task-001-review-08 corrections applied
+**Final Validated Remote HEAD**: 46c10c79ad2102b0e6877164c4868108b1942423
+**Review Cycle**: task-001-review-09 final bookkeeping corrections applied

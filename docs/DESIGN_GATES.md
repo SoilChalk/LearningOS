@@ -14,7 +14,7 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ## Gate 1: Core Research Phase
 
-**Current Status**: EXIT EVALUATION IN PROGRESS (task-001-core-research)
+**Current Status**: MET WITH DOCUMENTED LIMITATIONS (task-001-core-research complete)
 
 ### Entry Conditions
 ✓ Project purpose defined
@@ -87,11 +87,11 @@ Design gates define entry and exit conditions for each major phase of Learning O
 - Khan Academy RCT studies (institutional access issues)
 - MDPI learning analytics (Akamai bot detection, DOI resolver failed)
 
-### Gate 1 Exit Decision: NOT YET MET
+### Gate 1 Exit Decision: MET WITH DOCUMENTED LIMITATIONS
 
-**All exit conditions pass individually**, but unresolved research gaps remain:
+**All exit conditions pass individually**. Unresolved research gaps are documented as limitations to carry forward to Gate 2, not as exit-condition failures.
 
-**Unresolved Gaps Requiring Acknowledgment**:
+**Documented Limitations for Gate 2**:
 - **Layer 1**: Preventing model knowledge leakage when sources incomplete; handling ambiguous/conflicting sources
 - **Layer 2**: Vocabulary/notation constraint enforcement; assessment criteria alignment; academic integrity preservation mechanisms
 - **Layer 3**: Automatic obstacle-type detection (terminology gaps, prerequisite deficits, language barriers, procedural vs. conceptual confusion)
@@ -99,8 +99,8 @@ Design gates define entry and exit conditions for each major phase of Learning O
 - **Layer 5**: Unified learner model across reading, debugging, structured exercises; cross-domain knowledge state transfer; skill decomposition for unstructured tasks
 
 **Research Coverage Summary**:
-- 6 of 10 RQs directly covered (RQ1.1, RQ3.1, RQ4.1, RQ5.1)
-- 4 of 10 RQs partially covered (RQ1.2, RQ2.1, RQ2.2, RQ3.2, RQ4.2, RQ5.2)
+- 4 of 10 RQs directly covered (RQ1.1, RQ3.1, RQ4.1, RQ5.1)
+- 6 of 10 RQs partially covered (RQ1.2, RQ2.1, RQ2.2, RQ3.2, RQ4.2, RQ5.2)
 - 0 of 10 RQs uncovered
 - All five research dimensions have evidence; depth varies by dimension
 
@@ -254,6 +254,6 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ---
 
-**Last Updated**: 2026-07-29T18:00:00Z
-**Phase**: Gate 1 - Core Research EXIT EVALUATION
-**Next Phase**: Gate 2 - First Vertical Scenario Design (decision pending)
+**Last Updated**: 2026-07-29T19:00:00Z
+**Phase**: Gate 1 - Core Research COMPLETE
+**Next Phase**: Gate 2 - First Vertical Scenario Design (ready to begin)

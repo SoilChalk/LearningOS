@@ -252,13 +252,13 @@ Should open reading, debugging, and structured exercises share a unified learner
 
 ## Eight-Source Coverage Summary
 
-**Directly Covered (6 of 10 RQs):**
+**Directly Covered (4 of 10 RQs):**
 - RQ1.1: Source-bound explanations (src-001, src-002)
 - RQ3.1: Teaching action taxonomy (src-002, src-003, src-004, src-007)
 - RQ4.1: Factual observation vs. inference (src-002, src-003, src-004, src-006, src-007, src-008)
 - RQ5.1: Knowledge tracing data requirements (src-005, src-006, src-007)
 
-**Partially Covered (4 of 10 RQs):**
+**Partially Covered (6 of 10 RQs):**
 - RQ1.2: Material scope control (leakage prevention unclear)
 - RQ2.1: Course-specific constraints (vocabulary/notation not addressed)
 - RQ2.2: Task context preservation (multi-session mechanisms not detailed)

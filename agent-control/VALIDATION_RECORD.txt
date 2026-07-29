@@ -1,9 +1,22 @@
 # Validation Record - Task 001 Core Research
 
 ## Protocol Version: 8
-## Review Cycle: task-001-review-08
-## Validated At: 2026-07-29T18:15:00Z
+## Review Cycle: task-001-review-09
+## Validated At: 2026-07-29T19:00:00Z
 ## Branch: agent/task-001-core-research
+## Final Validated Remote HEAD: 46c10c79ad2102b0e6877164c4868108b1942423
+
+---
+
+## Review 09 — Final Bookkeeping Corrections
+
+Research synthesis from Review 08 accepted. Final corrections applied:
+- RQ coverage counts corrected to 4 directly_covered, 6 partially_covered, 0 not_covered
+- Gate 1 status finalized as met_with_documented_limitations
+- Stage 5 marked complete
+- Task 001 marked complete
+
+No sources added or changed in Review 09.
 
 ---
 
@@ -77,11 +90,14 @@ Status: PASSED (no forbidden phrases found)
 
 All protocol-8 acceptance commands PASSED.
 
+Task 001: COMPLETE
+Gate 1: MET WITH DOCUMENTED LIMITATIONS
 Source Count: 8/8 verified
 Evidence Boundaries: Corrected for src-006, src-007, src-008
 Matrix Status: Rebuilt from eight sources
-Research Coverage: 6 directly_covered, 4 partially_covered, 0 not_covered
-Gate 1 Exit Conditions: All pass individually; unresolved gaps documented
+Research Coverage: 4 directly_covered, 6 partially_covered, 0 not_covered
+Stage 5: COMPLETE
+Task 002: NOT STARTED
 
 ---
 
@@ -110,7 +126,14 @@ Design Gates Update: COMPLETE
 State Reconciliation: COMPLETE
 Validation Record: COMPLETE
 
-Ready for commit and push.
+## Review 09 Contract Completion
+
+RQ Coverage Counts: CORRECTED (4 direct, 6 partial, 0 not covered)
+Gate 1 Status: FINALIZED (met_with_documented_limitations)
+Stage 5: COMPLETE
+Task 001: COMPLETE
+
+Ready for final verification.
 
 ---
 

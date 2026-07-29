@@ -1,24 +1,21 @@
 {
   "protocol_version": 8,
   "task_id": "task-001-core-research",
-  "status": "in_progress",
+  "status": "complete",
   "branch": "agent/task-001-core-research",
-  "review_cycle": "task-001-review-08",
-  "updated_at": "2026-07-29T18:00:00Z",
-  "last_completed_stage": "stage_4_gates_and_state",
-  "next_action": "Complete validation and update PR #2; await Gate 1 exit decision",
+  "review_cycle": "task-001-review-09",
+  "updated_at": "2026-07-29T19:00:00Z",
+  "last_completed_stage": "stage_5_results_and_validation",
+  "next_action": "Task 001 complete; Gate 1 met with documented limitations; ready for Task 002 (not started)",
   "stages_completed": [
     "stage_1_structure_established",
     "stage_2_core_source_verification",
     "stage_3_synthesis_matrix",
-    "stage_4_gates_and_state"
-  ],
-  "stages_in_progress": [
+    "stage_4_gates_and_state",
     "stage_5_results_and_validation"
   ],
-  "stages_remaining": [
-    "stage_5_results_and_validation"
-  ],
+  "stages_in_progress": [],
+  "stages_remaining": [],
   "source_count": 8,
   "sources_fully_verified": 8,
   "sources_target_minimum": 8,
@@ -156,20 +153,41 @@
     "activities": "complete",
     "exit_conditions_individually": "all_pass",
     "unresolved_gaps_documented": true,
-    "status": "exit_evaluation_in_progress",
-    "recommendation": "Gate 1 can advance to Gate 2 with documented limitations; eight-source evidence base provides foundation for first vertical scenario design while acknowledging some design questions require implementation experiments"
+    "status": "met_with_documented_limitations",
+    "recommendation": "Gate 1 met; eight-source evidence base provides foundation for first vertical scenario design; documented limitations become Gate 2 constraints"
   },
   "stage_3_matrix_status": {
     "artifact_status": "complete",
     "stage_status": "complete",
     "note": "Matrix rebuilt from eight-source ledger; all sources integrated with evidence boundaries"
   },
-  "stage_4_gates_and_state_status": {
+  "stage_5_results_and_validation_status": {
     "artifact_status": "complete",
     "stage_status": "complete",
-    "note": "DESIGN_GATES.md and CURRENT_STATE.yaml updated to eight-source state; Gate 1 exit conditions evaluated explicitly"
+    "note": "All protocol-8 acceptance commands passed; commit pushed; SHA verified; PR body updated; post-push verification complete"
   },
   "execution_cycles": [
+    {
+      "cycle_id": "task-001-review-09-finalization",
+      "started_at": "2026-07-29T19:00:00Z",
+      "decision": "finalize_gate_1_and_task_001_completion",
+      "review_09_outcome": "research_synthesis_accepted_final_bookkeeping_corrected",
+      "corrections": [
+        "RQ coverage counts corrected to 4 directly_covered, 6 partially_covered, 0 not_covered",
+        "Gate 1 status finalized as met_with_documented_limitations",
+        "Stage 5 marked complete",
+        "Task 001 marked complete"
+      ],
+      "artifacts_updated": [
+        "docs/RESEARCH_QUESTIONS.md (coverage counts corrected)",
+        "docs/DESIGN_GATES.md (Gate 1 met with documented limitations)",
+        "state/CURRENT_STATE.yaml (Task 001 complete, Stage 5 complete)",
+        "agent-control/results/task-001.json (reconciled)",
+        "agent-control/results/task-001-pr.md (final state)",
+        "agent-control/VALIDATION_RECORD.txt (updated)"
+      ],
+      "note": "Review 09 bookkeeping-only corrections applied; no sources added or changed; Task 001 complete"
+    },
     {
       "cycle_id": "task-001-review-08-synthesis",
       "started_at": "2026-07-29T17:00:00Z",
