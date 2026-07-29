@@ -1,37 +1,36 @@
 protocol_version: 3
-updated_at: "2026-07-29T08:10:50Z"
+updated_at: "2026-07-29T09:15:00Z"
 task_id: task-001-core-research
 phase: core_research
 status: in_progress
 
 current_stage:
-  stage_id: stage_2_core_source_verification
-  started_at: "2026-07-29T02:20:00Z"
+  stage_id: stage_3_synthesis_matrix
+  started_at: "2026-07-29T09:15:00Z"
   completed: false
   blocked: false
-  stop_condition_reached: true
-  stop_condition: required_research_dimension_has_no_accessible_primary_or_high_quality_survey_after_three_distinct_candidates
-  next_stage: stage_3_synthesis_matrix
+  stop_condition_reached: false
+  next_stage: stage_4_gates_and_state
 
 stages_completed:
   - stage_1_structure_established
+  - stage_2_core_source_verification
 
 stages_remaining:
-  - stage_2_core_source_verification
   - stage_3_synthesis_matrix
   - stage_4_gates_and_state
   - stage_5_results_and_validation
 
 research_progress:
-  sources_verified: 5
+  sources_verified: 8
   sources_target_min: 8
   sources_target_max: 15
   research_questions_defined: 10
   design_gates_defined: 4
-  sources_fully_verified: 5
-  sources_incomplete_candidates: 10
-  stage_2_resume_cycle_completed: true
-  stage_2_outcome: stopped_below_minimum
+  sources_fully_verified: 8
+  incomplete_candidates: 7
+  stage_2_status: complete
+  stage_3_status: in_progress
 
 phase_constraints:
   allowed_claims:
@@ -39,7 +38,9 @@ phase_constraints:
     - "Research questions defined across five dimensions"
     - "Source verification criteria documented"
     - "Design gate boundaries specified"
-    - "5 sources fully verified with complete body content read"
+    - "8 sources fully verified with complete body content read"
+    - "Stage 2 core source verification complete"
+    - "Minimum source target (8) achieved"
 
   forbidden_claims:
     - "Learning OS architecture validated"
@@ -47,22 +48,25 @@ phase_constraints:
     - "Learning effectiveness proven for Learning OS"
     - "System scales to multiple courses"
     - "Pedagogical actions optimized"
-    - "Task 001 or Gate 1 complete"
+    - "Task 001 complete"
+    - "Gate 1 complete (requires explicit exit evaluation)"
 
 next_action:
-  action: "Continue Stage 2: Attempt additional accessible sources or document insufficient availability"
+  action: "Rebuild matrix and research coverage from 8 verified sources; re-evaluate Gate 1 exit conditions"
   priority:
-    - "Attempt 3 more distinct accessible candidates for incomplete research dimensions"
-    - "If 3 candidates fail per dimension, document stop condition"
-    - "Update all files to maintain consistent in_progress status"
+    - "Update REFERENCE_SYSTEM_MATRIX.md with src-008 findings"
+    - "Update RESEARCH_QUESTIONS.md with complete source coverage"
+    - "Update DESIGN_GATES.md with Gate 1 status"
+    - "Re-evaluate all Gate 1 exit conditions explicitly"
 
 gate_status:
   gate_1_core_research:
-    status: in_progress
+    status: awaiting_exit_evaluation
     entry_conditions_met: true
-    exit_conditions_met: false
+    activities_complete: true
+    exit_conditions_met: requires_explicit_evaluation
     blocked: false
-    progress: "Stage 1 complete (structure), Stage 2 in progress (5/8 sources)"
+    progress: "Stage 1 complete (structure), Stage 2 complete (8/8 sources), Stage 3 in progress (matrix rebuild)"
 
   gate_2_first_scenario:
     status: not_started
