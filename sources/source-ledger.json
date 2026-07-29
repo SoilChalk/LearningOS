@@ -1,7 +1,7 @@
 {
   "$schema": "../templates/SOURCE_LEDGER.schema.json",
   "schema_version": "1.0",
-  "generated_at": "2026-07-29T16:00:00Z",
+  "generated_at": "2026-07-29T08:10:50Z",
   "task_id": "task-001-core-research",
   "status": "in_progress",
   "stage": "stage_2_core_source_verification",
@@ -11,7 +11,7 @@
   "sources": [
     {
       "id": "src-001",
-      "title": "了解 Gemini Notebook (Learn about Gemini Notebook)",
+      "title": "\u4e86\u89e3 Gemini Notebook (Learn about Gemini Notebook)",
       "organization_or_authors": "Google",
       "publication_date": "2026",
       "source_type": "product_documentation",
@@ -91,11 +91,11 @@
         "anti_pattern_avoidance"
       ],
       "verification_status": "verified",
-      "notes": "Product documentation accessed 2026-07-29; document updated '23小时前' (23 hours ago) from access date"
+      "notes": "Product documentation accessed 2026-07-29; document updated '23\u5c0f\u65f6\u524d' (23 hours ago) from access date"
     },
     {
       "id": "src-003",
-      "title": "Gemini 中的 LearnLM (LearnLM in Gemini)",
+      "title": "Gemini \u4e2d\u7684 LearnLM (LearnLM in Gemini)",
       "organization_or_authors": "Google Cloud / Google DeepMind",
       "publication_date": "2026-05",
       "source_type": "product_documentation",
@@ -205,7 +205,7 @@
         "Each domain (e.g., Algebra 1, Algebra 2) requires separate pre-built knowledge structure"
       ],
       "design_implications": [
-        "Knowledge modeling feasible at scale: 350 concepts → millions of states, assessment remains tractable (25-30 questions)",
+        "Knowledge modeling feasible at scale: 350 concepts \u2192 millions of states, assessment remains tractable (25-30 questions)",
         "Prerequisite relationships mathematically modelable via combinatorial framework",
         "Adaptive assessment can be efficient using stochastic (Markovian) procedures",
         "Domain specificity critical: each course requires separate knowledge structure",
@@ -297,7 +297,67 @@
         "RQ4.2"
       ],
       "status": "deferred"
+    },
+    {
+      "candidate_id": "candidate-kt-survey-2024",
+      "title": "A Survey of Knowledge Tracing: Models, Variants, and Applications",
+      "reason": "arXiv abstract accessible but full paper content not extractable via web tools; PDF access not supported by current tooling",
+      "alternative_attempted": "Tried multiple arXiv HTML endpoints (ar5iv.labs, arxiv.org/html, rendered mode); all returned extraction errors",
+      "research_questions": [
+        "RQ5.1",
+        "RQ5.2"
+      ],
+      "status": "deferred",
+      "partial_metadata": {
+        "authors": "Shuanghong Shen, Qi Liu, Zhenya Huang, et al.",
+        "publication": "IEEE Transactions on Learning Technologies, 2024",
+        "url": "https://arxiv.org/abs/2105.15106",
+        "note": "Comprehensive survey published in peer-reviewed journal; abstract confirms relevance but body content not accessible"
+      }
+    },
+    {
+      "candidate_id": "candidate-olm-meta-synthesis",
+      "title": "Open learner models and pedagogical strategies in higher education: a meta-synthesis",
+      "reason": "Frontiers journal page not accessible; content extraction failed",
+      "alternative_attempted": "Tried full and rendered web fetch modes",
+      "research_questions": [
+        "RQ5.2"
+      ],
+      "status": "deferred",
+      "partial_metadata": {
+        "publication": "Frontiers in Education, 2025",
+        "url": "https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2025.1760183/full"
+      }
+    },
+    {
+      "candidate_id": "candidate-digital-logs-review",
+      "title": "Predicting student outcomes using digital logs of learning behaviors: Review",
+      "reason": "NIH PMC repository blocked by CAPTCHA verification system",
+      "alternative_attempted": "Tried rendered mode; encountered Cloudflare challenge",
+      "research_questions": [
+        "RQ4.1",
+        "RQ4.2"
+      ],
+      "status": "deferred",
+      "partial_metadata": {
+        "publication": "PMC (PubMed Central)",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10556130/"
+      }
+    },
+    {
+      "candidate_id": "candidate-learning-analytics-engagement",
+      "title": "Learning Analytics on Student Engagement",
+      "reason": "MDPI platform blocked by Akamai security challenge",
+      "alternative_attempted": "Tried rendered mode; encountered bot detection",
+      "research_questions": [
+        "RQ4.1"
+      ],
+      "status": "deferred",
+      "partial_metadata": {
+        "publication": "MDPI Sustainability, 2023",
+        "url": "https://www.mdpi.com/2071-1050/15/10/7849"
+      }
     }
   ],
-  "notes": "Review cycle task-001-review-01 required replacement of sources that relied on search snippets and secondary sources. After attempting multiple academic sources (BKT papers, Cognitive Tutor publications, ITS meta-analyses, Duolingo research, Khan Academy RCTs), access restrictions (paywalls, PDF blocks, HTTP errors) prevented reading source bodies. Current ledger contains 5 fully verified sources with complete body content read and documented. Remaining 3 sources to reach minimum target of 8 deferred pending accessible alternatives."
+  "notes": "Review cycle task-001-review-01 required replacement of sources that relied on search snippets and secondary sources. After attempting multiple academic sources (BKT papers, Cognitive Tutor publications, ITS meta-analyses, Duolingo research, Khan Academy RCTs), access restrictions (paywalls, PDF blocks, HTTP errors) prevented reading source bodies. Current ledger contains 5 fully verified sources with complete body content read and documented. Remaining 3 sources to reach minimum target of 8 deferred pending accessible alternatives.\n\nStage 2 resume cycle (task-001-stage-2-resume-01): Prioritized RQ5.2 (task-type-specific modeling) and weak evidence dimensions per execution contract. Attempted four distinct high-quality candidates (IEEE survey, Frontiers meta-synthesis, NIH PMC review, MDPI article). All four candidates inaccessible due to: PDF extraction not supported, journal platform extraction failures, CAPTCHA/bot-detection systems. Stop condition reached per protocol: required research dimensions have no accessible primary or high-quality survey after three+ distinct candidates. Current ledger remains at 5 verified sources."
 }

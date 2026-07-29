@@ -3,8 +3,8 @@
   "task_id": "task-001-core-research",
   "status": "in_progress",
   "branch": "agent/task-001-core-research",
-  "review_cycle": "task-001-review-03",
-  "updated_at": "2026-07-29T06:56:21Z",
+  "review_cycle": "task-001-stage-2-resume-01",
+  "updated_at": "2026-07-29T08:10:50Z",
   "last_completed_stage": "stage_1_structure_established",
   "next_action": "Continue stage_2_core_source_verification: attempt 3 more distinct accessible candidates for remaining research dimensions, or document stop condition if source exhaustion reached",
   "stages_completed": [
@@ -21,7 +21,7 @@
   "source_count": 5,
   "sources_fully_verified": 5,
   "sources_target_minimum": 8,
-  "incomplete_candidates": 6,
+  "incomplete_candidates": 10,
   "files_changed": [
     "docs/RESEARCH_QUESTIONS.md",
     "docs/DESIGN_GATES.md",
@@ -134,9 +134,11 @@
     "Confirmed exact grep command exits 0 with no stale artifacts"
   ],
   "unresolved_issues": [
-    "Source count 5/8: minimum target of 8 not yet achieved",
-    "Research question RQ5.2 not covered by current sources",
-    "Multiple academic sources inaccessible: BKT (Corbett & Anderson 1995), Cognitive Tutors/ACT-R (CMU PACT), ASSISTments, ITS meta-analyses (SAGE paywalls), Duolingo research (arXiv errors), Khan Academy RCTs (institutional access)"
+    "Source count 5/8: minimum target not achieved due to systematic accessibility barriers",
+    "Research question RQ5.2 (task-type-specific modeling) not covered by accessible sources",
+    "Weak evidence dimensions identified in contract (learner-state change from interaction, source-grounding plus learner-model integration) require sources not accessible",
+    "Stage 2 resume cycle stop condition reached: four distinct high-quality candidates attempted for priority dimensions; all inaccessible due to PDF extraction limitations, journal platform blocks, CAPTCHA/bot-detection systems",
+    "Multiple academic sources inaccessible: BKT papers, Cognitive Tutors/ACT-R, ASSISTments, ITS meta-analyses (paywalls), Duolingo research (arXiv errors), Khan Academy RCTs (institutional access), KT survey 2024 (PDF extraction), OLM meta-synthesis (platform block), digital logs review (CAPTCHA), learning analytics (Akamai challenge)"
   ],
   "claims_requiring_review": [
     "Matrix deferred candidates section lists inaccessible sources; explicitly labeled as deferred, not cited as evidence",
@@ -157,5 +159,22 @@
     "artifact_status": "current_for_5_verified_sources",
     "stage_status": "incomplete_until_minimum_8_sources",
     "note": "Matrix rebuilt from five-source ledger; Stage 3 not complete until minimum source count (8) is met"
-  }
+  },
+  "execution_cycles": [
+    {
+      "cycle_id": "task-001-stage-2-resume-01",
+      "started_at": "2026-07-29T08:10:50Z",
+      "decision": "stop_below_minimum",
+      "stop_condition": "required_research_dimension_has_no_accessible_primary_or_high_quality_survey_after_three_distinct_candidates",
+      "candidates_attempted": 4,
+      "candidates_verified": 0,
+      "final_source_count": 5,
+      "priority_dimensions": [
+        "RQ5.2",
+        "learner-state change from interaction evidence",
+        "source-grounding plus learner-model integration"
+      ],
+      "note": "Attempted four distinct high-quality candidates for priority research dimensions. All candidates inaccessible due to systematic barriers: PDF extraction not supported, journal platform extraction failures, CAPTCHA/bot-detection systems. Per contract requirement, stopped rather than adding weak evidence."
+    }
+  ]
 }

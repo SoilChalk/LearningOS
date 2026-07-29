@@ -1,5 +1,5 @@
 protocol_version: 3
-updated_at: "2026-07-29T16:00:00Z"
+updated_at: "2026-07-29T08:10:50Z"
 task_id: task-001-core-research
 phase: core_research
 status: in_progress
@@ -9,6 +9,8 @@ current_stage:
   started_at: "2026-07-29T02:20:00Z"
   completed: false
   blocked: false
+  stop_condition_reached: true
+  stop_condition: required_research_dimension_has_no_accessible_primary_or_high_quality_survey_after_three_distinct_candidates
   next_stage: stage_3_synthesis_matrix
 
 stages_completed:
@@ -27,7 +29,9 @@ research_progress:
   research_questions_defined: 10
   design_gates_defined: 4
   sources_fully_verified: 5
-  sources_incomplete_candidates: 6
+  sources_incomplete_candidates: 10
+  stage_2_resume_cycle_completed: true
+  stage_2_outcome: stopped_below_minimum
 
 phase_constraints:
   allowed_claims:
