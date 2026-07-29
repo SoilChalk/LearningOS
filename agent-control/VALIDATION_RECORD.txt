@@ -1,12 +1,17 @@
 # Validation Record - Task 001 Core Research
 
 ## Protocol Version: 8
-## Review Cycle: task-001-review-09
-## Validated At: 2026-07-29T19:00:00Z
+## Review Cycle: task-001-review-10
+## Validated At: 2026-07-29T20:00:00Z
 ## Branch: agent/task-001-core-research
-## Final Validated Remote HEAD: 46c10c79ad2102b0e6877164c4868108b1942423
+
+**Note**: Final local/remote branch equality is verified externally in the live GitHub PR body after push.
 
 ---
+
+## Review 10 — Remove Self-Referential SHA
+
+Final bookkeeping-only correction. Self-referential SHA fields removed from tracked repository files per review requirement.
 
 ## Review 09 — Final Bookkeeping Corrections
 
@@ -92,11 +97,12 @@ All protocol-8 acceptance commands PASSED.
 
 Task 001: COMPLETE
 Gate 1: MET WITH DOCUMENTED LIMITATIONS
+All Five Stages: COMPLETE
 Source Count: 8/8 verified
 Evidence Boundaries: Corrected for src-006, src-007, src-008
 Matrix Status: Rebuilt from eight sources
 Research Coverage: 4 directly_covered, 6 partially_covered, 0 not_covered
-Stage 5: COMPLETE
+Review 09 Finalization: RECORDED
 Task 002: NOT STARTED
 
 ---
@@ -130,8 +136,13 @@ Validation Record: COMPLETE
 
 RQ Coverage Counts: CORRECTED (4 direct, 6 partial, 0 not covered)
 Gate 1 Status: FINALIZED (met_with_documented_limitations)
-Stage 5: COMPLETE
+All Five Stages: COMPLETE
 Task 001: COMPLETE
+
+## Review 10 Contract Completion
+
+Self-Referential SHA Fields: REMOVED
+Stale Summary Claims: CORRECTED
 
 Ready for final verification.
 

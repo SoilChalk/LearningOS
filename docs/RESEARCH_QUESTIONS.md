@@ -288,4 +288,4 @@ None - all RQs have at least partial coverage
 
 ---
 
-**Status**: Stage 3 complete. Eight verified sources provide direct coverage for 6 RQs and partial coverage for 4 RQs. No RQs remain uncovered. Remaining gaps documented for each partially covered RQ.
+**Status**: Stage 3 complete. Eight verified sources provide direct coverage for 4 RQs and partial coverage for 6 RQs. No RQs remain uncovered. Remaining gaps documented for each partially covered RQ.
