@@ -1,25 +1,25 @@
-protocol_version: 5
+protocol_version: 6
 
 task_id: task-001-core-research
-status: in_progress
+status: changes_requested
 branch: agent/task-001-core-research
 pull_request: 2
 
 objective: >
-  Continue Task 001 Stage 2 research from the current five verified sources.
-  Add only directly read, concrete, high-quality sources until the minimum of
-  eight verified sources is reached, or document a protocol stop condition.
+  Correct the invalid Stage 2 stop outcome, restore active source verification,
+  and directly evaluate accessible high-quality source bodies for the remaining
+  research dimensions without weakening evidence standards.
 
 context:
   authoritative_issue: https://github.com/SoilChalk/LearningOS/issues/1
   review_target: https://github.com/SoilChalk/LearningOS/pull/2
-  prior_review: task-001-review-05
-  prior_review_decision: accepted
-  accepted_head: bafc178370c9bba50769310625e6220299c06e1f
+  review_id: task-001-review-07
+  decision: changes_requested
+  reviewed_head: 622936aec1dcf27b5c9ee56d9117fb94fb8bf73b
   note: >
-    Review 05 corrections are accepted. The matrix is current for five verified
-    sources but Stage 3 and Gate 1 remain incomplete. This file replaces the
-    obsolete Review 02 correction contract.
+    Review 05 remains accepted. The task-001-stage-2-resume-01 stop condition is
+    rejected because publicly readable source bodies exist and three failed
+    candidates were not demonstrated for any one required dimension.
 
 allowed_paths:
   - AGENTS.md
@@ -51,42 +51,62 @@ current_truth:
     - src-004
     - src-005
   stage_2_status: in_progress
+  stage_2_resume_01_outcome: rejected_invalid_stop_condition
   stage_3_artifact_status: current_for_5_verified_sources
   stage_3_status: incomplete_until_minimum_8_sources
   task_002_status: not_started
 
-execution_cycle:
-  cycle_id: task-001-stage-2-resume-01
-  decision: continue_research
-  scope:
-    - >
-      Read the current ledger, source notes, research questions, matrix, design
-      gates, state file, and Task 001 result before searching.
-    - >
-      Prioritize uncovered RQ5.2 and weak evidence dimensions: learner-state
-      change from interaction evidence, source-grounding plus learner-model
-      integration, and evidence-based pedagogical action selection.
-    - >
-      Attempt no more than three distinct accessible candidates per required
-      dimension. Stop early after three additional sources are fully verified.
-    - >
-      Count a source only after reading its source body and recording one
-      concrete primary or high-quality survey URL, publication metadata,
-      access date, directly supported observations, design implications,
-      limitations/non-inferences, and affected decisions.
-    - >
-      Product pages may support feature claims but not learning-effect claims.
-      Search snippets, aggregate URLs, remembered literature, and inaccessible
-      papers do not count as verified evidence.
-    - >
-      Update the ledger, one source note per accepted source, the provisional
-      matrix, research coverage, design gates, current state, Task 001 result,
-      and actual PR body. Do not create implementation architecture or code
-      beyond validation/support scripts already in scope.
-    - >
-      Do not mark Gate 1 met merely because the source count reaches eight.
-      Evaluate every Gate 1 exit condition explicitly and keep unsupported
-      conclusions scoped to the reviewed sample.
+required_changes:
+  - >
+    Remove or explicitly supersede the stop_below_minimum outcome in the ledger,
+    Task 001 result, current state, design gates, and actual PR body. Restore a
+    coherent active Stage 2 status. Do not describe external resolution as required.
+  - >
+    Correct the Study Mode regression in sources/source-ledger.json. The source
+    documents user-requested controls and possible direct answers; it does not prove
+    that explicit instruction is technically required, that Socratic behavior is
+    opt-in/default-off, or that automatic adjustment never occurs. Keep those as
+    project design inferences only.
+  - >
+    Directly read and evaluate the accessible full body of A Survey of Knowledge
+    Tracing: Models, Variants, and Applications (arXiv 2105.15106). Use official
+    arXiv HTML/PDF/e-print retrieval and local PDF-to-text extraction if browser
+    rendering fails. Distinguish the arXiv version date from later journal metadata.
+  - >
+    Directly read and evaluate the accessible full Frontiers article Open learner
+    models and pedagogical strategies in higher education: a meta-synthesis of
+    approaches to self-regulated learning, DOI 10.3389/feduc.2025.1760183. Record
+    its actual publication date, 2026-01-26, separately from the DOI year.
+  - >
+    Directly read and evaluate at least one additional accessible body relevant to
+    interaction evidence: the MDPI systematic review DOI 10.3390/su15107849 or the
+    PMC article PMC10556130. Use official HTML, XML, PDF, NCBI/Europe PMC, or local
+    download fallbacks rather than treating one CAPTCHA or bot challenge as source
+    unavailability.
+  - >
+    Do not automatically count the three named candidates. Add a source only after
+    its body is read and a complete schema-valid record and source note are written.
+    Map each accepted or rejected candidate explicitly to the priority dimensions.
+  - >
+    Track candidate attempts per required dimension. A stop condition may be invoked
+    only after three distinct acceptable retrieval candidates fail for the same
+    required dimension after documented fallback attempts.
+  - >
+    Reconcile all counts and state fields. The current result reports ten incomplete
+    candidates while one Gate 1 blocker still reports six; next_action, blocked,
+    stop_condition_reached, stage status, and PR body must tell one consistent story.
+  - >
+    Rebuild the provisional matrix and research coverage from the resulting verified
+    ledger. Re-evaluate every Gate 1 exit condition explicitly; reaching eight sources
+    alone does not make Gate 1 complete.
+
+retrieval_fallback_order:
+  - official HTML full text
+  - official XML or structured article endpoint
+  - official PDF downloaded with curl -L or equivalent and converted locally to text
+  - official repository mirror such as NCBI or Europe PMC
+  - DOI-linked author or institutional manuscript
+  - reject only after the relevant dimension has three documented candidate failures
 
 required_outputs:
   - docs/RESEARCH_QUESTIONS.md
@@ -113,6 +133,7 @@ source_requirements:
     - Individual reports must not be generalized into population claims.
     - Prefer eight strong sources over weak sources added to satisfy the count.
     - Each accepted source must pass the production JSON Schema validator.
+    - A retrieval-tool failure is not evidence that the public source is inaccessible.
 
 acceptance_commands:
   - python3 -m json.tool sources/source-ledger.json >/dev/null
@@ -122,17 +143,17 @@ acceptance_commands:
   - bash scripts/test_validation_negative.sh
   - find . -maxdepth 3 -type f | sort
   - git diff --check origin/main...HEAD
-  - "! grep -R -nE 'Sources: 8 verified|\\+14 percentile points|14 percentile point gain' docs sources state agent-control/results"
+  - "! grep -R -nE 'Sources: 8 verified|\\+14 percentile points|14 percentile point gain|Pedagogical action selection requires explicit user instruction|Socratic questioning is opt-in feature, not default behavior' docs sources state agent-control/results"
 
-completion_states:
-  reached_minimum:
-    - Ledger contains at least eight fully verified concrete sources.
-    - Matrix and research coverage are rebuilt from the full verified ledger.
-    - All status-bearing artifacts agree on source count and gate status.
-  stopped_below_minimum:
-    - Each remaining required dimension has three documented distinct candidate attempts.
-    - Inaccessible or rejected candidates are not counted as evidence.
-    - Result and PR body state the exact stop condition and unresolved gap.
+review_07_acceptance:
+  - Invalid Stage 2 stop condition is removed or explicitly superseded.
+  - Stage 2 is active and all state-bearing artifacts are internally consistent.
+  - Accessible full source bodies are directly read and evaluated.
+  - Candidate attempts and outcomes are mapped per required dimension.
+  - Study Mode direct observations and design inferences remain separated everywhere.
+  - Ledger, matrix, gates, state, result, and PR body agree on counts and gate status.
+  - Local HEAD equals the remote branch SHA after push.
+  - PR remains Draft and Task 002 is not started.
 
 stop_conditions:
   - same_required_operation_fails_twice_after_declared_fallback_and_no_equivalent_alternative_exists
@@ -143,7 +164,7 @@ stop_conditions:
 
 completion_process:
   - Fetch and merge origin/main into the existing task branch without discarding task work.
-  - Execute only this Stage 2 research cycle.
+  - Read PR Review 07 and execute only required_changes in this contract.
   - Run every acceptance command verbatim and record exact exit codes.
   - Commit and push the existing branch so Draft PR #2 updates.
   - Verify local HEAD equals the remote branch SHA after push.
