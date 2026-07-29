@@ -1,4 +1,4 @@
-protocol_version: 8
+protocol_version: 9
 
 task_id: task-001-core-research
 status: changes_requested
@@ -6,171 +6,64 @@ branch: agent/task-001-core-research
 pull_request: 2
 
 objective: >
-  Complete the evidence-bounded eight-source synthesis for Task 001, correct
-  conceptual overreach in the new source records, reconcile every status-bearing
-  artifact, and perform a truthful Gate 1 exit evaluation.
+  Complete the final Review 11 bookkeeping correction for Task 001. Do not
+  modify sources, research synthesis, evidence boundaries, RQ classifications,
+  or Gate 1 reasoning.
 
 context:
   authoritative_issue: https://github.com/SoilChalk/LearningOS/issues/1
   review_target: https://github.com/SoilChalk/LearningOS/pull/2
-  review_id: task-001-review-08
+  review_id: task-001-review-11
   decision: changes_requested
-  reviewed_head: 775158505d6602e962d466ac6b595c8f447589c4
+  reviewed_head: ed17cb32c3c228252b52e0bad0d11c5711faf96a
   note: >
-    Three additional source bodies were retrieved and eight ledger records pass
-    schema validation. Review 07 is not accepted because the live PR body, matrix,
-    gates, research-question coverage, validation record, and evidence mappings do
-    not yet tell a truthful consistent story.
-
-allowed_paths:
-  - AGENTS.md
-  - agent-control/**
-  - docs/**
-  - sources/**
-  - templates/**
-  - state/**
-  - scripts/**
-
-forbidden_paths:
-  - private/**
-  - personal/**
-  - raw-course-materials/**
-  - .env
-  - "**/*.key"
-  - "**/*secret*"
-  - "**/*token*"
+    Task 001 is substantively complete. Review 10 removed tracked self-referential
+    SHA claims and corrected the RQ footer, but the validation record still
+    contains two stale reconciliation summaries.
 
 current_truth:
-  task_status: in_progress
-  gate_1_status: not_met
+  task_status: complete
+  gate_1_status: met_with_documented_limitations
   verified_source_count: 8
-  minimum_source_count: 8
-  verified_source_ids:
-    - src-001
-    - src-002
-    - src-003
-    - src-004
-    - src-005
-    - src-006
-    - src-007
-    - src-008
-  source_body_retrieval_status: complete_for_current_eight
-  stage_2_status: minimum_count_reached_pending_evidence_boundary_correction
-  stage_3_status: incomplete_stale_five_source_matrix
-  gate_1_evaluation_status: not_performed
-  live_pr_body_status: stale_five_source_stop_narrative
+  research_questions_directly_covered: 4
+  research_questions_partially_covered: 6
+  research_questions_not_covered: 0
+  stage_5_status: complete
   task_002_status: not_started
+  pull_request_status: draft
+  live_remote_head: ed17cb32c3c228252b52e0bad0d11c5711faf96a
+  formal_review_11_status: pending_final_bookkeeping
+
+allowed_paths:
+  - agent-control/VALIDATION_RECORD.txt
+  - agent-control/results/task-001.json
+  - agent-control/results/task-001-pr.md
+
+forbidden_changes:
+  - add_remove_or_re_review_sources
+  - change_research_content
+  - change_evidence_boundaries
+  - change_rq_classifications
+  - change_gate_1_reasoning
+  - start_task_002
+  - merge_pull_request
 
 required_changes:
   - >
-    Merge the latest origin/main into the existing task branch before editing.
-    Resolve conflicts without discarding source notes or prior accepted validator
-    work. Do not merge PR #2.
+    In agent-control/VALIDATION_RECORD.txt, replace the stale reconciliation
+    statement `state/CURRENT_STATE.yaml - Protocol 8; Stages 1-4 complete` with
+    `state/CURRENT_STATE.yaml - Protocol 8; all five stages complete; Task 001 complete`.
   - >
-    Update the actual GitHub PR body only after final validation. The current live
-    body still reports five sources and the rejected stop condition. Editing
-    agent-control/results/task-001-pr.md is not a substitute for gh pr edit or the
-    GitHub API.
+    In agent-control/VALIDATION_RECORD.txt, replace the stale reconciliation
+    statement `agent-control/results/task-001.json - Review-08 execution cycle recorded`
+    with `agent-control/results/task-001.json - Review 09 finalization cycle recorded; Task 001 complete`.
   - >
-    Rebuild docs/REFERENCE_SYSTEM_MATRIX.md from scratch as an eight-source artifact.
-    Remove the stale five-source header, source table, Layer 5 analysis, gap claims,
-    deferred list, next steps, and final status. Include src-006, src-007, and
-    src-008 only within their actual evidence boundaries.
+    Update agent-control/results/task-001.json so the latest bookkeeping cycle
+    is identifiable as task-001-review-11, either through review_cycle or an
+    explicit Review 11 execution-cycle entry. Do not alter research results.
   - >
-    Update docs/DESIGN_GATES.md to the eight-source state. Correct Tutor CoPilot
-    effects to percentage points, not percentile points. Remove the claim that Study
-    Mode requires explicit pedagogical control. Evaluate every Gate 1 exit condition
-    explicitly with evidence, pass/fail status, and unresolved work.
-  - >
-    Update docs/RESEARCH_QUESTIONS.md with a source coverage section. Classify every
-    RQ individually as directly_covered, partially_covered, or not_covered. Include
-    source IDs and one evidence-boundary note for each RQ. Do not claim all ten RQs
-    are addressed when RQ1.2 or other questions lack direct evidence.
-  - >
-    Correct src-006 in both its note and ledger record. The KT survey supports
-    interaction-sequence modeling, side information, model variants, and adaptive
-    learning applications. It does not establish user-material source grounding.
-    Remove source_grounding_strategy as an affected decision. Remove the imported
-    claim that deep learning tracks millions of knowledge states with tractable
-    adaptive assessment. Treat evidence for RQ5.2 as partial and limited to
-    structured exercise interactions, not open reading or debugging.
-  - >
-    Correct src-007 in both its note and ledger record. Open learner model
-    transparency means exposing or negotiating a learner model; it is not source
-    grounding to user-provided course materials. Remove source-grounding +
-    learner-model integration claims and related decision identifiers. Retain
-    evidence about learner-model transparency, agency, SRL scaffolding, feedback,
-    and adaptive personalization. Mark cross-task RQ5.2 relevance as partial.
-  - >
-    Correct src-008 in both its note and ledger record. The paper predicts course
-    outcomes or risk from LMS behavioral traces; it does not estimate conceptual
-    mastery or a KT-style knowledge state. Use outcome/risk prediction terminology.
-    Map it strongly to RQ4.1 and, with limitations, RQ4.2. Do not treat it as direct
-    evidence resolving the unified learner-model question in RQ5.2.
-  - >
-    Rebuild agent-control/results/task-001.json from the corrected artifacts. Do not
-    use unresolved_issues: [] or blockers: [] while Stage 3, Gate evaluation,
-    obstacle-specific adaptation, material scope control, or cross-task model
-    applicability remain partial or unresolved. Coverage labels must match the
-    research-question artifact.
-  - >
-    Replace false self-referential validation bookkeeping. A tracked validation file
-    may record validated_commit, meaning the commit whose tree was validated before
-    a later bookkeeping commit. It must not claim that an older SHA is the current
-    final remote head. Record final local/remote equality externally in the live PR
-    body after the final push.
-  - >
-    Reconcile sources/source-ledger.json, all source notes, the matrix, research
-    questions, design gates, state/CURRENT_STATE.yaml, task-001.json,
-    task-001-pr.md, the validation record, and the live PR body. They must agree on
-    eight verified records, Task 001 in progress, the actual Stage 3 state, Gate 1
-    status, incomplete candidate count, and next action.
-
-source_evidence_boundaries:
-  src_006:
-    supports:
-      - knowledge_state_estimation_from_structured_exercise_interactions
-      - side_information_and_temporal_variants
-      - knowledge_tracing_model_taxonomy
-      - adaptive_learning_applications
-    does_not_support:
-      - user_material_source_grounding
-      - unified_model_across_reading_debugging_and_exercises
-      - millions_of_knowledge_states_claim
-  src_007:
-    supports:
-      - learner_model_transparency
-      - inspectable_negotiable_editable_adaptive_olm_categories
-      - self_regulated_learning_scaffolding
-      - learner_agency_and_feedback
-    does_not_support:
-      - source_bound_content_attribution
-      - user_material_grounding_plus_learner_model_integration
-      - direct_resolution_of_cross_task_model_unification
-  src_008:
-    supports:
-      - behavioral_trace_feature_engineering
-      - course_outcome_and_risk_prediction
-      - prediction_timing_interpretability_equity_and_privacy
-    does_not_support:
-      - conceptual_mastery_state_estimation
-      - knowledge_tracing_state
-      - direct_resolution_of_cross_task_model_unification
-      - intervention_effectiveness
-
-required_outputs:
-  - docs/RESEARCH_QUESTIONS.md
-  - docs/REFERENCE_SYSTEM_MATRIX.md
-  - docs/DESIGN_GATES.md
-  - sources/source-ledger.json
-  - sources/src-006-kt-survey.md
-  - sources/src-007-olm-meta-synthesis.md
-  - sources/src-008-pmc-digital-logs.md
-  - state/CURRENT_STATE.yaml
-  - agent-control/results/task-001.json
-  - agent-control/results/task-001-pr.md
-  - agent-control/VALIDATION_RECORD.txt
-  - actual GitHub PR #2 body
+    Keep tracked files free of final/current commit SHA claims. Final local and
+    remote equality remains recorded only in the live GitHub PR body after push.
 
 acceptance_commands:
   - python3 -m json.tool sources/source-ledger.json >/dev/null
@@ -184,40 +77,25 @@ acceptance_commands:
   - grep -q 'src-007' docs/REFERENCE_SYSTEM_MATRIX.md
   - grep -q 'src-008' docs/REFERENCE_SYSTEM_MATRIX.md
   - "! grep -R -nE 'Sources: 5 verified sources|five verified sources|5/8|stopped below minimum|required_research_dimension_has_no_accessible_primary_or_high_quality_survey_after_three_distinct_candidates|pedagogical action requires explicit control|\\+4-9 percentile points|4-9 percentile points|tracks millions of knowledge states|source-grounding \\+ learner-model integration|source_grounding_plus_learner_model_integration' docs sources state agent-control/results"
-
-post_push_verification:
-  - git rev-parse HEAD
-  - git ls-remote origin refs/heads/agent/task-001-core-research
   - >
-    gh pr view 2 --json isDraft,body,headRefOid --jq
-    '{isDraft,headRefOid,body}'
-  - >
-    Confirm the live PR body reports the final remote head, eight verified sources,
-    truthful Stage 3 and Gate 1 states, and contains no rejected stop narrative.
-
-review_08_acceptance:
-  - Live PR body matches the final remote branch state and SHA.
-  - Matrix is rebuilt from all eight verified sources.
-  - Design gates and research questions match the eight-source evidence.
-  - Every RQ has a direct, partial, or uncovered classification with source IDs.
-  - Source grounding, learner-model transparency, outcome prediction, and knowledge-state estimation are not conflated.
-  - Gate 1 exit conditions are evaluated explicitly rather than inferred from source count.
-  - Validation evidence uses truthful non-self-referential bookkeeping.
-  - All status-bearing artifacts agree.
-  - PR remains Draft; Task 002 remains not started.
-
-stop_conditions:
-  - same_required_operation_fails_twice_after_declared_fallback_and_no_equivalent_alternative_exists
-  - repository_state_cannot_be_persisted_after_two_attempts
-  - task_requires_modifying_a_forbidden_path
-  - requested_content_is_not_suitable_for_a_public_repository
+    ! grep -R -nE 'Stages 1-4 complete|Review-08 execution cycle recorded|Final Validated Remote HEAD|direct coverage for 6 RQs|partial coverage for 4 RQs'
+    docs/RESEARCH_QUESTIONS.md agent-control/results agent-control/VALIDATION_RECORD.txt
 
 completion_process:
-  - Fetch and merge origin/main into the existing task branch without discarding task work.
-  - Read PR Review 08 and execute only this protocol-8 contract.
-  - Run every acceptance command verbatim and record exact exit codes.
+  - Fetch and merge origin/main into the existing task branch.
+  - Read PR Review 11 and execute only this protocol-9 contract.
+  - Run every acceptance command verbatim; stop before commit on any failure.
   - Commit and push the existing branch.
   - Verify local HEAD equals the remote branch SHA.
-  - Update the actual GitHub PR body after the final push.
-  - Run post_push_verification and report its output.
-  - Stop without merging PR #2 or starting Task 002.
+  - Update the actual GitHub PR body with the new remote head.
+  - Keep PR #2 Draft.
+  - Stop without merging or starting Task 002.
+
+review_11_acceptance:
+  - Validation record contains no stale Stage 1-4 or Review 08 reconciliation text.
+  - Task result identifies Review 11 as the latest bookkeeping cycle.
+  - No tracked file claims to contain the final/current branch SHA.
+  - All acceptance commands pass.
+  - Live PR body head equals the remote branch head.
+  - Task 001 remains complete; Gate 1 remains met_with_documented_limitations.
+  - Task 002 remains not started; PR remains Draft.
