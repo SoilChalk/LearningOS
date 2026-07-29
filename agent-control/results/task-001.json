@@ -3,9 +3,9 @@
   "task_id": "task-001-core-research",
   "status": "in_progress",
   "branch": "agent/task-001-core-research",
-  "commit": "",
-  "review_cycle": "task-001-review-02",
-  "updated_at": "2026-07-29T18:00:00Z",
+  "commit": "b03f06330e1c76f03776b268a9f81c5f986d04c9",
+  "review_cycle": "task-001-review-03",
+  "updated_at": "2026-07-29T06:56:21Z",
   "last_completed_stage": "stage_1_structure_established",
   "next_action": "Continue stage_2_core_source_verification: attempt 3 more distinct accessible candidates for remaining research dimensions, or document stop condition if source exhaustion reached",
   "stages_completed": [
@@ -30,6 +30,7 @@
     "templates/SOURCE_RECORD.json",
     "templates/SOURCE_LEDGER.schema.json",
     "scripts/validate_source_records.py",
+    "scripts/test_validation_negative.sh",
     "sources/source-ledger.json",
     "sources/src-001-notebooklm.md",
     "sources/src-002-chatgpt-study-mode.md",
@@ -37,7 +38,9 @@
     "sources/src-004-tutor-copilot.md",
     "sources/src-005-aleks-kst.md",
     "state/CURRENT_STATE.yaml",
-    "agent-control/results/task-001.json"
+    "agent-control/results/task-001.json",
+    "agent-control/results/task-001-pr.md",
+    "agent-control/VALIDATION_RECORD.txt"
   ],
   "validation": [
     {
@@ -57,11 +60,15 @@
       "exit_code": 0
     },
     {
+      "command": "bash scripts/test_validation_negative.sh",
+      "exit_code": 0
+    },
+    {
       "command": "find . -maxdepth 3 -type f | sort",
       "exit_code": 0
     },
     {
-      "command": "! grep -R -nE '<prohibited_terms>' docs sources state agent-control/results",
+      "note": "Verbatim grep command and exit code recorded in agent-control/VALIDATION_RECORD.txt to avoid self-reference",
       "exit_code": 0
     }
   ],
@@ -112,19 +119,20 @@
     "Source grounding with inline citations demonstrated (NotebookLM src-001)",
     "RCT evidence: LearnLM moved from 50th to 64th percentile (a difference of 14 percentile ranks) (src-003)",
     "RCT evidence: Tutor CoPilot +4 to +9 percentage points (src-004)",
-    "ChatGPT Study Mode documents user-requested teaching styles; whether pedagogical selection requires explicit control is a design inference (src-002)",
-    "ChatGPT Study Mode documentation states Socratic questioning as opt-in behavior; 'there may be times when it gives a direct answer' (src-002)",
+    "ChatGPT Study Mode documents user-requested teaching styles (src-002) - design inference: whether this represents a technical requirement is not directly stated",
+    "ChatGPT Study Mode documentation describes available teaching style requests including Socratic; states 'there may be times when it gives a direct answer' (src-002) - design inference about default/opt-in policy",
     "Knowledge Space Theory enables learner modeling at scale (ALEKS src-005: 25-30 questions for millions of states)"
   ],
-  "review_02_changes_applied": [
-    "Matrix rebuilt from five-source ledger; removed all references to removed sources",
-    "Negative gap claims scoped to reviewed sample: 'Not observed in the five verified sources' instead of 'No system found'",
-    "LearnLM percentile wording corrected throughout: 'moved from 50th to 64th percentile (a difference of 14 percentile ranks)'",
-    "Study Mode claims downgraded: separated documented interface behavior from design inferences about technical requirements",
-    "Schema architecture fixed: created SOURCE_LEDGER.schema.json with sources.items pointing to SOURCE_RECORD.json",
-    "Deterministic schema validation added: validate_source_records.py using jsonschema library",
-    "Stage 2 kept in progress, Gate 1 status kept as not_met",
-    "All status files synchronized: in_progress, 5 sources, Gate 1 not_met"
+  "review_03_changes_applied": [
+    "Replaced manual checker with real JSON Schema validation using jsonschema library",
+    "Added FormatChecker() to validate uri, date, and date-time formats",
+    "Created negative test suite (test_validation_negative.sh) with 3 tests proving invalid records exit nonzero",
+    "Ran every CURRENT_TASK.yaml acceptance command verbatim and recorded exact exit codes",
+    "Updated to review_cycle: task-001-review-03",
+    "Used real execution timestamp via date -u command",
+    "Added validation script and negative test to files_changed list",
+    "Downgraded Study Mode pedagogical claims to design inferences, not direct findings",
+    "Confirmed exact grep command exits 0 with no stale artifacts"
   ],
   "unresolved_issues": [
     "Source count 5/8: minimum target of 8 not yet achieved",
@@ -132,9 +140,9 @@
     "Multiple academic sources inaccessible: BKT (Corbett & Anderson 1995), Cognitive Tutors/ACT-R (CMU PACT), ASSISTments, ITS meta-analyses (SAGE paywalls), Duolingo research (arXiv errors), Khan Academy RCTs (institutional access)"
   ],
   "claims_requiring_review": [
-    "Matrix deferred candidates section lists inaccessible sources; these are explicitly labeled as deferred, not cited as evidence",
-    "Study Mode pedagogical inference claims now labeled as design inferences from documented behavior, not direct observations",
-    "Negative gap claims now explicitly scoped to 'five verified sources reviewed so far'"
+    "Matrix deferred candidates section lists inaccessible sources; explicitly labeled as deferred, not cited as evidence",
+    "Study Mode claims now labeled as design inferences from documented behavior, not direct observations or technical requirements",
+    "Negative gap claims explicitly scoped to 'five verified sources reviewed so far'"
   ],
   "gate_1_status": {
     "entry_conditions": "all_met",

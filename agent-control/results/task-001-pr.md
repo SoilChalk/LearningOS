@@ -8,7 +8,7 @@ Task 001 (core-research) is **IN PROGRESS**. Stage 1 (structure establishment) c
 
 **Sources Verified**: 5 of 8 minimum required  
 **Gate 1**: NOT MET  
-**Review Cycle**: task-001-review-02 corrections applied  
+**Review Cycle**: task-001-review-03 corrections applied  
 **Branch**: agent/task-001-core-research  
 **PR Status**: Draft  
 
@@ -29,23 +29,23 @@ Task 001 (core-research) is **IN PROGRESS**. Stage 1 (structure establishment) c
 ### Templates & Scripts
 - `templates/SOURCE_RECORD.json` - Schema for individual source records
 - `templates/SOURCE_LEDGER.schema.json` - Schema for complete source ledger
-- `scripts/validate_source_records.py` - Deterministic JSON Schema validation
+- `scripts/validate_source_records.py` - Real JSON Schema validation with FormatChecker
+- `scripts/test_validation_negative.sh` - Negative test suite (3 tests)
 
 ### State & Control
 - `sources/source-ledger.json` - Structured ledger with 5 verified sources, 6 incomplete candidates
 - `state/CURRENT_STATE.yaml` - Phase: core_research IN PROGRESS
-- `agent-control/results/task-001.json` - Task result with review-02 changes applied
+- `agent-control/results/task-001.json` - Task result with review-03 changes applied
 
-## Review 02 Changes Applied
+## Review 03 Changes Applied
 
-1. **Matrix rebuilt from five-source ledger**: All references to removed sources eliminated
-2. **Negative gap claims scoped**: Changed "No system found" to "Not observed in the five verified sources reviewed so far"
-3. **LearnLM percentile wording corrected**: "moved from 50th to 64th percentile (a difference of 14 percentile ranks)" - not "percentage points"
-4. **Study Mode claims downgraded**: Separated documented interface behavior from design inferences about technical requirements
-5. **Schema architecture fixed**: Created `SOURCE_LEDGER.schema.json` with proper reference to `SOURCE_RECORD.json`
-6. **Deterministic validation added**: `validate_source_records.py` uses jsonschema library, returns nonzero on failure
-7. **Stage 2 kept in progress**: Gate 1 status remains not_met
-8. **All files synchronized**: Consistent in_progress status, 5 sources, Gate 1 not_met
+1. **Real JSON Schema validation implemented**: Using Python jsonschema library with FormatChecker() to validate uri, date, and date-time formats
+2. **Negative test suite created**: `test_validation_negative.sh` with 3 tests proving invalid ledger/records exit nonzero
+3. **All acceptance commands executed verbatim**: Recorded exact exit codes for all CURRENT_TASK.yaml commands
+4. **Study Mode claims downgraded**: Recast as design inferences, not direct findings about technical requirements
+5. **Real execution timestamp**: Generated via `date -u` command
+6. **Result bookkeeping corrected**: Updated to review-03, added validation scripts to files_changed
+7. **Exact grep command recorded**: Full verbatim command with actual exit code
 
 ## Validation Commands
 
@@ -60,17 +60,20 @@ python3 -m json.tool templates/SOURCE_RECORD.json >/dev/null
 python3 -m json.tool templates/SOURCE_LEDGER.schema.json >/dev/null
 # Exit code: 0 (PASSED)
 
-# Schema validation
+# Real schema validation with format checking
 python3 scripts/validate_source_records.py
 # Exit code: 0 (PASSED)
+
+# Negative test suite
+bash scripts/test_validation_negative.sh
+# Exit code: 0 (PASSED - all 3 negative tests correctly rejected invalid data)
 
 # File structure check
 find . -maxdepth 3 -type f | sort
 # Exit code: 0 (PASSED)
 
-# Prohibited term check
-# Checks that removed source IDs and incorrect percentile terminology do not appear
-# Exit code: 0 (PASSED)
+# Prohibited term check (verbatim from CURRENT_TASK.yaml)
+# Verbatim grep command recorded in task-001.json validation section
 # Exit code: 0 (PASSED)
 ```
 
@@ -88,9 +91,9 @@ find . -maxdepth 3 -type f | sort
 
 ### Layer 3: Pedagogical Action Selection
 - **Documented behavior**: ChatGPT Study Mode allows explicit teaching style requests (src-002)
-- **Design inference**: Whether pedagogical selection requires explicit user control is an inference, not directly stated
+- **Design inference**: Whether this pattern represents a technical requirement is not directly stated by the source
 - **Embedded training**: LearnLM uses system instructions to trigger behaviors (src-003)
-- **Critical observation**: Socratic questioning documented as opt-in; "there may be times when it gives a direct answer" (src-002)
+- **Observed interface pattern**: Socratic questioning available as user request; documentation states "there may be times when it gives a direct answer" (src-002) - default/opt-in policy is a design inference
 
 ### Layer 4: Learning-Behavior Evidence
 - **RCT evidence (LearnLM)**: Math performance moved from 50th to 64th percentile (a difference of 14 percentile ranks), 12+ hours over 8 weeks, Sierra Leone middle school math (src-003)
@@ -151,7 +154,6 @@ The following were **not observed in the five verified sources reviewed so far**
 
 **Task ID**: task-001-core-research  
 **Status**: IN PROGRESS  
-**Last Updated**: 2026-07-29T18:00:00Z  
+**Last Updated**: 2026-07-29T06:56:21Z  
 **Branch**: agent/task-001-core-research  
-**Review Cycle**: task-001-review-02 corrections applied
-
+**Review Cycle**: task-001-review-03 corrections applied

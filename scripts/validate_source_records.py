@@ -10,13 +10,13 @@ from pathlib import Path
 
 try:
     import jsonschema
-    from jsonschema import validate, ValidationError, RefResolver
+    from jsonschema import validate, ValidationError, RefResolver, FormatChecker
 except ImportError:
     print("ERROR: jsonschema library not installed. Run: pip install jsonschema", file=sys.stderr)
     sys.exit(1)
 
 def validate_source_ledger():
-    """Validate source ledger and records using actual JSON Schema validation."""
+    """Validate source ledger and records using actual JSON Schema validation with format checking."""
     repo_root = Path(__file__).parent.parent
     ledger_path = repo_root / "sources" / "source-ledger.json"
     ledger_schema_path = repo_root / "templates" / "SOURCE_LEDGER.schema.json"
@@ -45,7 +45,7 @@ def validate_source_ledger():
         print(f"ERROR: Failed to load source ledger: {e}", file=sys.stderr)
         return 1
     
-    # Set up resolver for $ref
+    # Set up resolver for $ref with deterministic local resolution
     schema_store = {
         ledger_schema.get("$id", str(ledger_schema_path.resolve())): ledger_schema,
         record_schema.get("$id", str(record_schema_path.resolve())): record_schema,
@@ -54,9 +54,12 @@ def validate_source_ledger():
     }
     resolver = RefResolver.from_schema(ledger_schema, store=schema_store)
     
-    # Validate ledger against ledger schema
+    # Enable format checking for uri, date, date-time
+    format_checker = FormatChecker()
+    
+    # Validate ledger against ledger schema with format checking
     try:
-        validate(instance=ledger, schema=ledger_schema, resolver=resolver)
+        validate(instance=ledger, schema=ledger_schema, resolver=resolver, format_checker=format_checker)
         print("✓ Ledger structure validated against SOURCE_LEDGER.schema.json")
     except ValidationError as e:
         print(f"VALIDATION FAILED: Ledger structure invalid", file=sys.stderr)
@@ -64,12 +67,12 @@ def validate_source_ledger():
         print(f"  Error: {e.message}", file=sys.stderr)
         return 1
     
-    # Validate each source record
+    # Validate each source record with format checking
     source_count = len(ledger.get("sources", []))
     for i, source in enumerate(ledger.get("sources", [])):
         source_id = source.get("id", f"source_{i}")
         try:
-            validate(instance=source, schema=record_schema)
+            validate(instance=source, schema=record_schema, format_checker=format_checker)
         except ValidationError as e:
             print(f"VALIDATION FAILED: {source_id} invalid", file=sys.stderr)
             print(f"  Path: {' -> '.join(str(p) for p in e.path)}", file=sys.stderr)

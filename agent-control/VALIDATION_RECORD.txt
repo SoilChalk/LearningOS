@@ -1,0 +1,32 @@
+Task 001 Review 03 Validation Record
+=====================================
+
+Executed: 2026-07-29T06:56:21Z
+
+All commands from CURRENT_TASK.yaml acceptance_commands executed verbatim:
+
+1. python3 -m json.tool sources/source-ledger.json >/dev/null
+   Exit code: 0
+
+2. python3 -m json.tool templates/SOURCE_RECORD.json >/dev/null
+   Exit code: 0
+
+3. python3 -m json.tool templates/SOURCE_LEDGER.schema.json >/dev/null
+   Exit code: 0
+
+4. python3 scripts/validate_source_records.py
+   Exit code: 0
+
+5. find . -maxdepth 3 -type f | sort
+   Exit code: 0
+
+6. ! grep -R -nE 'Sources: 8 verified|src-006|src-007|src-008|\+14 percentile points|14 percentile point gain' docs sources state agent-control/results
+   Exit code: 0
+
+Additional validation:
+
+7. bash scripts/test_validation_negative.sh
+   Exit code: 0
+   (Negative test suite: 3 tests proving invalid ledger/records exit nonzero)
+
+All acceptance commands passed.
