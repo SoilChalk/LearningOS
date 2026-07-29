@@ -3,7 +3,6 @@
   "task_id": "task-001-core-research",
   "status": "in_progress",
   "branch": "agent/task-001-core-research",
-  "commit": "b03f06330e1c76f03776b268a9f81c5f986d04c9",
   "review_cycle": "task-001-review-03",
   "updated_at": "2026-07-29T06:56:21Z",
   "last_completed_stage": "stage_1_structure_established",
@@ -15,7 +14,7 @@
     "stage_2_core_source_verification"
   ],
   "stages_remaining": [
-    "stage_3_synthesis_matrix",
+    "stage_2_core_source_verification",
     "stage_4_gates_and_state",
     "stage_5_results_and_validation"
   ],
@@ -153,5 +152,10 @@
       "Source count 5/8 (minimum 8 required)",
       "6 incomplete candidates due to access restrictions"
     ]
+  },
+  "stage_3_matrix_status": {
+    "artifact_status": "current_for_5_verified_sources",
+    "stage_status": "incomplete_until_minimum_8_sources",
+    "note": "Matrix rebuilt from five-source ledger; Stage 3 not complete until minimum source count (8) is met"
   }
 }

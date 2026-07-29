@@ -1,5 +1,5 @@
 #!/bin/bash
-# Negative test: prove that invalid ledger/record causes nonzero exit
+# Negative test: prove that invalid ledger/record causes production validator to exit nonzero
 
 set -e
 
@@ -8,7 +8,7 @@ cd "$REPO_ROOT"
 
 echo "=== Running negative validation tests ==="
 
-# Test 1: Invalid ledger with missing required field
+# Test 1: Invalid ledger with missing required field 'status'
 echo "Test 1: Invalid ledger (missing required field 'status')"
 INVALID_LEDGER=$(mktemp)
 cat > "$INVALID_LEDGER" << 'LEDGER_EOF'
@@ -25,43 +25,12 @@ cat > "$INVALID_LEDGER" << 'LEDGER_EOF'
 }
 LEDGER_EOF
 
-python3 << PYTHON_EOF
-import json
-import sys
-from pathlib import Path
-from jsonschema import validate, ValidationError, RefResolver, FormatChecker
-
-repo_root = Path("$REPO_ROOT")
-ledger_schema_path = repo_root / "templates" / "SOURCE_LEDGER.schema.json"
-record_schema_path = repo_root / "templates" / "SOURCE_RECORD.json"
-
-with open(ledger_schema_path) as f:
-    ledger_schema = json.load(f)
-with open(record_schema_path) as f:
-    record_schema = json.load(f)
-with open("$INVALID_LEDGER") as f:
-    ledger = json.load(f)
-
-schema_store = {
-    "./SOURCE_RECORD.json": record_schema,
-    "../templates/SOURCE_RECORD.json": record_schema
-}
-resolver = RefResolver.from_schema(ledger_schema, store=schema_store)
-format_checker = FormatChecker()
-
-try:
-    validate(instance=ledger, schema=ledger_schema, resolver=resolver, format_checker=format_checker)
-    print("FAIL: Invalid ledger passed validation", file=sys.stderr)
-    sys.exit(1)
-except ValidationError:
-    print("✓ Invalid ledger correctly rejected")
-    sys.exit(0)
-PYTHON_EOF
-
-if [ $? -ne 0 ]; then
-    echo "FAILED: Test 1"
+if python3 scripts/validate_source_records.py --ledger "$INVALID_LEDGER" 2>/dev/null; then
+    echo "FAIL: Invalid ledger passed validation" >&2
     rm -f "$INVALID_LEDGER"
     exit 1
+else
+    echo "✓ Invalid ledger correctly rejected (production validator returned nonzero)"
 fi
 rm -f "$INVALID_LEDGER"
 
@@ -86,39 +55,16 @@ cat > "$INVALID_RECORD" << 'RECORD_EOF'
 }
 RECORD_EOF
 
-python3 << PYTHON_EOF
-import json
-import sys
-from pathlib import Path
-from jsonschema import validate, ValidationError, FormatChecker
-
-repo_root = Path("$REPO_ROOT")
-record_schema_path = repo_root / "templates" / "SOURCE_RECORD.json"
-
-with open(record_schema_path) as f:
-    record_schema = json.load(f)
-with open("$INVALID_RECORD") as f:
-    record = json.load(f)
-
-format_checker = FormatChecker()
-
-try:
-    validate(instance=record, schema=record_schema, format_checker=format_checker)
-    print("FAIL: Invalid ID pattern passed validation", file=sys.stderr)
-    sys.exit(1)
-except ValidationError:
-    print("✓ Invalid ID pattern correctly rejected")
-    sys.exit(0)
-PYTHON_EOF
-
-if [ $? -ne 0 ]; then
-    echo "FAILED: Test 2"
+if python3 scripts/validate_source_records.py --record "$INVALID_RECORD" 2>/dev/null; then
+    echo "FAIL: Invalid ID pattern passed validation" >&2
     rm -f "$INVALID_RECORD"
     exit 1
+else
+    echo "✓ Invalid ID pattern correctly rejected (production validator returned nonzero)"
 fi
 rm -f "$INVALID_RECORD"
 
-# Test 3: Invalid source record with bad date format
+# Test 3: Invalid source record with malformed date
 echo "Test 3: Invalid source record (malformed date)"
 INVALID_DATE=$(mktemp)
 cat > "$INVALID_DATE" << 'DATE_EOF'
@@ -139,38 +85,16 @@ cat > "$INVALID_DATE" << 'DATE_EOF'
 }
 DATE_EOF
 
-python3 << PYTHON_EOF
-import json
-import sys
-from pathlib import Path
-from jsonschema import validate, ValidationError, FormatChecker
-
-repo_root = Path("$REPO_ROOT")
-record_schema_path = repo_root / "templates" / "SOURCE_RECORD.json"
-
-with open(record_schema_path) as f:
-    record_schema = json.load(f)
-with open("$INVALID_DATE") as f:
-    record = json.load(f)
-
-format_checker = FormatChecker()
-
-try:
-    validate(instance=record, schema=record_schema, format_checker=format_checker)
-    print("FAIL: Invalid date passed validation", file=sys.stderr)
-    sys.exit(1)
-except ValidationError:
-    print("✓ Invalid date correctly rejected")
-    sys.exit(0)
-PYTHON_EOF
-
-if [ $? -ne 0 ]; then
-    echo "FAILED: Test 3"
+if python3 scripts/validate_source_records.py --record "$INVALID_DATE" 2>/dev/null; then
+    echo "FAIL: Invalid date passed validation" >&2
     rm -f "$INVALID_DATE"
     exit 1
+else
+    echo "✓ Invalid date correctly rejected (production validator returned nonzero)"
 fi
 rm -f "$INVALID_DATE"
 
 echo ""
 echo "=== All negative tests passed ==="
+echo "    (Production validator correctly returned nonzero for all invalid inputs)"
 exit 0
