@@ -116,9 +116,10 @@ required_changes:
     owner_acceptance differs, lifecycle_status differs, formal_closure differs,
     task_002_status differs. Add at least 8 total negative tests.
   - >
-    Update `agent-control/results/task-001-control-plane-repair.json` field
-    `repair_completed_at` from null to the actual Protocol 10 completion timestamp
-    from the commit or result file.
+    Preserve the existing Protocol 10 result field `completed_at: "2026-07-30T14:24:53Z"`
+    in `agent-control/results/task-001-control-plane-repair.json`. Do not add a
+    duplicate repair_completed_at field to the result JSON. The result already
+    records the actual completion timestamp.
   - >
     In `state/CURRENT_STATE.yaml`, update `next_action.action` to reflect
     awaiting_owner_decision state: remove "ready for Task 002 initiation" language;
@@ -136,9 +137,14 @@ required_changes:
   - >
     After all validation passes and the task branch is pushed, switch to main branch,
     pull latest, replace `agent-control/CURRENT_TASK.yaml` with the non-executable
-    awaiting_owner_decision template (task-001-core-research, no allowed paths,
-    awaiting owner authorization), commit "Restore CURRENT_TASK to awaiting state after
-    Protocol 11", and push main. This prevents new agents from re-executing Protocol 10/11.
+    awaiting_owner_decision template. The restored template must record Protocol 10
+    repair completion at `control_plane_repair.repair_completed_at: "2026-07-30T14:24:53Z"`.
+    It must also record Protocol 11 finalization separately with its actual completion
+    timestamp and result-file reference (`control_plane_finalization.finalization_completed_at`
+    and `finalization_result_file`). Task ID: task-001-core-research, status:
+    awaiting_owner_decision, no allowed paths, awaiting owner authorization. Commit
+    "Restore CURRENT_TASK to awaiting state after Protocol 11" and push main to prevent
+    new agents from re-executing Protocol 10/11.
   - >
     Write the declared finalization result JSON with actual commands, exit codes,
     baseline head, files changed, lifecycle state, and completion timestamp. State
@@ -149,6 +155,16 @@ acceptance_commands:
   - python3 -m json.tool agent-control/results/task-001.json >/dev/null
   - python3 -m json.tool agent-control/results/task-001-control-plane-repair.json >/dev/null
   - python3 -m json.tool agent-control/results/task-001-control-plane-finalization.json >/dev/null
+  - >
+    python3 - <<'PY'
+    import json, sys
+    with open('agent-control/results/task-001-control-plane-repair.json') as f:
+        data = json.load(f)
+    if data.get('completed_at') != '2026-07-30T14:24:53Z':
+        print(f"ERROR: Protocol 10 result completed_at is '{data.get('completed_at')}', expected '2026-07-30T14:24:53Z'", file=sys.stderr)
+        sys.exit(1)
+    print("✓ Protocol 10 result completed_at preserved")
+    PY
   - python3 scripts/check_control_state.py
   - bash scripts/test_control_state.sh
   - git diff --check
@@ -179,17 +195,36 @@ acceptance_commands:
   - grep -q 'formal_closure: false' agent-control/CURRENT_TASK.yaml
   - grep -q 'task_002_status: not_started' agent-control/CURRENT_TASK.yaml
   - test "$(git rev-parse --abbrev-ref HEAD)" = "agent/task-001-core-research"
+  - >
+    python3 - <<'PY'
+    import sys, re
+    with open('agent-control/CURRENT_TASK.yaml') as f:
+        content = f.read()
+    if 'control_plane_repair' not in content:
+        print("ERROR: Final main:CURRENT_TASK.yaml must record control_plane_repair section", file=sys.stderr)
+        sys.exit(1)
+    if not re.search(r'repair_completed_at:\s*["\']?2026-07-30T14:24:53Z["\']?', content):
+        print("ERROR: Final main:CURRENT_TASK.yaml must record Protocol 10 repair_completed_at: 2026-07-30T14:24:53Z", file=sys.stderr)
+        sys.exit(1)
+    if 'control_plane_finalization' not in content:
+        print("ERROR: Final main:CURRENT_TASK.yaml must record control_plane_finalization section", file=sys.stderr)
+        sys.exit(1)
+    if not re.search(r'finalization_completed_at:\s*["\']?2026-07-\d{2}T\d{2}:\d{2}:\d{2}Z["\']?', content):
+        print("ERROR: Final main:CURRENT_TASK.yaml must record Protocol 11 finalization_completed_at timestamp", file=sys.stderr)
+        sys.exit(1)
+    print("✓ Final main:CURRENT_TASK.yaml records both Protocol 10 and 11 completion timestamps")
+    PY
 
 completion_conditions:
   - YAML parser handles same-level indentation correctly.
   - Consistency checker validates all 9 required lifecycle fields across task/state/result.
   - At least 8 negative tests prove checker rejects field mismatches.
-  - repair_completed_at updated to actual timestamp.
+  - Protocol 10 result completed_at timestamp preserved (not duplicated as repair_completed_at).
   - CURRENT_STATE and task-001 result next_action reflect awaiting_owner_decision (not "ready for Task 002").
   - PR #2 body updated with actual lifecycle state and remote HEAD; remains Draft/open/unmerged.
   - All Protocol 11 acceptance commands pass on task branch.
   - Changes committed and pushed to agent/task-001-core-research.
-  - main:agent-control/CURRENT_TASK.yaml restored to non-executable awaiting state.
+  - main:agent-control/CURRENT_TASK.yaml restored to non-executable awaiting state with both Protocol 10 and 11 completion timestamps recorded.
   - main branch pushed to prevent Protocol 10/11 re-execution.
   - Task 001 research artifacts unchanged from baseline.
   - Task 001 not formally closed, Task 002 not started, PR #2 not merged.
@@ -209,12 +244,13 @@ completion_process:
   - Fix YAML parser indentation handling.
   - Extend consistency checker to validate 9 lifecycle fields.
   - Expand negative tests to at least 8 tests covering field mismatches.
-  - Update repair_completed_at timestamp.
+  - Preserve Protocol 10 result completed_at; do not add duplicate repair_completed_at.
   - Update CURRENT_STATE and task-001 result next_action to awaiting_owner_decision.
   - Run every acceptance command verbatim; stop before commit on any failure.
   - Write the finalization result JSON.
   - Commit and push agent/task-001-core-research.
   - Update PR #2 body with actual lifecycle state; keep Draft/open/unmerged.
-  - Switch to main, pull latest, restore CURRENT_TASK.yaml to awaiting state.
+  - Switch to main, pull latest, restore CURRENT_TASK.yaml to awaiting state with both Protocol 10 and 11 completion timestamps.
+  - Verify final main:CURRENT_TASK.yaml contains non-null repair_completed_at and finalization_completed_at.
   - Commit and push main to prevent re-execution.
   - Stop in awaiting_owner_decision; do not close Task 001 and do not begin Task 002.
