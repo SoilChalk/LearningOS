@@ -104,17 +104,26 @@ required_changes:
     level follow a nested section. Ensure it can parse CURRENT_TASK.yaml, CURRENT_STATE.yaml,
     and task-001.json lifecycle sections correctly.
   - >
-    Extend `scripts/check_control_state.py` to validate all required lifecycle fields:
-    CURRENT_TASK.yaml status, previous_agent_execution, technical_completion,
+    Extend `scripts/check_control_state.py` to validate correct status semantics and
+    lifecycle field agreement. Top-level status fields have different semantics:
+    CURRENT_TASK.yaml status must equal awaiting_owner_decision; CURRENT_STATE.yaml
+    status remains complete; task-001.json status remains complete. Do not require
+    these three top-level status fields to be equal. The following eight lifecycle
+    fields must agree across CURRENT_TASK.yaml truth_to_preserve, CURRENT_STATE.yaml
+    lifecycle, and task-001.json lifecycle: previous_agent_execution, technical_completion,
     reviewer_acceptance, latest_reviewer_record, owner_acceptance, lifecycle_status,
-    formal_closure, task_002_status. All three sources (task/state/result) must agree
-    on these semantic values.
+    formal_closure, task_002_status. Expected values: cancelled_after_commit_and_push,
+    candidate_complete, accepted, task-001-review-12, pending, awaiting_owner_decision,
+    false, not_started.
   - >
     Expand `scripts/test_control_state.sh` negative tests to prove the checker returns
-    nonzero when: status is not awaiting_owner_decision, previous_agent_execution
-    differs across sources, technical_completion differs, reviewer_acceptance differs,
-    owner_acceptance differs, lifecycle_status differs, formal_closure differs,
-    task_002_status differs. Add at least 8 total negative tests.
+    nonzero for all invalid states. Require at least 9 negative tests: CURRENT_TASK
+    status is not awaiting_owner_decision; previous_agent_execution mismatch;
+    technical_completion mismatch; reviewer_acceptance mismatch; latest_reviewer_record
+    mismatch; owner_acceptance mismatch; lifecycle_status mismatch; formal_closure
+    mismatch; task_002_status mismatch. Each test must mutate fixture copies or
+    temporary files, invoke the production checker, and prove nonzero exit. The
+    negative-test script must not duplicate the checker implementation.
   - >
     Preserve the existing Protocol 10 result field `completed_at: "2026-07-30T14:24:53Z"`
     in `agent-control/results/task-001-control-plane-repair.json`. Do not add a
@@ -151,7 +160,7 @@ required_changes:
     that Protocol 10+11 control-plane work is candidate complete, awaiting owner decision;
     do not claim formal task closure.
 
-acceptance_commands:
+task_branch_acceptance_commands:
   - python3 -m json.tool agent-control/results/task-001.json >/dev/null
   - python3 -m json.tool agent-control/results/task-001-control-plane-repair.json >/dev/null
   - python3 -m json.tool agent-control/results/task-001-control-plane-finalization.json >/dev/null
@@ -195,6 +204,14 @@ acceptance_commands:
   - grep -q 'formal_closure: false' agent-control/CURRENT_TASK.yaml
   - grep -q 'task_002_status: not_started' agent-control/CURRENT_TASK.yaml
   - test "$(git rev-parse --abbrev-ref HEAD)" = "agent/task-001-core-research"
+
+post_restoration_acceptance_commands:
+  - grep -q '^status: awaiting_owner_decision$' agent-control/CURRENT_TASK.yaml
+  - grep -q '^allowed_paths: \[\]$' agent-control/CURRENT_TASK.yaml
+  - grep -q 'owner_acceptance: pending' agent-control/CURRENT_TASK.yaml
+  - grep -q 'formal_closure: false' agent-control/CURRENT_TASK.yaml
+  - grep -q 'task_002_status: not_started' agent-control/CURRENT_TASK.yaml
+  - grep -q 'repair_completed_at: ["\x27]2026-07-30T14:24:53Z["\x27]' agent-control/CURRENT_TASK.yaml
   - >
     python3 - <<'PY'
     import sys, re
@@ -212,20 +229,27 @@ acceptance_commands:
     if not re.search(r'finalization_completed_at:\s*["\']?2026-07-\d{2}T\d{2}:\d{2}:\d{2}Z["\']?', content):
         print("ERROR: Final main:CURRENT_TASK.yaml must record Protocol 11 finalization_completed_at timestamp", file=sys.stderr)
         sys.exit(1)
-    print("✓ Final main:CURRENT_TASK.yaml records both Protocol 10 and 11 completion timestamps")
+    if not re.search(r'finalization_result_file:\s*agent-control/results/task-001-control-plane-finalization\.json', content):
+        print("ERROR: Final main:CURRENT_TASK.yaml must record Protocol 11 finalization_result_file", file=sys.stderr)
+        sys.exit(1)
+    print("✓ Final main:CURRENT_TASK.yaml records both Protocol 10 and 11 completion timestamps and result file")
     PY
+  - test "$(git rev-parse --abbrev-ref HEAD)" = "main"
+  - git diff --check
 
 completion_conditions:
   - YAML parser handles same-level indentation correctly.
-  - Consistency checker validates all 9 required lifecycle fields across task/state/result.
-  - At least 8 negative tests prove checker rejects field mismatches.
+  - Consistency checker validates correct status semantics: CURRENT_TASK status equals awaiting_owner_decision; CURRENT_STATE and task-001 result status remain complete; eight lifecycle fields agree across truth_to_preserve/lifecycle/lifecycle sections.
+  - At least 9 negative tests prove checker rejects: wrong CURRENT_TASK status, and mismatches in each of the eight lifecycle fields.
   - Protocol 10 result completed_at timestamp preserved (not duplicated as repair_completed_at).
   - CURRENT_STATE and task-001 result next_action reflect awaiting_owner_decision (not "ready for Task 002").
   - PR #2 body updated with actual lifecycle state and remote HEAD; remains Draft/open/unmerged.
-  - All Protocol 11 acceptance commands pass on task branch.
+  - All task_branch_acceptance_commands pass before committing task branch.
   - Changes committed and pushed to agent/task-001-core-research.
-  - main:agent-control/CURRENT_TASK.yaml restored to non-executable awaiting state with both Protocol 10 and 11 completion timestamps recorded.
-  - main branch pushed to prevent Protocol 10/11 re-execution.
+  - Main branch pulled, CURRENT_TASK.yaml restored to non-executable awaiting state.
+  - All post_restoration_acceptance_commands pass before committing main.
+  - Final main:CURRENT_TASK.yaml records both Protocol 10 and 11 completion timestamps and result file reference.
+  - Main branch pushed; origin/main:CURRENT_TASK.yaml verified in final non-executable state.
   - Task 001 research artifacts unchanged from baseline.
   - Task 001 not formally closed, Task 002 not started, PR #2 not merged.
 
@@ -242,15 +266,17 @@ stop_conditions:
 completion_process:
   - Verify clean baseline and local/remote equality on task branch.
   - Fix YAML parser indentation handling.
-  - Extend consistency checker to validate 9 lifecycle fields.
-  - Expand negative tests to at least 8 tests covering field mismatches.
+  - Extend consistency checker to validate correct status semantics and eight lifecycle field agreement.
+  - Expand negative tests to at least 9 tests: wrong CURRENT_TASK status plus eight lifecycle field mismatches.
   - Preserve Protocol 10 result completed_at; do not add duplicate repair_completed_at.
   - Update CURRENT_STATE and task-001 result next_action to awaiting_owner_decision.
-  - Run every acceptance command verbatim; stop before commit on any failure.
+  - Run every task_branch_acceptance_command verbatim; stop before commit on any failure.
   - Write the finalization result JSON.
   - Commit and push agent/task-001-core-research.
   - Update PR #2 body with actual lifecycle state; keep Draft/open/unmerged.
-  - Switch to main, pull latest, restore CURRENT_TASK.yaml to awaiting state with both Protocol 10 and 11 completion timestamps.
-  - Verify final main:CURRENT_TASK.yaml contains non-null repair_completed_at and finalization_completed_at.
-  - Commit and push main to prevent re-execution.
+  - Switch to main, pull latest origin/main.
+  - Restore CURRENT_TASK.yaml to awaiting state with: task-001-core-research, status awaiting_owner_decision, allowed_paths empty, control_plane_repair.repair_completed_at 2026-07-30T14:24:53Z, control_plane_finalization.finalization_completed_at actual timestamp, control_plane_finalization.finalization_result_file agent-control/results/task-001-control-plane-finalization.json.
+  - Run every post_restoration_acceptance_command verbatim; stop before commit on any failure.
+  - Commit and push main.
+  - Fetch origin and verify origin/main:CURRENT_TASK.yaml contains final non-executable state.
   - Stop in awaiting_owner_decision; do not close Task 001 and do not begin Task 002.
