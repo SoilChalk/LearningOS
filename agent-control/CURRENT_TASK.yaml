@@ -1,34 +1,18 @@
 protocol_version: 10
 
-task_id: task-001-control-plane-repair
-status: ready
+task_id: task-001-core-research
+status: awaiting_owner_decision
 branch: agent/task-001-core-research
 pull_request: 2
-baseline_head: c2e75c06474d1b0df1832d9c5a2a62a73ab34dbe
-result_file: agent-control/results/task-001-control-plane-repair.json
 
 objective: >
-  Repair only the Task 001 lifecycle and continuity control plane. Replace the
-  stale Review 11 execution contract with a truthful awaiting-owner-decision
-  state, separate technical completion from owner acceptance and formal closure,
-  strengthen startup reconciliation, and add a minimal deterministic consistency
-  check. Do not modify Task 001 research content or begin any later task.
-
-owner_authorization:
-  recorded_at: "2026-07-30T22:04:00+08:00"
-  authorized:
-    - accept_task_001_research_and_technical_artifacts_as_current_candidate
-    - publish_and_execute_this_strictly_limited_control_plane_repair
-  explicitly_not_authorized:
-    - formally_close_task_001
-    - merge_pull_request_2
-    - mark_pull_request_2_ready_for_review
-    - start_or_prepare_task_002
-    - change_task_001_research_results
+  Task 001 core research complete. Technical implementation accepted by reviewer
+  (Review 12). Awaiting explicit owner authorization for formal closure, pull
+  request merge, or next-task initiation.
 
 truth_to_preserve:
   subject_task_id: task-001-core-research
-  previous_agent_execution: cancelled_by_user_after_commit_and_push
+  previous_agent_execution: cancelled_after_commit_and_push
   technical_completion: candidate_complete
   reviewer_acceptance: accepted
   latest_reviewer_record: task-001-review-12
@@ -44,6 +28,11 @@ truth_to_preserve:
   research_questions_partially_covered: 6
   research_questions_not_covered: 0
 
+control_plane_repair:
+  repair_task_id: task-001-control-plane-repair
+  repair_result_file: agent-control/results/task-001-control-plane-repair.json
+  repair_completed_at: null  # Will be set by repair execution
+
 inputs:
   - AGENTS.md
   - agent-control/TASK_PROTOCOL.md
@@ -52,177 +41,27 @@ inputs:
   - agent-control/results/task-001.json
   - agent-control/VALIDATION_RECORD.txt
   - agent-control/results/task-001-pr.md
-  - GitHub PR #2 metadata and latest review, when accessible
-  - owner authorization recorded in this protocol-10 contract
+  - GitHub PR #2 metadata and latest review
 
-execution_preconditions:
-  - Work on the existing branch `agent/task-001-core-research`; do not create a Task 002 branch.
-  - The working tree must be clean before execution.
-  - Local HEAD and `origin/agent/task-001-core-research` must both equal the declared baseline head before importing this contract.
-  - Fetch `origin/main` and merge it into the existing task branch only to import this protocol-10 contract and any non-conflicting main control updates.
-  - Stop if that merge would alter Task 001 research artifacts or causes a conflict outside `agent-control/CURRENT_TASK.yaml`.
-  - After importing the contract, reread all declared inputs before modifying files.
-
-allowed_paths:
-  - AGENTS.md
-  - agent-control/TASK_PROTOCOL.md
-  - agent-control/CURRENT_TASK.yaml
-  - state/CURRENT_STATE.yaml
-  - agent-control/results/task-001.json
-  - agent-control/results/task-001-control-plane-repair.json
-  - scripts/check_control_state.py
-  - scripts/test_control_state.sh
+allowed_paths: []
 
 forbidden_paths:
   - docs/**
   - sources/**
   - templates/**
-  - agent-control/VALIDATION_RECORD.txt
-  - agent-control/results/task-001-pr.md
-  - scripts/validate_source_records.py
-  - scripts/test_validation_negative.sh
+  - state/**
+  - agent-control/**
+  - scripts/**
 
-forbidden_changes:
-  - alter_sources_or_source_notes
-  - alter_research_synthesis
-  - alter_evidence_boundaries
-  - alter_rq_classifications_or_counts
-  - alter_gate_1_reasoning_or_status
-  - reinterpret_review_12_as_owner_acceptance
-  - mark_owner_acceptance_as_accepted
-  - mark_task_001_formally_closed
-  - merge_or_close_pull_request_2
-  - mark_pull_request_2_ready_for_review
-  - create_or_start_task_002
-  - create_a_kiro_spec
-  - rewrite_unrelated_repository_governance
-
-required_changes:
-  - >
-    Update `AGENTS.md` startup reconciliation so an agent must read the task
-    protocol, current task contract, current state when present, and the result
-    file identified by the contract or subject task when present. The first
-    response must list files actually read and compare their lifecycle claims.
-  - >
-    Require the agent to stop without writes when task contract, current state,
-    and result records disagree on the active task or lifecycle status. Chat or
-    compressed-context claims must never silently resolve the contradiction.
-  - >
-    Update `agent-control/TASK_PROTOCOL.md` to distinguish at least:
-    agent execution, technical completion, reviewer acceptance, owner acceptance,
-    and formal closure. Define interrupted/cancelled execution, submitted for
-    review, reviewer accepted, awaiting owner decision, and closed states.
-  - >
-    State explicitly that cancellation does not imply failure, technical
-    completion, owner acceptance, or closure. Persisted evidence may establish
-    candidate technical completion, but it cannot change owner acceptance.
-  - >
-    State explicitly that only a new contract containing an unambiguous owner
-    authorization may transition owner acceptance, formal closure, PR merge or
-    next-task authorization. A GitHub review submitted through the owner account
-    is reviewer evidence unless the contract explicitly records an owner decision.
-  - >
-    Add matching lifecycle records to `state/CURRENT_STATE.yaml` and
-    `agent-control/results/task-001.json` without changing any research facts,
-    counts, classifications, source records, stage results or Gate 1 reasoning.
-    Use these exact semantic values: previous agent execution cancelled after
-    commit and push; technical completion candidate complete; reviewer accepted;
-    owner acceptance pending; lifecycle awaiting owner decision; formal closure
-    false; Task 002 not started.
-  - >
-    Replace this executable contract in the branch's final
-    `agent-control/CURRENT_TASK.yaml` with a non-executable truthful waiting state
-    for `task-001-core-research`: `status: awaiting_owner_decision`, no allowed
-    write paths, owner acceptance pending, formal closure false, PR #2 Draft/open/
-    unmerged, and Task 002 not started. Preserve a reference to the completed
-    control repair result file.
-  - >
-    Add `scripts/check_control_state.py`, using only repository-local files and
-    the Python standard library, to compare the lifecycle claims in
-    `CURRENT_TASK.yaml`, `CURRENT_STATE.yaml`, and `task-001.json`. It must return
-    zero only when the required semantic values agree and forbidden transitions
-    are absent. Do not add a package dependency solely for YAML parsing.
-  - >
-    Add `scripts/test_control_state.sh` that invokes the production checker and
-    proves nonzero exits for at least: stale `changes_requested` task status,
-    owner acceptance marked accepted without authorization, formal closure true,
-    Task 002 started, and a mismatch between current state and result records.
-    The negative test must not duplicate the checker implementation.
-  - >
-    Write the declared repair result JSON with actual commands and exit codes,
-    the starting baseline head, files changed, lifecycle state written, and any
-    unresolved limitations. Do not claim Task 001 formal closure.
-
-acceptance_commands:
-  - python3 -m json.tool agent-control/results/task-001.json >/dev/null
-  - python3 -m json.tool agent-control/results/task-001-control-plane-repair.json >/dev/null
-  - python3 scripts/check_control_state.py
-  - bash scripts/test_control_state.sh
-  - git diff --check
-  - git diff --exit-code c2e75c06474d1b0df1832d9c5a2a62a73ab34dbe...HEAD -- docs sources templates agent-control/VALIDATION_RECORD.txt agent-control/results/task-001-pr.md scripts/validate_source_records.py scripts/test_validation_negative.sh
-  - >
-    python3 - <<'PY'
-    import subprocess, sys
-    allowed = {
-        'AGENTS.md',
-        'agent-control/TASK_PROTOCOL.md',
-        'agent-control/CURRENT_TASK.yaml',
-        'state/CURRENT_STATE.yaml',
-        'agent-control/results/task-001.json',
-        'agent-control/results/task-001-control-plane-repair.json',
-        'scripts/check_control_state.py',
-        'scripts/test_control_state.sh',
-    }
-    changed = set(subprocess.check_output(
-        ['git', 'diff', '--name-only',
-         'c2e75c06474d1b0df1832d9c5a2a62a73ab34dbe...HEAD'],
-        text=True,
-    ).splitlines())
-    unexpected = sorted(changed - allowed)
-    if unexpected:
-        print('Unexpected paths changed after control-repair baseline:')
-        print('\n'.join(unexpected))
-        sys.exit(1)
-    PY
-  - grep -q '^status: awaiting_owner_decision$' agent-control/CURRENT_TASK.yaml
-  - grep -q 'owner_acceptance: pending' agent-control/CURRENT_TASK.yaml
-  - grep -q 'formal_closure: false' agent-control/CURRENT_TASK.yaml
-  - grep -q 'task_002_status: not_started' agent-control/CURRENT_TASK.yaml
-  - test "$(git rev-parse --abbrev-ref HEAD)" = "agent/task-001-core-research"
-
-completion_conditions:
-  - Startup instructions compare task, state and result records rather than trusting one stale file.
-  - Lifecycle dimensions and owner-only transitions are documented unambiguously.
-  - Task 001 research and technical artifacts remain unchanged from the baseline.
-  - CURRENT_TASK, CURRENT_STATE and task-001 result agree on awaiting_owner_decision semantics.
-  - The production consistency checker passes on repository state.
-  - Negative tests prove the checker rejects the required contradictions and forbidden transitions.
-  - The repair result JSON truthfully records execution and validation.
-  - Changes are committed and pushed to the existing task branch.
-  - Local HEAD equals the remote task-branch HEAD after push.
-  - PR #2 remains Draft, open and unmerged.
-  - Task 002 remains not started.
-  - Task 001 remains not formally closed.
+next_action: >
+  Awaiting explicit owner authorization. Do not modify files, do not merge PR #2,
+  do not mark PR ready for review, do not start Task 002, and do not mark Task 001
+  formally closed without a new executable contract containing unambiguous owner
+  authorization.
 
 stop_conditions:
-  - The local working tree is not clean before importing the contract.
-  - The local or remote task-branch head does not equal the declared baseline head before importing the contract.
-  - Importing `origin/main` causes a conflict outside the current task contract.
-  - Any required change would touch a forbidden path or alter research content.
-  - Any lifecycle source cannot be read or its meaning would need to be guessed.
-  - The consistency checker or any acceptance command exits nonzero.
-  - GitHub shows PR #2 merged, closed, or no longer Draft unexpectedly.
-  - Execution would require interpreting Review 12 as owner acceptance.
-  - Execution would require formal closure, PR merge, or Task 002 preparation.
-
-completion_process:
-  - Fetch origin and verify the clean baseline and local/remote equality.
-  - Merge `origin/main` into the existing task branch to import this contract.
-  - Reread all inputs and confirm the strict control-only boundary.
-  - Implement only the required lifecycle and consistency changes.
-  - Run every acceptance command verbatim; stop before commit on any failure.
-  - Write the repair result JSON.
-  - Commit and push the existing task branch.
-  - Verify local HEAD equals the remote task-branch SHA.
-  - Verify PR #2 remains Draft, open and unmerged without changing PR metadata.
-  - Stop in `awaiting_owner_decision`; do not close Task 001 and do not begin Task 002.
+  - No executable contract with owner authorization is present
+  - Any write operation is attempted without a ready contract
+  - Any attempt to merge, close, or change PR #2 status
+  - Any attempt to start or prepare Task 002
+  - Any attempt to mark Task 001 formally closed

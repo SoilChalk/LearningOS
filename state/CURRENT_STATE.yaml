@@ -4,6 +4,16 @@ task_id: task-001-core-research
 phase: core_research
 status: complete
 
+lifecycle:
+  previous_agent_execution: cancelled_after_commit_and_push
+  technical_completion: candidate_complete
+  reviewer_acceptance: accepted
+  latest_reviewer_record: task-001-review-12
+  owner_acceptance: pending
+  lifecycle_status: awaiting_owner_decision
+  formal_closure: false
+  task_002_status: not_started
+
 current_stage:
   stage_id: none
   started_at: "2026-07-29T19:00:00Z"
