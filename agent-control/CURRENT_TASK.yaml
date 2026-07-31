@@ -1,12 +1,12 @@
 protocol_version: 12
 
-task_id: task-001-pre-merge-control-repair
-status: in_progress
+task_id: task-001-core-research
+status: awaiting_owner_decision
 allowed_paths: []
 
 objective: >
-  Protocol 12 control-plane deployment in progress.
-  Other agents must stop. Do not execute this contract.
+  Core research for Task 001 is candidate complete with reviewer acceptance.
+  Awaiting owner decision on formal closure or next action.
 
 truth_to_preserve:
   subject_task_id: task-001-core-research
@@ -20,7 +20,21 @@ truth_to_preserve:
   pull_request_status: draft_open_unmerged
   task_002_status: not_started
 
+control_plane_completion:
+  protocol_10_completed_at: "2026-07-30T14:24:53Z"
+  protocol_10_result: agent-control/results/task-001-control-plane-repair.json
+  protocol_11_completed_at: "2026-07-30T19:22:53Z"
+  protocol_11_result: agent-control/results/task-001-control-plane-finalization.json
+  protocol_12_main_finalization_commit_recorded_externally: true
+  protocol_12_result: agent-control/results/task-001-pre-merge-control-repair.json
+
+live_task_branch_head_source: GitHub_PR_2_metadata
+
+pull_request: 2
+branch: agent/task-001-core-research
+
 stop_conditions:
-  - This contract is a deployment lock, not an executable task
-  - Do not modify any files
-  - Wait for Protocol 12 to complete and restore the final waiting state
+  - This is a non-executable waiting contract
+  - Owner acceptance is pending
+  - Do not execute, modify files, or start Task 002
+  - Await owner authorization decision
