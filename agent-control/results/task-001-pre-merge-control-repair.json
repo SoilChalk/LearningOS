@@ -4,74 +4,102 @@
   "subject_task_id": "task-001-core-research",
   "status": "candidate_complete",
   "reviewer_status": "pending_independent_review",
+  "audit_record_status": "corrected_under_protocol_13",
   "branch": "agent/task-001-core-research",
-  "objective": "Repair Protocol 11 implementation defects, selectively deploy complete lifecycle control plane to main without merging Task 001 research, and reconcile task branch with main so PR #2 has no control-plane merge conflicts",
+  "objective": "Repair Protocol 11 implementation defects, selectively deploy the complete lifecycle control plane to main without merging Task 001 research, and reconcile the task branch with main so PR #2 has no control-plane merge conflicts.",
+  "completed_at": "2026-07-31T10:50:30Z",
+  "completion_time_source": "GitHub commit metadata for the Phase 5 commit",
   "phases_completed": [
     {
       "phase": 1,
       "name": "task_branch_repair",
-      "completed_at": "2026-07-31T00:00:00+08:00",
-      "commit": "5dd0fb50a83b10f8a8b2c1f9e72e5d8e3c7f4d6a",
-      "changes": [
-        "Added --current-task, --current-state, --task-result options to checker",
-        "Rewrote negative test script to use isolated fixtures with hash verification",
-        "Corrected Protocol 11 result: status=candidate_complete, reviewer_status=changes_addressed_pending_review",
-        "Recorded completed main restoration commit f5bf669 and validation",
-        "Removed stale main-restoration-pending statement"
-      ],
-      "validation": {
-        "json_tool": "exit_code=0",
-        "check_control_state": "exit_code=0",
-        "test_control_state": "exit_code=0",
-        "git_diff_check": "exit_code=0",
-        "protocol_11_corrections": "exit_code=0",
-        "allowed_paths_only": "exit_code=0"
-      }
+      "commit": "5dd0fb5fb1e9b8961206812d8329fb083cb35155",
+      "committed_at": "2026-07-31T09:47:19Z",
+      "time_source": "GitHub commit metadata",
+      "changes": ["Added checker path options", "Rewrote tests to use isolated fixtures with live-file hash verification", "Corrected Protocol 11 result"],
+      "validation": [
+        {"command": "python3 -m json.tool agent-control/results/task-001-control-plane-finalization.json", "exit_code": 0},
+        {"command": "python3 scripts/check_control_state.py", "exit_code": 0},
+        {"command": "bash scripts/test_control_state.sh", "exit_code": 0, "note": "1 positive and 9 negative tests passed; live authority hashes unchanged"},
+        {"command": "git diff --check", "exit_code": 0},
+        {"command": "Protocol 11 correction and allowed-path checks", "exit_code": 0}
+      ]
     },
     {
       "phase": 2,
       "name": "main_control_deployment",
-      "completed_at": "2026-07-31T00:15:00+08:00",
       "commit": "dd7a5cbdf33509432e7f8d350e2c10d553860cc7",
-      "changes": [
-        "Deployed enhanced AGENTS.md with lifecycle comparison instruction",
-        "Deployed enhanced TASK_PROTOCOL.md with lifecycle state documentation",
-        "Deployed updated checker with control task in-progress handling",
-        "Deployed updated test suite with flexible status pattern matching",
-        "Deployed CURRENT_STATE.yaml and all result files",
-        "Created Protocol 12 in-progress result",
-        "Installed in-progress deployment lock in CURRENT_TASK.yaml"
-      ],
-      "validation": {
-        "all_json_tools": "exit_code=0",
-        "check_control_state": "exit_code=0",
-        "test_control_state": "exit_code=0",
-        "git_diff_check": "exit_code=0",
-        "status_in_progress": "verified",
-        "allowed_paths_empty": "verified",
-        "lifecycle_comparison_in_agents": "verified",
-        "lifecycle_states_in_protocol": "verified",
-        "on_main_branch": "verified"
-      }
+      "committed_at": "2026-07-31T10:47:10Z",
+      "time_source": "GitHub commit metadata",
+      "changes": ["Selectively deployed the lifecycle control plane to main", "Installed a non-executable in-progress deployment lock", "Created the Protocol 12 in-progress result"],
+      "validation": [
+        {"command": "JSON validation for deployed result files", "exit_code": 0},
+        {"command": "python3 scripts/check_control_state.py", "exit_code": 0},
+        {"command": "bash scripts/test_control_state.sh", "exit_code": 0},
+        {"command": "git diff --check", "exit_code": 0},
+        {"command": "Deployment-lock and control-plane presence checks", "exit_code": 0}
+      ]
     },
     {
       "phase": 3,
       "name": "task_branch_reconciliation",
-      "completed_at": "2026-07-31T00:30:00+08:00",
-      "commit": "1764d18c8f0e9a2d5b3c4e6f7a8b9c0d1e2f3a4b",
-      "changes": [
-        "Merged Phase 2 main commit into task branch",
-        "Resolved control-plane conflicts to exact main versions",
-        "No forbidden research paths touched"
-      ],
-      "validation": {
-        "check_control_state": "exit_code=0",
-        "test_control_state": "exit_code=0",
-        "git_diff_check": "exit_code=0",
-        "forbidden_paths_unchanged": "exit_code=0"
-      }
+      "commit": "1764d18902bb676eac4104fc36e0e36e82aa7ca4",
+      "committed_at": "2026-07-31T10:48:10Z",
+      "time_source": "GitHub commit metadata",
+      "changes": ["Merged the Phase 2 main control-plane deployment into the task branch", "Resolved control-plane conflicts to the deployed main versions", "Preserved research paths unchanged"],
+      "validation": [
+        {"command": "python3 scripts/check_control_state.py", "exit_code": 0},
+        {"command": "bash scripts/test_control_state.sh", "exit_code": 0},
+        {"command": "git diff --check", "exit_code": 0},
+        {"command": "Forbidden research-path comparison", "exit_code": 0}
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "main_finalization",
+      "commit": "a424ddd7238a75451e4071d048c5c41f60205a74",
+      "committed_at": "2026-07-31T10:50:14Z",
+      "time_source": "GitHub commit metadata",
+      "changes": ["Restored main CURRENT_TASK.yaml to awaiting_owner_decision", "Set Protocol 12 to candidate_complete pending independent review", "Recorded Protocol 10, 11, and 12 result references"],
+      "validation": [
+        {"command": "python3 -m json.tool agent-control/results/task-001-pre-merge-control-repair.json", "exit_code": 0},
+        {"command": "python3 scripts/check_control_state.py", "exit_code": 0},
+        {"command": "bash scripts/test_control_state.sh", "exit_code": 0},
+        {"command": "git diff --check", "exit_code": 0},
+        {"command": "Final main waiting-contract field checks", "exit_code": 0}
+      ]
+    },
+    {
+      "phase": 5,
+      "name": "task_branch_final_sync",
+      "commit": "ba4b750b416d8853b088b1ea8a49a4fff00939c5",
+      "committed_at": "2026-07-31T10:50:30Z",
+      "time_source": "GitHub commit metadata",
+      "changes": ["Merged finalized main into the task branch", "Pushed without history rewriting", "Updated PR #2 and verified no merge conflict"],
+      "validation": [
+        {"command": "python3 scripts/check_control_state.py", "exit_code": 0},
+        {"command": "bash scripts/test_control_state.sh", "exit_code": 0},
+        {"command": "git diff --check", "exit_code": 0},
+        {"command": "git merge-base --is-ancestor origin/main HEAD", "exit_code": 0},
+        {"command": "git merge-tree --write-tree origin/main HEAD", "exit_code": 0}
+      ]
     }
   ],
+  "post_push_validation": {
+    "protocol_12_task_branch_head": "ba4b750b416d8853b088b1ea8a49a4fff00939c5",
+    "protocol_12_main_head": "a424ddd7238a75451e4071d048c5c41f60205a74",
+    "main_current_task_status": "awaiting_owner_decision",
+    "main_allowed_paths": [],
+    "pull_request": 2,
+    "pull_request_state": "open",
+    "pull_request_draft": true,
+    "pull_request_merged": false,
+    "pull_request_mergeable": true,
+    "owner_acceptance": "pending",
+    "formal_closure": false,
+    "task_002_status": "not_started",
+    "evidence_sources": ["GitHub commit metadata for all five phase commits", "GitHub PR #2 metadata", "origin/main and origin/agent/task-001-core-research repository files"]
+  },
   "lifecycle_state_preserved": {
     "previous_agent_execution": "cancelled_after_commit_and_push",
     "technical_completion": "candidate_complete",
@@ -83,10 +111,20 @@
     "pull_request_status": "draft_open_unmerged",
     "task_002_status": "not_started"
   },
-  "protocol_timestamps": {
-    "protocol_10_completed": "2026-07-30T14:24:53Z",
-    "protocol_11_completed": "2026-07-30T19:22:53Z",
-    "protocol_12_main_finalization_pending": "awaiting_phase_4_completion"
+  "research_preservation": {
+    "research_content_changed": false,
+    "sources_changed": false,
+    "evidence_boundaries_changed": false,
+    "rq_classifications_or_counts_changed": false,
+    "gate_1_reasoning_or_status_changed": false
   },
-  "next_action": "Phase 4 finalizes Protocol 12 result, restores main CURRENT_TASK to awaiting_owner_decision, then Phase 5 syncs task branch and updates PR #2"
+  "protocol_13_audit_repair": {
+    "authorized_at": "2026-07-31T19:42:00+08:00",
+    "status": "candidate_complete",
+    "reviewer_status": "pending_independent_review",
+    "corrections": ["Replaced nonexistent commit SHAs with the five verified real commit SHAs", "Replaced inferred rounded phase times with GitHub commit timestamps", "Recorded Phases 4 and 5 as completed", "Removed stale pending statements", "Recorded post-push validation", "Corrected the PR #2 Protocol 12 completion timestamp", "Mirrored this result file on main and the task branch"],
+    "containing_protocol_13_commit_shas_recorded_externally": true
+  },
+  "next_action": "Await a separate explicit owner decision. Do not formally close Task 001, merge or mark PR #2 ready, or start or prepare Task 002 without a new authorization.",
+  "explicitly_not_done": ["Did not modify Task 001 research content or conclusions", "Did not modify the checker or test logic", "Did not change lifecycle facts", "Did not mark owner acceptance accepted", "Did not formally close Task 001", "Did not merge, close, or mark PR #2 ready", "Did not start or prepare Task 002"]
 }
