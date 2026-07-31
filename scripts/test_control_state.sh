@@ -86,7 +86,7 @@ run_positive_test "Valid control state passes"
 
 # Test 1: CURRENT_TASK status is not awaiting_owner_decision
 run_negative_test "CURRENT_TASK status not awaiting_owner_decision" "
-    sed -i.bak 's/^status: awaiting_owner_decision$/status: ready/' \
+    sed -i.bak 's/^status: .*$/status: ready/' \
         '$FIXTURE_DIR/CURRENT_TASK.yaml'
     rm -f '$FIXTURE_DIR/CURRENT_TASK.yaml.bak'
 "

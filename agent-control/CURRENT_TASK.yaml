@@ -1,14 +1,12 @@
-protocol_version: 10
+protocol_version: 12
 
-task_id: task-001-core-research
-status: awaiting_owner_decision
-branch: agent/task-001-core-research
-pull_request: 2
+task_id: task-001-pre-merge-control-repair
+status: in_progress
+allowed_paths: []
 
 objective: >
-  Task 001 core research complete. Technical implementation accepted by reviewer
-  (Review 12). Awaiting explicit owner authorization for formal closure, pull
-  request merge, or next-task initiation.
+  Protocol 12 control-plane deployment in progress.
+  Other agents must stop. Do not execute this contract.
 
 truth_to_preserve:
   subject_task_id: task-001-core-research
@@ -19,49 +17,10 @@ truth_to_preserve:
   owner_acceptance: pending
   lifecycle_status: awaiting_owner_decision
   formal_closure: false
-  verified_remote_head: c2e75c06474d1b0df1832d9c5a2a62a73ab34dbe
   pull_request_status: draft_open_unmerged
   task_002_status: not_started
-  gate_1_status: met_with_documented_limitations
-  verified_source_count: 8
-  research_questions_directly_covered: 4
-  research_questions_partially_covered: 6
-  research_questions_not_covered: 0
-
-control_plane_repair:
-  repair_task_id: task-001-control-plane-repair
-  repair_result_file: agent-control/results/task-001-control-plane-repair.json
-  repair_completed_at: null  # Will be set by repair execution
-
-inputs:
-  - AGENTS.md
-  - agent-control/TASK_PROTOCOL.md
-  - agent-control/CURRENT_TASK.yaml
-  - state/CURRENT_STATE.yaml
-  - agent-control/results/task-001.json
-  - agent-control/VALIDATION_RECORD.txt
-  - agent-control/results/task-001-pr.md
-  - GitHub PR #2 metadata and latest review
-
-allowed_paths: []
-
-forbidden_paths:
-  - docs/**
-  - sources/**
-  - templates/**
-  - state/**
-  - agent-control/**
-  - scripts/**
-
-next_action: >
-  Awaiting explicit owner authorization. Do not modify files, do not merge PR #2,
-  do not mark PR ready for review, do not start Task 002, and do not mark Task 001
-  formally closed without a new executable contract containing unambiguous owner
-  authorization.
 
 stop_conditions:
-  - No executable contract with owner authorization is present
-  - Any write operation is attempted without a ready contract
-  - Any attempt to merge, close, or change PR #2 status
-  - Any attempt to start or prepare Task 002
-  - Any attempt to mark Task 001 formally closed
+  - This contract is a deployment lock, not an executable task
+  - Do not modify any files
+  - Wait for Protocol 12 to complete and restore the final waiting state

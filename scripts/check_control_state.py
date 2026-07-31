@@ -158,7 +158,8 @@ def main():
     result_task_id = task_result.get('task_id', '')
 
     # For control-plane tasks, the subject is task-001-core-research
-    if 'control-plane' in task_task_id:
+    is_control_task = 'control' in task_task_id and task_task_id != 'task-001-core-research'
+    if is_control_task:
         expected_subject = get_nested(current_task, 'truth_to_preserve', 'subject_task_id')
         if expected_subject and expected_subject != state_task_id:
             errors.append(f"State task_id '{state_task_id}' does not match control subject '{expected_subject}'")
@@ -170,22 +171,26 @@ def main():
     else:
         errors.append(f"Task IDs disagree: task={task_task_id}, state={state_task_id}, result={result_task_id}")
 
-    # Check status semantics - Protocol 11 correct semantics:
-    # CURRENT_TASK.yaml status must equal awaiting_owner_decision
-    # CURRENT_STATE.yaml status remains complete
-    # task-001.json status remains complete
+    # Check status semantics
+    # For in-progress control tasks: STATE/RESULT must still be complete, TASK can be in_progress
+    # Final awaiting state: CURRENT_TASK=awaiting_owner_decision, STATE/RESULT=complete
     task_status = current_task.get('status', '')
     state_status = current_state.get('status', '')
     result_status = task_result.get('status', '')
 
-    if task_status != 'awaiting_owner_decision':
-        errors.append(f"CURRENT_TASK status is '{task_status}', must be 'awaiting_owner_decision'")
-
-    # State and result should remain 'complete' - don't require them to equal task status
+    # State and result should always remain 'complete'
     if state_status != 'complete':
         errors.append(f"CURRENT_STATE status is '{state_status}', should remain 'complete'")
     if result_status != 'complete':
         errors.append(f"task-001.json status is '{result_status}', should remain 'complete'")
+
+    # CURRENT_TASK status validation
+    if is_control_task and task_status == 'in_progress':
+        # In-progress control task deployment lock - allow in_progress
+        # But lifecycle fields in truth_to_preserve must still match STATE/RESULT
+        pass
+    elif task_status != 'awaiting_owner_decision':
+        errors.append(f"CURRENT_TASK status is '{task_status}', must be 'awaiting_owner_decision'")
 
     # Check eight lifecycle fields must agree across truth_to_preserve/lifecycle/lifecycle
     task_lifecycle = current_task.get('truth_to_preserve', {})

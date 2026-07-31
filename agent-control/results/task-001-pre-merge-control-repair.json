@@ -1,0 +1,50 @@
+{
+  "protocol_version": 12,
+  "task_id": "task-001-pre-merge-control-repair",
+  "subject_task_id": "task-001-core-research",
+  "status": "in_progress",
+  "phase": "main_deployed_pending_branch_reconciliation",
+  "branch": "agent/task-001-core-research",
+  "objective": "Repair Protocol 11 implementation defects, selectively deploy complete lifecycle control plane to main without merging Task 001 research, and reconcile task branch with main so PR #2 has no control-plane merge conflicts",
+  "phases_completed": [
+    {
+      "phase": 1,
+      "name": "task_branch_repair",
+      "completed_at": "2026-07-31T00:00:00+08:00",
+      "commit": "5dd0fb50a83b10f8a8b2c1f9e72e5d8e3c7f4d6a",
+      "changes": [
+        "Added --current-task, --current-state, --task-result options to checker",
+        "Rewrote negative test script to use isolated fixtures with hash verification",
+        "Corrected Protocol 11 result: status=candidate_complete, reviewer_status=changes_addressed_pending_review",
+        "Recorded completed main restoration commit f5bf669 and validation",
+        "Removed stale main-restoration-pending statement"
+      ],
+      "validation": {
+        "json_tool": "exit_code=0",
+        "check_control_state": "exit_code=0",
+        "test_control_state": "exit_code=0",
+        "git_diff_check": "exit_code=0",
+        "protocol_11_corrections": "exit_code=0",
+        "allowed_paths_only": "exit_code=0"
+      }
+    },
+    {
+      "phase": 2,
+      "name": "main_control_deployment",
+      "status": "in_progress",
+      "note": "Selective control-plane file deployment to main underway"
+    }
+  ],
+  "lifecycle_state_preserved": {
+    "previous_agent_execution": "cancelled_after_commit_and_push",
+    "technical_completion": "candidate_complete",
+    "reviewer_acceptance": "accepted",
+    "latest_reviewer_record": "task-001-review-12",
+    "owner_acceptance": "pending",
+    "lifecycle_status": "awaiting_owner_decision",
+    "formal_closure": false,
+    "pull_request_status": "draft_open_unmerged",
+    "task_002_status": "not_started"
+  },
+  "next_action": "Complete Phase 2 main deployment, create in-progress lock in main CURRENT_TASK, commit and push main, then proceed to Phase 3 branch reconciliation"
+}
