@@ -1,0 +1,57 @@
+{
+  "protocol_version": 14,
+  "task_id": "task-001-owner-closure",
+  "subject_task_id": "task-001-core-research",
+  "status": "complete",
+  "owner_decision": "accepted",
+  "owner_authorization": {
+    "instruction": "都授权",
+    "recorded_at": "2026-08-01T04:33:00+08:00",
+    "authorized_actions": [
+      "owner_accept_task_001",
+      "mark_pull_request_2_ready",
+      "merge_pull_request_2",
+      "formally_close_task_001",
+      "publish_task_002_contract",
+      "create_task_002_branch"
+    ]
+  },
+  "lifecycle": {
+    "previous_agent_execution": "cancelled_after_commit_and_push",
+    "technical_completion": "candidate_complete",
+    "reviewer_acceptance": "accepted",
+    "latest_reviewer_record": "task-001-review-12",
+    "owner_acceptance": "accepted",
+    "lifecycle_status": "formally_closed",
+    "formal_closure": true,
+    "task_002_status": "authorized"
+  },
+  "pull_request": {
+    "number": 2,
+    "head_at_merge": "8ca5ac3ffca37c340a3efb49bedf710346b6dc2a",
+    "merge_commit": "35d8208b0ee201c9a7035d6e75be95cabd84cd10",
+    "merged_at": "2026-07-31T20:38:34Z",
+    "merge_method": "merge",
+    "final_state": "merged"
+  },
+  "accepted_outcome": {
+    "gate_1_status": "met_with_documented_limitations",
+    "verified_source_count": 8,
+    "research_questions_directly_covered": 4,
+    "research_questions_partially_covered": 6,
+    "research_questions_not_covered": 0,
+    "note": "Owner acceptance applies to the reviewed Task 001 outcome and its documented limitations; it does not assert that all research questions are fully resolved."
+  },
+  "predecessor_records": [
+    "agent-control/results/task-001.json",
+    "agent-control/results/task-001-control-plane-repair.json",
+    "agent-control/results/task-001-control-plane-finalization.json",
+    "agent-control/results/task-001-pre-merge-control-repair.json"
+  ],
+  "formal_closure": {
+    "closed": true,
+    "closed_after_merge": true,
+    "reopening_requires_new_explicit_owner_authorization": true
+  },
+  "next_action": "Task 002 may be published as a separate ready contract. Task 001 is formally closed."
+}
