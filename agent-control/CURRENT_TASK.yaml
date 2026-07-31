@@ -1,40 +1,74 @@
-protocol_version: 12
+protocol_version: 13
 
-task_id: task-001-core-research
-status: awaiting_owner_decision
-allowed_paths: []
+task_id: task-001-protocol-12-audit-record-repair
+status: ready
+branch: agent/task-001-core-research
+pull_request: 2
 
 objective: >
-  Core research for Task 001 is candidate complete with reviewer acceptance.
-  Awaiting owner decision on formal closure or next action.
+  Correct only the Protocol 12 audit record and PR completion timestamp using
+  verified Git commit metadata. Mirror the corrected result on main and the task
+  branch, then restore main to the non-executable awaiting_owner_decision state.
+
+owner_authorization:
+  recorded_at: "2026-07-31T19:42:00+08:00"
+  authorized:
+    - correct_protocol_12_audit_result
+    - mirror_corrected_result_on_main_and_task_branch
+    - correct_pr_2_protocol_12_timestamp
+    - restore_main_waiting_contract
+  explicitly_not_authorized:
+    - modify_research_content
+    - modify_checker_or_tests
+    - change_lifecycle_facts
+    - owner_acceptance
+    - formal_closure
+    - merge_close_or_ready_pr_2
+    - start_or_prepare_task_002
 
 truth_to_preserve:
   subject_task_id: task-001-core-research
-  previous_agent_execution: cancelled_after_commit_and_push
   technical_completion: candidate_complete
   reviewer_acceptance: accepted
-  latest_reviewer_record: task-001-review-12
   owner_acceptance: pending
   lifecycle_status: awaiting_owner_decision
   formal_closure: false
   pull_request_status: draft_open_unmerged
   task_002_status: not_started
 
-control_plane_completion:
-  protocol_10_completed_at: "2026-07-30T14:24:53Z"
-  protocol_10_result: agent-control/results/task-001-control-plane-repair.json
-  protocol_11_completed_at: "2026-07-30T19:22:53Z"
-  protocol_11_result: agent-control/results/task-001-control-plane-finalization.json
-  protocol_12_main_finalization_commit_recorded_externally: true
-  protocol_12_result: agent-control/results/task-001-pre-merge-control-repair.json
+allowed_changes:
+  - main:agent-control/results/task-001-pre-merge-control-repair.json
+  - agent/task-001-core-research:agent-control/results/task-001-pre-merge-control-repair.json
+  - GitHub PR #2 body
+  - main:agent-control/CURRENT_TASK.yaml
 
-live_task_branch_head_source: GitHub_PR_2_metadata
+required_audit_facts:
+  phase_1:
+    commit: 5dd0fb5fb1e9b8961206812d8329fb083cb35155
+    committed_at: "2026-07-31T09:47:19Z"
+  phase_2:
+    commit: dd7a5cbdf33509432e7f8d350e2c10d553860cc7
+    committed_at: "2026-07-31T10:47:10Z"
+  phase_3:
+    commit: 1764d18902bb676eac4104fc36e0e36e82aa7ca4
+    committed_at: "2026-07-31T10:48:10Z"
+  phase_4:
+    commit: a424ddd7238a75451e4071d048c5c41f60205a74
+    committed_at: "2026-07-31T10:50:14Z"
+  phase_5:
+    commit: ba4b750b416d8853b088b1ea8a49a4fff00939c5
+    committed_at: "2026-07-31T10:50:30Z"
+  protocol_12_completed_at: "2026-07-31T10:50:30Z"
 
-pull_request: 2
-branch: agent/task-001-core-research
+completion_conditions:
+  - Protocol 12 result records all five phases and the five exact commit SHAs.
+  - No Phase 4, Phase 5, main-finalization, or branch-sync action remains pending.
+  - Phase timestamps are taken from Git commit metadata, not inferred placeholders.
+  - Post-push validation records main waiting state and PR Draft/open/unmerged/mergeable state.
+  - Main and task-branch result file contents are byte-identical.
+  - PR #2 body uses the corrected Protocol 12 completion timestamp.
+  - Main ends with status awaiting_owner_decision and allowed_paths empty.
 
 stop_conditions:
-  - This is a non-executable waiting contract
-  - Owner acceptance is pending
-  - Do not execute, modify files, or start Task 002
-  - Await owner authorization decision
+  - Any requested change exceeds the four allowed targets.
+  - Research, checker, test, lifecycle, merge, Ready, closure, or Task 002 changes are attempted.
