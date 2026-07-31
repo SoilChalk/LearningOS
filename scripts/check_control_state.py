@@ -127,12 +127,24 @@ def get_nested(data, *keys, default=None):
 
 
 def main():
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Control State Consistency Checker')
+    parser.add_argument('--current-task', type=str, help='Path to CURRENT_TASK.yaml (default: repo authority file)')
+    parser.add_argument('--current-state', type=str, help='Path to CURRENT_STATE.yaml (default: repo authority file)')
+    parser.add_argument('--task-result', type=str, help='Path to task-001.json (default: repo authority file)')
+    args = parser.parse_args()
+
     repo_root = Path(__file__).parent.parent
 
-    # Read all three files
-    current_task = read_yaml_file(repo_root / 'agent-control' / 'CURRENT_TASK.yaml')
-    current_state = read_yaml_file(repo_root / 'state' / 'CURRENT_STATE.yaml')
-    task_result = read_json_file(repo_root / 'agent-control' / 'results' / 'task-001.json')
+    # Read all three files - use custom paths if provided
+    current_task_path = Path(args.current_task) if args.current_task else repo_root / 'agent-control' / 'CURRENT_TASK.yaml'
+    current_state_path = Path(args.current_state) if args.current_state else repo_root / 'state' / 'CURRENT_STATE.yaml'
+    task_result_path = Path(args.task_result) if args.task_result else repo_root / 'agent-control' / 'results' / 'task-001.json'
+
+    current_task = read_yaml_file(current_task_path)
+    current_state = read_yaml_file(current_state_path)
+    task_result = read_json_file(task_result_path)
 
     if not all([current_task, current_state, task_result]):
         print("ERROR: Cannot read required files", file=sys.stderr)

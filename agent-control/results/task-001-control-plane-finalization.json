@@ -2,7 +2,8 @@
   "protocol_version": 11,
   "task_id": "task-001-control-plane-finalization",
   "subject_task_id": "task-001-core-research",
-  "status": "complete",
+  "status": "candidate_complete",
+  "reviewer_status": "changes_addressed_pending_review",
   "branch": "agent/task-001-core-research",
   "baseline_head": "2c82f6533f2b74175dfa6dc8543919ceb051ab71",
   "completed_at": "2026-07-30T19:22:53Z",
@@ -110,7 +111,17 @@
     "completed_at": "2026-07-30T14:24:53Z",
     "note": "Protocol 10 repair result timestamp preserved; not duplicated as repair_completed_at"
   },
-  "next_action": "Task branch changes committed and pushed. PR #2 body updated with actual lifecycle state and remote HEAD. Main branch restoration pending: switch to main, pull latest, restore CURRENT_TASK.yaml to non-executable awaiting state with both Protocol 10 and 11 completion timestamps.",
+  "main_restoration_completed": {
+    "commit": "f5bf66957f9d44b665ec3969a2d18cc4a501ec9c",
+    "completed_at": "2026-07-30T19:22:53Z",
+    "note": "Main CURRENT_TASK.yaml restored to non-executable awaiting_owner_decision state"
+  },
+  "post_restoration_validation": {
+    "origin_main_executable": false,
+    "verified_at": "2026-07-30T19:22:53Z",
+    "note": "Confirmed origin/main CURRENT_TASK.yaml status is awaiting_owner_decision with empty allowed_paths"
+  },
+  "next_action": "Protocol 11 complete. Main restoration and validation finished. Task branch awaiting Protocol 12 pre-merge repair for selective control-plane deployment and branch reconciliation.",
   "explicitly_not_done": [
     "Did not modify Task 001 research content, sources, evidence boundaries, RQ classifications, or Gate 1 reasoning",
     "Did not modify AGENTS.md or TASK_PROTOCOL.md",
