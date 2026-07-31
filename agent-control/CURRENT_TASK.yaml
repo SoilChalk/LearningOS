@@ -1,50 +1,71 @@
-protocol_version: 13
+protocol_version: 14
 
-task_id: task-001-core-research
-status: awaiting_owner_decision
-allowed_paths: []
+task_id: task-001-owner-closure-and-task-002-transition
+status: ready
+branch: main
+pull_request: 2
+result_file: agent-control/results/task-001-owner-closure.json
 
 objective: >
-  Task 001 research and control-plane work are candidate complete. Protocol 13
-  corrected the Protocol 12 audit record using verified Git commit metadata.
-  Awaiting a separate explicit owner decision.
+  Apply the owner's explicit authorization to accept and formally close Task 001,
+  mark PR #2 ready and merge it, then publish Task 002 as the first vertical
+  scenario design task. Do not execute Task 002 design work in this transition.
 
-truth_to_preserve:
-  subject_task_id: task-001-core-research
-  previous_agent_execution: cancelled_after_commit_and_push
-  technical_completion: candidate_complete
-  reviewer_acceptance: accepted
-  latest_reviewer_record: task-001-review-12
-  owner_acceptance: pending
-  lifecycle_status: awaiting_owner_decision
-  formal_closure: false
-  pull_request_status: draft_open_unmerged
-  task_002_status: not_started
+owner_authorization:
+  recorded_at: "2026-08-01T04:33:00+08:00"
+  source_instruction: "都授权"
+  interpretation: >
+    Authorizes owner acceptance of Task 001, formal Task 001 closure, the Ready
+    transition and merge of PR #2, and publication of Task 002.
+  authorized:
+    - owner_accept_task_001
+    - mark_pull_request_2_ready
+    - merge_pull_request_2
+    - formally_close_task_001
+    - publish_task_002_contract
+    - create_task_002_branch
+  explicitly_not_authorized:
+    - execute_task_002_design_deliverables_in_this_transition
+    - expand_task_002_beyond_gate_2_design
 
-control_plane_completion:
-  protocol_10_completed_at: "2026-07-30T14:24:53Z"
-  protocol_10_result: agent-control/results/task-001-control-plane-repair.json
-  protocol_11_completed_at: "2026-07-30T19:22:53Z"
-  protocol_11_result: agent-control/results/task-001-control-plane-finalization.json
-  protocol_12_completed_at: "2026-07-31T10:50:30Z"
-  protocol_12_result: agent-control/results/task-001-pre-merge-control-repair.json
-  protocol_13_contract_commit: 6dfdfce7090e163004f2b4e303da7c1b9dac6640
-  protocol_13_main_result_commit: 2628975bc97998c3d7a78c22c730e5c1d83814ac
-  protocol_13_task_branch_result_commit: 8ca5ac3ffca37c340a3efb49bedf710346b6dc2a
-  protocol_13_result_blob: 8bd036a44ffeabf628131270ec0bffaa14b8646c
+preconditions:
+  - PR #2 is Draft, open, unmerged, and mergeable.
+  - PR #2 head is 8ca5ac3ffca37c340a3efb49bedf710346b6dc2a.
+  - Protocol 13 audit synchronization is accepted.
+  - Task 001 technical completion is candidate_complete and reviewer acceptance is accepted.
 
-live_task_branch_head_source: GitHub_PR_2_metadata
-pull_request: 2
-branch: agent/task-001-core-research
+transition_order:
+  - Mark PR #2 ready for review.
+  - Merge PR #2 using a merge commit and the verified head SHA.
+  - Record Task 001 owner acceptance and formal closure on main.
+  - Publish a ready Task 002 contract for Gate 2 first vertical scenario design.
+  - Create the declared Task 002 branch at the final main transition commit.
+  - Stop without executing Task 002 deliverables.
 
-next_action: >
-  Await a separate explicit owner decision. Do not modify files, formally close
-  Task 001, merge or mark PR #2 ready, or start or prepare Task 002 without a new
-  executable contract containing unambiguous owner authorization.
+allowed_paths_after_merge:
+  - agent-control/CURRENT_TASK.yaml
+  - agent-control/TASK_PROTOCOL.md
+  - agent-control/results/task-001-owner-closure.json
+  - agent-control/results/task-002.json
+  - state/CURRENT_STATE.yaml
+  - scripts/check_control_state.py
+  - scripts/test_control_state.sh
+
+forbidden_changes:
+  - alter_task_001_research_content_or_conclusions
+  - alter_source_evidence_boundaries_or_rq_counts
+  - begin_task_002_design_artifacts_during_transition
+  - rewrite_or_force_push_history
+
+completion_conditions:
+  - PR #2 is merged and no longer Draft/open.
+  - Task 001 owner acceptance is accepted and formal closure is true in the closure record.
+  - Main publishes Protocol 15 Task 002 with status ready.
+  - Task 002 branch exists at the final main transition commit.
+  - Task 002 implementation remains not started.
 
 stop_conditions:
-  - This is a non-executable waiting contract
-  - Owner acceptance is pending
-  - No write operation is authorized
-  - Do not merge, close, or change Draft status of PR #2
-  - Do not start or prepare Task 002
+  - PR head differs from the verified SHA.
+  - PR is not mergeable.
+  - Merge fails.
+  - Any operation would modify Task 001 research content outside the PR merge.
