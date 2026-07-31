@@ -1,0 +1,36 @@
+{
+  "protocol_version": 15,
+  "task_id": "task-002-first-vertical-scenario-design",
+  "status": "ready",
+  "branch": "agent/task-002-first-vertical-scenario",
+  "phase": "gate_2_first_vertical_scenario_design",
+  "lifecycle": {
+    "previous_agent_execution": "not_started",
+    "technical_completion": "not_started",
+    "reviewer_acceptance": "pending",
+    "latest_reviewer_record": "none",
+    "owner_acceptance": "authorized",
+    "lifecycle_status": "ready",
+    "formal_closure": false,
+    "task_002_status": "ready"
+  },
+  "predecessor": {
+    "task_id": "task-001-core-research",
+    "closure_result": "agent-control/results/task-001-owner-closure.json",
+    "formal_closure": true,
+    "pull_request_2_merge_commit": "35d8208b0ee201c9a7035d6e75be95cabd84cd10"
+  },
+  "objective": "Design the first complete, source-grounded vertical learning scenario without implementing a frontend, runtime learner model, scheduler, or multi-scenario architecture.",
+  "scenario_boundary": {
+    "name": "source-grounded learning recovery and independent completion check",
+    "user_problem": "A learner has real course material, has lost their position or cannot identify where they are confused, and needs a bounded explanation plus an observable independent check.",
+    "minimum_flow": [
+      "recover current material position and task boundary",
+      "identify the learner's expressed obstacle without forcing a taxonomy",
+      "select a bounded pedagogical action",
+      "request one independent behavior check",
+      "persist minimal state for the next session"
+    ]
+  },
+  "next_action": "Execute the Protocol 15 contract on the declared Task 002 branch. Do not implement Task 002 work on main."
+}
