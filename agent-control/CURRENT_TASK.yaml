@@ -1,71 +1,176 @@
-protocol_version: 14
+protocol_version: 15
 
-task_id: task-001-owner-closure-and-task-002-transition
+task_id: task-002-first-vertical-scenario-design
 status: ready
-branch: main
-pull_request: 2
-result_file: agent-control/results/task-001-owner-closure.json
+branch: agent/task-002-first-vertical-scenario
+result_file: agent-control/results/task-002.json
 
 objective: >
-  Apply the owner's explicit authorization to accept and formally close Task 001,
-  mark PR #2 ready and merge it, then publish Task 002 as the first vertical
-  scenario design task. Do not execute Task 002 design work in this transition.
+  Design the first complete vertical Learning OS scenario: a learner uses real
+  course material, recovers their current position or expresses unresolved
+  confusion, receives a source-bounded pedagogical action, completes one
+  observable independent check, and leaves minimal state for the next session.
+  This is a design task, not an implementation or pilot task.
 
 owner_authorization:
   recorded_at: "2026-08-01T04:33:00+08:00"
   source_instruction: "都授权"
-  interpretation: >
-    Authorizes owner acceptance of Task 001, formal Task 001 closure, the Ready
-    transition and merge of PR #2, and publication of Task 002.
-  authorized:
-    - owner_accept_task_001
-    - mark_pull_request_2_ready
-    - merge_pull_request_2
-    - formally_close_task_001
-    - publish_task_002_contract
-    - create_task_002_branch
-  explicitly_not_authorized:
-    - execute_task_002_design_deliverables_in_this_transition
-    - expand_task_002_beyond_gate_2_design
+  scope: "Task 002 Gate 2 design is authorized to start after formal Task 001 closure."
 
-preconditions:
-  - PR #2 is Draft, open, unmerged, and mergeable.
-  - PR #2 head is 8ca5ac3ffca37c340a3efb49bedf710346b6dc2a.
-  - Protocol 13 audit synchronization is accepted.
-  - Task 001 technical completion is candidate_complete and reviewer acceptance is accepted.
+lifecycle:
+  previous_agent_execution: not_started
+  technical_completion: not_started
+  reviewer_acceptance: pending
+  latest_reviewer_record: none
+  owner_acceptance: authorized
+  lifecycle_status: ready
+  formal_closure: false
+  task_002_status: ready
 
-transition_order:
-  - Mark PR #2 ready for review.
-  - Merge PR #2 using a merge commit and the verified head SHA.
-  - Record Task 001 owner acceptance and formal closure on main.
-  - Publish a ready Task 002 contract for Gate 2 first vertical scenario design.
-  - Create the declared Task 002 branch at the final main transition commit.
-  - Stop without executing Task 002 deliverables.
+predecessor:
+  task_id: task-001-core-research
+  closure_result: agent-control/results/task-001-owner-closure.json
+  formal_closure: true
+  pull_request_2_merge_commit: 35d8208b0ee201c9a7035d6e75be95cabd84cd10
+  gate_1_exit: met_with_documented_limitations
 
-allowed_paths_after_merge:
-  - agent-control/CURRENT_TASK.yaml
-  - agent-control/TASK_PROTOCOL.md
+inputs:
+  - docs/DESIGN_GATES.md
+  - docs/RESEARCH_QUESTIONS.md
+  - docs/REFERENCE_SYSTEM_MATRIX.md
+  - sources/source-ledger.json
+  - state/CURRENT_STATE.yaml
   - agent-control/results/task-001-owner-closure.json
   - agent-control/results/task-002.json
+
+scenario_boundary:
+  name: source-grounded_learning_recovery_and_independent_completion_check
+  user_problem: >
+    The learner has real course material but has lost their position, cannot
+    identify exactly where they are confused, or cannot tell whether an
+    explanation has become independently usable knowledge.
+  minimum_flow:
+    - recover current material position and task boundary
+    - accept natural-language confusion without requiring a fixed error taxonomy
+    - select one bounded pedagogical action grounded in the supplied material
+    - request one observable independent behavior check
+    - persist minimal state sufficient for the next session
+
+allowed_paths:
+  - docs/FIRST_VERTICAL_SCENARIO.md
+  - docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
+  - docs/DESIGN_GATES.md
+  - templates/MINIMAL_LEARNING_STATE.schema.json
+  - scripts/validate_task_002.py
+  - scripts/test_task_002_negative.sh
   - state/CURRENT_STATE.yaml
+  - agent-control/results/task-002.json
+
+forbidden_paths:
+  - sources/**
+  - docs/RESEARCH_QUESTIONS.md
+  - docs/REFERENCE_SYSTEM_MATRIX.md
+  - agent-control/results/task-001*.json
+  - agent-control/VALIDATION_RECORD.txt
+  - agent-control/TASK_PROTOCOL.md
+  - AGENTS.md
   - scripts/check_control_state.py
   - scripts/test_control_state.sh
 
-forbidden_changes:
-  - alter_task_001_research_content_or_conclusions
-  - alter_source_evidence_boundaries_or_rq_counts
-  - begin_task_002_design_artifacts_during_transition
-  - rewrite_or_force_push_history
+required_deliverables:
+  - >
+    `docs/FIRST_VERTICAL_SCENARIO.md`: define actor, real-material input,
+    preconditions, complete step-by-step flow, entry/exit criteria for every
+    step, recovery behavior, evidence collection points, measurable success
+    criteria, failure states, and explicit non-goals.
+  - >
+    `docs/PEDAGOGICAL_ACTION_DECISION_TREE.md`: define a small provisional
+    decision tree that maps observable interaction evidence to actions such as
+    clarify terminology, restore prerequisite, give a bounded example, request
+    an explanation, request a fresh problem attempt, or stop and ask for more
+    source material. Do not claim automatic obstacle classification is solved.
+  - >
+    `templates/MINIMAL_LEARNING_STATE.schema.json`: define only the state needed
+    for this scenario, including current_position, task_boundary,
+    observed_difficulty, evidence_level, last_pedagogical_action,
+    independent_check, and next_action.
+  - >
+    `scripts/validate_task_002.py` and `scripts/test_task_002_negative.sh`:
+    validate the required documents and schema using isolated fixtures and
+    negative cases. Use only the Python standard library.
+  - >
+    Update `docs/DESIGN_GATES.md`, `state/CURRENT_STATE.yaml`, and
+    `agent-control/results/task-002.json` truthfully after validation. Gate 2 may
+    be marked candidate complete only if every declared exit condition passes.
+
+required_design_constraints:
+  - use one scenario and one real-material flow only
+  - distinguish factual interaction events from inferences
+  - do not infer mastery from self-report alone
+  - make independent completion evidence observable
+  - preserve source vocabulary, notation, assessment, and integrity constraints
+  - carry forward all documented Gate 1 limitations
+  - prefer simple provisional rules over generalized architecture
+
+prohibited_activities:
+  - frontend_or_application_implementation
+  - runtime_agent_or_multi_agent_implementation
+  - automatic_mastery_classifier
+  - general_knowledge_graph
+  - automated_review_scheduler
+  - multi_course_or_multi_scenario_support
+  - real_user_pilot_execution
+  - claiming_learning_effectiveness_or_architecture_validation
+
+acceptance_commands:
+  - python3 -m json.tool templates/MINIMAL_LEARNING_STATE.schema.json >/dev/null
+  - python3 -m json.tool agent-control/results/task-002.json >/dev/null
+  - python3 scripts/validate_task_002.py
+  - bash scripts/test_task_002_negative.sh
+  - python3 scripts/check_control_state.py
+  - git diff --check
+  - grep -q '^# First Vertical Scenario' docs/FIRST_VERTICAL_SCENARIO.md
+  - grep -q '^# Pedagogical Action Decision Tree' docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
+  - >
+    python3 - <<'PY'
+    import subprocess, sys
+    allowed = {
+        'docs/FIRST_VERTICAL_SCENARIO.md',
+        'docs/PEDAGOGICAL_ACTION_DECISION_TREE.md',
+        'docs/DESIGN_GATES.md',
+        'templates/MINIMAL_LEARNING_STATE.schema.json',
+        'scripts/validate_task_002.py',
+        'scripts/test_task_002_negative.sh',
+        'state/CURRENT_STATE.yaml',
+        'agent-control/results/task-002.json',
+    }
+    changed = set(subprocess.check_output(
+        ['git', 'diff', '--name-only', 'origin/main...HEAD'], text=True
+    ).splitlines())
+    bad = sorted(changed - allowed)
+    if bad:
+        print('\n'.join(bad))
+        sys.exit(1)
+    PY
 
 completion_conditions:
-  - PR #2 is merged and no longer Draft/open.
-  - Task 001 owner acceptance is accepted and formal closure is true in the closure record.
-  - Main publishes Protocol 15 Task 002 with status ready.
-  - Task 002 branch exists at the final main transition commit.
-  - Task 002 implementation remains not started.
+  - Gate 2 scenario specification is complete and internally consistent.
+  - Every flow step has explicit entry and exit criteria.
+  - The pedagogical decision tree is bounded and evidence-aware.
+  - Minimal state schema is valid JSON and contains no speculative architecture.
+  - Success criteria are measurable without a complex learner model.
+  - All acceptance commands pass with actual exit codes recorded.
+  - A Draft PR is opened for independent review.
 
 stop_conditions:
-  - PR head differs from the verified SHA.
-  - PR is not mergeable.
-  - Merge fails.
-  - Any operation would modify Task 001 research content outside the PR merge.
+  - Any required input is missing or contradicts the Task 001 accepted evidence boundary.
+  - Work would require changing a forbidden path.
+  - Work would require implementing or piloting the system rather than designing the scenario.
+  - Validation fails and cannot be corrected within allowed paths.
+  - The task branch no longer descends from the Protocol 15 publication point.
+
+completion_process:
+  - Work only on agent/task-002-first-vertical-scenario.
+  - Persist the result as in_progress if interrupted.
+  - Stop after pushing the branch and opening a Draft PR.
+  - Do not merge Task 002 or begin Gate 3 automatically.
