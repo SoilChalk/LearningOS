@@ -4,38 +4,30 @@ task_id: task-001-pre-merge-control-repair
 status: ready
 branch: agent/task-001-core-research
 pull_request: 2
+pre_contract_main_head: f5bf66957f9d44b665ec3969a2d18cc4a501ec9c
 baseline_task_branch_head: 20d79b5a2ba93284a6f6246e4fae54a1e81a0c56
-baseline_main_head: f5bf66957f9d44b665ec3969a2d18cc4a501ec9c
 result_file: agent-control/results/task-001-pre-merge-control-repair.json
 
 objective: >
-  Repair the two deferred Protocol 11 implementation defects, deploy the complete
-  lifecycle control plane to the default branch without merging Task 001 research,
+  Repair the two deferred Protocol 11 implementation defects, selectively deploy
+  the complete lifecycle control plane to main without merging Task 001 research,
   and reconcile the task branch with main so PR #2 has no control-plane merge
-  conflicts. Preserve the awaiting_owner_decision lifecycle. Do not formally close
-  Task 001, merge or ready PR #2, or start Task 002.
+  conflicts. Preserve awaiting_owner_decision. Do not close Task 001, merge or
+  ready PR #2, or start Task 002.
 
 owner_authorization:
   recorded_at: "2026-07-31T13:28:00+08:00"
   source_instruction: "授权"
   interpretation: >
-    Authorizes only this pre-merge control repair and default-branch control-plane
-    deployment. It does not authorize owner acceptance, formal closure, PR merge,
-    Ready-for-review transition, or Task 002.
-  authorized:
-    - repair_protocol_11_deferred_issues
-    - deploy_approved_control_plane_files_to_main_without_merging_pr_2
-    - merge_main_into_the_task_branch_only_to_reconcile_control_plane_history
-    - update_pr_2_body_with_truthful_pre_merge_state
-    - verify_pr_2_has_no_merge_conflicts
+    Authorizes only this pre-merge repair, control-plane deployment, branch
+    reconciliation, PR-body update, and conflict verification.
   explicitly_not_authorized:
-    - accept_task_001_as_formally_complete
-    - accept_protocol_10_11_or_12_as_owner
-    - formally_close_task_001
-    - merge_or_close_pull_request_2
-    - mark_pull_request_2_ready_for_review
-    - start_or_prepare_task_002
-    - modify_task_001_research_content_or_conclusions
+    - owner_acceptance
+    - formal_task_001_closure
+    - pull_request_2_merge_or_close
+    - pull_request_2_ready_transition
+    - task_002_start_or_preparation
+    - task_001_research_changes
 
 truth_to_preserve:
   subject_task_id: task-001-core-research
@@ -54,36 +46,69 @@ truth_to_preserve:
   research_questions_partially_covered: 6
   research_questions_not_covered: 0
 
-required_inputs:
-  - origin/main:AGENTS.md
-  - origin/main:agent-control/TASK_PROTOCOL.md
-  - origin/main:agent-control/CURRENT_TASK.yaml
-  - origin/agent/task-001-core-research:AGENTS.md
-  - origin/agent/task-001-core-research:agent-control/TASK_PROTOCOL.md
-  - origin/agent/task-001-core-research:agent-control/CURRENT_TASK.yaml
-  - origin/agent/task-001-core-research:scripts/check_control_state.py
-  - origin/agent/task-001-core-research:scripts/test_control_state.sh
-  - origin/agent/task-001-core-research:state/CURRENT_STATE.yaml
-  - origin/agent/task-001-core-research:agent-control/results/task-001.json
-  - origin/agent/task-001-core-research:agent-control/results/task-001-control-plane-repair.json
-  - origin/agent/task-001-core-research:agent-control/results/task-001-control-plane-finalization.json
-  - GitHub PR #2 metadata and body
-
-execution_preconditions:
-  - Run `git fetch origin` before any state decision.
+startup_preconditions:
+  - Run `git fetch origin`.
   - The working tree must be clean.
-  - `origin/main` must equal the declared baseline_main_head.
-  - Local and remote `agent/task-001-core-research` must both equal the declared baseline_task_branch_head.
-  - Read this contract using `git show origin/main:agent-control/CURRENT_TASK.yaml`.
-  - Do not merge or cherry-pick main into the task branch before Phase 1 is committed and pushed.
-  - Stop without writes if either baseline differs or PR #2 is not Draft, open, and unmerged.
+  - Local and remote task-branch HEAD must both equal `20d79b5a2ba93284a6f6246e4fae54a1e81a0c56`.
+  - `f5bf66957f9d44b665ec3969a2d18cc4a501ec9c` must be an ancestor of `origin/main`.
+  - >
+    `git diff --name-only f5bf66957f9d44b665ec3969a2d18cc4a501ec9c..origin/main`
+    must contain only `agent-control/CURRENT_TASK.yaml`. This permits contract-only
+    publication commits without relying on a self-referential main HEAD.
+  - Read the executable contract with `git show origin/main:agent-control/CURRENT_TASK.yaml`.
+  - Confirm protocol 12, this task_id, and status ready.
+  - Confirm PR #2 is Draft, open, and unmerged.
+  - Do not merge or cherry-pick main before Phase 1 is committed and pushed.
 
-allowed_paths_by_phase:
-  phase_1_task_branch_implementation:
+phase_1_task_branch_repair:
+  allowed_paths:
     - scripts/check_control_state.py
     - scripts/test_control_state.sh
     - agent-control/results/task-001-control-plane-finalization.json
-  phase_2_main_control_deployment:
+  required_changes:
+    - >
+      Add checker options `--current-task`, `--current-state`, and `--task-result`.
+      Defaults remain the live repository authority files; supplied paths must be used.
+    - >
+      Rewrite the negative-test script to use only temporary fixture copies and the
+      checker path options. It must use `set -euo pipefail`, a cleanup trap, one
+      positive fixture test, all 9 negative cases, and before/after hashes proving
+      the live authority files were unchanged. It must not duplicate checker logic.
+    - >
+      Correct the Protocol 11 result: `status: candidate_complete`,
+      `reviewer_status: changes_addressed_pending_review`; record completed main
+      restoration commit `f5bf66957f9d44b665ec3969a2d18cc4a501ec9c`, completed
+      post-restoration validation, and verified non-executable origin/main. Remove
+      the stale statement that main restoration is pending. Owner acceptance remains
+      pending and formal closure remains false.
+  acceptance_commands:
+    - python3 -m json.tool agent-control/results/task-001-control-plane-finalization.json >/dev/null
+    - python3 scripts/check_control_state.py
+    - bash scripts/test_control_state.sh
+    - git diff --check
+    - >
+      python3 - <<'PY'
+      import json, sys
+      p='agent-control/results/task-001-control-plane-finalization.json'
+      d=json.load(open(p)); t=json.dumps(d).lower()
+      assert d.get('status') == 'candidate_complete'
+      assert d.get('reviewer_status') == 'changes_addressed_pending_review'
+      assert 'f5bf66957f9d44b665ec3969a2d18cc4a501ec9c' in json.dumps(d)
+      if 'main restoration pending' in t:
+          sys.exit('stale main-restoration statement remains')
+      PY
+    - >
+      python3 - <<'PY'
+      import subprocess, sys
+      allowed={'scripts/check_control_state.py','scripts/test_control_state.sh','agent-control/results/task-001-control-plane-finalization.json'}
+      changed=set(subprocess.check_output(['git','diff','--name-only','20d79b5a2ba93284a6f6246e4fae54a1e81a0c56...HEAD'],text=True).splitlines())
+      bad=sorted(changed-allowed)
+      if bad: print('\n'.join(bad)); sys.exit(1)
+      PY
+  completion: Commit and push the task branch without force.
+
+phase_2_main_control_deployment:
+  allowed_paths:
     - AGENTS.md
     - agent-control/TASK_PROTOCOL.md
     - agent-control/CURRENT_TASK.yaml
@@ -94,140 +119,19 @@ allowed_paths_by_phase:
     - agent-control/results/task-001-pre-merge-control-repair.json
     - scripts/check_control_state.py
     - scripts/test_control_state.sh
-  phase_3_task_branch_reconciliation:
-    - merge_commit_only
-    - control_plane_paths_already_changed_on_main
-  phase_4_main_finalization:
-    - agent-control/CURRENT_TASK.yaml
-    - agent-control/results/task-001-pre-merge-control-repair.json
-  phase_5_task_branch_final_sync:
-    - merge_commit_only
-    - GitHub_PR_2_body
-
-forbidden_paths:
-  - docs/**
-  - sources/**
-  - templates/**
-  - agent-control/VALIDATION_RECORD.txt
-  - agent-control/results/task-001-pr.md
-  - scripts/validate_source_records.py
-  - scripts/test_validation_negative.sh
-
-forbidden_changes:
-  - alter_sources_or_source_notes
-  - alter_research_synthesis
-  - alter_evidence_boundaries
-  - alter_rq_classifications_or_counts
-  - alter_gate_1_reasoning_or_status
-  - reinterpret_review_12_as_owner_acceptance
-  - mark_owner_acceptance_as_accepted
-  - mark_task_001_formally_closed
-  - merge_or_close_pull_request_2
-  - mark_pull_request_2_ready_for_review
-  - create_or_start_task_002
-  - add_self_referential_commit_sha_claims_to_tracked_files
-
-required_changes:
-  - >
-    Extend `scripts/check_control_state.py` with explicit command-line path options
-    `--current-task`, `--current-state`, and `--task-result`. Defaults must remain the
-    repository authority files. The checker must use the supplied paths when present
-    so tests can operate entirely on isolated fixtures.
-  - >
-    Rewrite `scripts/test_control_state.sh` so it never modifies the live repository
-    authority files. Create a temporary fixture directory, copy the three authority
-    files into it, mutate only those copies, and invoke the production checker with
-    the explicit path options. Use `set -euo pipefail` and a cleanup trap. Preserve
-    all 9 negative cases. Add a positive fixture test and verify the live files have
-    identical hashes before and after the suite. The test script must not duplicate
-    checker logic.
-  - >
-    Reconcile `agent-control/results/task-001-control-plane-finalization.json` with
-    actual Protocol 11 history. Remove the statement that main restoration is pending.
-    Record that main restoration completed through commit
-    `f5bf66957f9d44b665ec3969a2d18cc4a501ec9c`, that post-restoration validation passed,
-    and that origin/main was verified in the non-executable awaiting state. Use
-    `status: candidate_complete` and `reviewer_status: changes_addressed_pending_review`.
-    Keep owner acceptance pending and formal closure false.
-  - >
-    Deploy only the approved control-plane paths from the repaired task branch to
-    main. This is a selective control-plane deployment, not a PR merge. Do not copy
-    research files, validation research records, source records, templates, or design
-    documents to main in this task.
-  - >
-    The deployed main control plane must include the enhanced AGENTS startup
-    reconciliation, lifecycle distinctions in TASK_PROTOCOL, CURRENT_STATE,
-    task-001 result, Protocol 10 and 11 result records, the production checker, and
-    isolated-fixture negative tests.
-  - >
-    During the intermediate main deployment commit, set Protocol 12 result status to
-    `in_progress` with phase `main_deployed_pending_branch_reconciliation`, and set
-    main CURRENT_TASK status to `in_progress` with no allowed write paths for any
-    other agent. This prevents duplicate execution while the authorized session
-    continues.
-  - >
-    Merge the intermediate main deployment commit into the task branch. Stop if a
-    conflict touches a research path. Control-plane conflicts, if any, must resolve
-    to the exact main-deployed versions. Do not rebase, force-push, squash, or rewrite
-    Task 001 history.
-  - >
-    Finalize main with a non-executable Protocol 12 waiting contract. It must use
-    `task_id: task-001-core-research`, `status: awaiting_owner_decision`, and
-    `allowed_paths: []`; preserve all lifecycle truth; record Protocol 10, 11, and 12
-    result references and completion timestamps; and state that the live task-branch
-    head is authoritative in GitHub PR #2 metadata rather than storing a self-referential
-    branch SHA in the tracked contract.
-  - >
-    Finalize the Protocol 12 result on main as `candidate_complete`, with
-    `reviewer_status: pending_independent_review`. Record every completed phase,
-    validation command and exit code, the known intermediate commits, and explain that
-    the containing final main commit SHA is intentionally recorded externally to avoid
-    tracked-file self-reference. Do not leave any `pending main restoration` statement.
-  - >
-    Merge the final main commit into the task branch, push without force, update PR #2
-    body with the final remote task-branch head and truthful lifecycle state, and verify
-    the PR remains Draft/open/unmerged. Verify the branch can merge into current main
-    without conflicts, but do not perform the PR merge.
-
-phase_acceptance_commands:
-  phase_1_task_branch_implementation:
-    - python3 -m json.tool agent-control/results/task-001-control-plane-finalization.json >/dev/null
-    - python3 scripts/check_control_state.py
-    - bash scripts/test_control_state.sh
-    - git diff --check
+  required_changes:
     - >
-      python3 - <<'PY'
-      import json, sys
-      p = 'agent-control/results/task-001-control-plane-finalization.json'
-      data = json.load(open(p))
-      text = json.dumps(data)
-      if data.get('status') != 'candidate_complete':
-          sys.exit('Protocol 11 result status must be candidate_complete')
-      if data.get('reviewer_status') != 'changes_addressed_pending_review':
-          sys.exit('Protocol 11 reviewer_status is incorrect')
-      if 'pending' in str(data.get('next_action', '')).lower() and 'owner' not in str(data.get('next_action', '')).lower():
-          sys.exit('Protocol 11 result still contains a stale operational pending action')
-      if 'f5bf66957f9d44b665ec3969a2d18cc4a501ec9c' not in text:
-          sys.exit('Protocol 11 result does not record the actual main restoration commit')
-      PY
+      Selectively copy the approved control-plane files from the repaired remote task
+      branch to main. Do not copy research documents, sources, templates, validation
+      research records, or research validation scripts.
     - >
-      python3 - <<'PY'
-      import subprocess, sys
-      allowed = {
-          'scripts/check_control_state.py',
-          'scripts/test_control_state.sh',
-          'agent-control/results/task-001-control-plane-finalization.json',
-      }
-      changed = set(subprocess.check_output(
-          ['git', 'diff', '--name-only', '20d79b5a2ba93284a6f6246e4fae54a1e81a0c56...HEAD'],
-          text=True,
-      ).splitlines())
-      unexpected = sorted(changed - allowed)
-      if unexpected:
-          print('\n'.join(unexpected))
-          sys.exit(1)
-      PY
-  phase_2_main_control_deployment:
+      Create the Protocol 12 result with `status: in_progress` and
+      `phase: main_deployed_pending_branch_reconciliation`.
+    - >
+      Replace main CURRENT_TASK with a Protocol 12 in-progress lock:
+      `status: in_progress`, `allowed_paths: []`, all lifecycle truth preserved, and
+      an instruction that other agents must stop.
+  acceptance_commands:
     - python3 -m json.tool agent-control/results/task-001.json >/dev/null
     - python3 -m json.tool agent-control/results/task-001-control-plane-repair.json >/dev/null
     - python3 -m json.tool agent-control/results/task-001-control-plane-finalization.json >/dev/null
@@ -239,14 +143,40 @@ phase_acceptance_commands:
     - grep -q '^allowed_paths: \[\]$' agent-control/CURRENT_TASK.yaml
     - grep -q 'Compare lifecycle claims across task contract, state, and result records' AGENTS.md
     - grep -q '^## Lifecycle states$' agent-control/TASK_PROTOCOL.md
-    - test "$(git rev-parse --abbrev-ref HEAD)" = "main"
-  phase_3_task_branch_reconciliation:
+    - test "$(git rev-parse --abbrev-ref HEAD)" = main
+  completion: Commit and push main without force.
+
+phase_3_task_branch_reconciliation:
+  required_changes:
+    - Merge the Phase 2 main commit into the task branch without rebasing or rewriting history.
+    - Resolve only control-plane conflicts to the exact main versions.
+    - Stop if any conflict or change touches a forbidden research path.
+  acceptance_commands:
     - python3 scripts/check_control_state.py
     - bash scripts/test_control_state.sh
     - git diff --check
-    - test "$(git rev-parse --abbrev-ref HEAD)" = "agent/task-001-core-research"
     - git diff --exit-code 20d79b5a2ba93284a6f6246e4fae54a1e81a0c56...HEAD -- docs sources templates agent-control/VALIDATION_RECORD.txt agent-control/results/task-001-pr.md scripts/validate_source_records.py scripts/test_validation_negative.sh
-  phase_4_main_finalization:
+  completion: Push the reconciled task branch without force.
+
+phase_4_main_finalization:
+  allowed_paths:
+    - agent-control/CURRENT_TASK.yaml
+    - agent-control/results/task-001-pre-merge-control-repair.json
+  required_changes:
+    - >
+      Finalize the Protocol 12 result as `candidate_complete` with
+      `reviewer_status: pending_independent_review`. Record all completed phases,
+      commands and exit codes. Do not leave a pending-main-restoration statement.
+      State that the containing final main commit SHA is recorded externally to avoid
+      tracked-file self-reference.
+    - >
+      Restore main CURRENT_TASK to a non-executable Protocol 12 waiting contract:
+      `task_id: task-001-core-research`, `status: awaiting_owner_decision`,
+      `allowed_paths: []`; owner acceptance pending, formal closure false, PR Draft/
+      open/unmerged, Task 002 not started; Protocol 10/11/12 timestamps and result
+      references recorded. Use
+      `live_task_branch_head_source: GitHub_PR_2_metadata` instead of a tracked branch SHA.
+  acceptance_commands:
     - python3 -m json.tool agent-control/results/task-001-pre-merge-control-repair.json >/dev/null
     - python3 scripts/check_control_state.py
     - bash scripts/test_control_state.sh
@@ -257,50 +187,64 @@ phase_acceptance_commands:
     - grep -q 'formal_closure: false' agent-control/CURRENT_TASK.yaml
     - grep -q 'task_002_status: not_started' agent-control/CURRENT_TASK.yaml
     - grep -q 'live_task_branch_head_source: GitHub_PR_2_metadata' agent-control/CURRENT_TASK.yaml
-    - test "$(git rev-parse --abbrev-ref HEAD)" = "main"
-  phase_5_task_branch_final_sync:
+  completion: Commit and push main without force.
+
+phase_5_task_branch_final_sync:
+  required_changes:
+    - Merge the final main commit into the task branch without rewriting history.
+    - Push the task branch without force.
+    - Update PR #2 body with the actual final remote task-branch HEAD and truthful lifecycle state.
+    - Keep PR #2 Draft, open, and unmerged.
+  acceptance_commands:
     - python3 scripts/check_control_state.py
     - bash scripts/test_control_state.sh
     - git diff --check
     - git merge-base --is-ancestor origin/main HEAD
     - git merge-tree --write-tree origin/main HEAD >/dev/null
-    - test "$(git rev-parse --abbrev-ref HEAD)" = "agent/task-001-core-research"
+    - test "$(git rev-parse --abbrev-ref HEAD)" = agent/task-001-core-research
 
-acceptance_commands:
-  note: Every command in every `phase_acceptance_commands` section is mandatory in its declared phase.
-  post_push_external_checks:
-    - Verify local task-branch HEAD equals `origin/agent/task-001-core-research`.
-    - Verify local main HEAD equals `origin/main`.
-    - Verify PR #2 remains Draft, open, and unmerged.
-    - Verify PR #2 body records the actual remote task-branch HEAD.
-    - Verify PR #2 has no merge conflicts against current main.
-    - Verify origin/main CURRENT_TASK is the final non-executable awaiting state.
+forbidden_paths:
+  - docs/**
+  - sources/**
+  - templates/**
+  - agent-control/VALIDATION_RECORD.txt
+  - agent-control/results/task-001-pr.md
+  - scripts/validate_source_records.py
+  - scripts/test_validation_negative.sh
+
+forbidden_actions:
+  - change_research_content_or_gate_1
+  - force_push_rebase_squash_or_history_rewrite
+  - owner_acceptance_or_formal_closure
+  - merge_close_or_ready_pull_request_2
+  - start_or_prepare_task_002
+  - tracked_self_referential_commit_sha
+
+post_push_checks:
+  - Local main equals origin/main.
+  - Local task branch equals its origin ref.
+  - origin/main CURRENT_TASK is the final non-executable awaiting state.
+  - PR #2 body contains the actual remote task-branch HEAD.
+  - PR #2 is Draft, open, unmerged, and conflict-free against current main.
 
 completion_conditions:
-  - Production checker accepts explicit fixture paths while preserving repository defaults.
-  - Negative tests never modify live authority files and all positive/negative cases pass.
-  - Protocol 11 result truthfully records completed main restoration and no stale operational pending action.
+  - Tests operate exclusively on isolated fixtures and live authority hashes remain unchanged.
+  - Protocol 11 result truthfully records completed main restoration.
   - Enhanced AGENTS, TASK_PROTOCOL, state, results, checker, and tests exist on main.
-  - Main ends in non-executable awaiting_owner_decision with no allowed paths.
-  - Protocol 12 result is candidate_complete and awaiting independent review, not owner-accepted.
-  - Task branch contains the final main control commits without research-file conflict changes.
-  - PR #2 is Draft, open, unmerged, and conflict-free against current main.
-  - Task 001 remains not formally closed and Task 002 remains not started.
+  - Main ends in awaiting_owner_decision with allowed_paths empty.
+  - Protocol 12 result is candidate_complete pending independent review, not owner-accepted.
+  - The task branch contains current main as an ancestor and has no merge conflict with main.
+  - PR #2 remains Draft/open/unmerged; Task 001 remains open; Task 002 remains not started.
 
 stop_conditions:
-  - Either baseline head differs before Phase 1.
-  - The working tree is not clean at a phase boundary.
-  - Any validation command exits nonzero.
-  - Any required change touches a forbidden research path.
-  - Any merge conflict occurs in docs, sources, templates, validation research records, or research validation scripts.
-  - Any operation would require force-push, history rewrite, PR merge, PR Ready transition, formal closure, or Task 002 preparation.
+  - A startup precondition fails.
+  - A validation command exits nonzero.
+  - Any forbidden path changes or conflicts.
+  - Execution would require force-push, history rewrite, PR merge/Ready, closure, or Task 002.
   - PR #2 is unexpectedly closed, merged, or no longer Draft.
 
 completion_process:
-  - Phase 1: repair checker, isolated tests, and Protocol 11 result on the task branch; validate, commit, and push.
-  - Phase 2: selectively deploy approved control-plane files to main; create in-progress Protocol 12 result and in-progress lock contract; validate, commit, and push.
-  - Phase 3: merge the intermediate main control deployment into the task branch; validate, commit if needed, and push.
-  - Phase 4: finalize Protocol 12 result and restore main to non-executable awaiting_owner_decision; validate, commit, and push.
-  - Phase 5: merge final main into the task branch; validate conflict-free ancestry, push, and update PR #2 body.
-  - Fetch both refs and perform all external post-push checks.
-  - Stop. Do not merge PR #2, do not close Task 001, and do not start Task 002.
+  - Execute Phases 1 through 5 in order.
+  - Stop at the first failed precondition or command without proceeding to later phases.
+  - After all post-push checks, report every commit, modified file, command exit code, PR state, and final origin/main waiting state.
+  - Stop. Do not merge PR #2, close Task 001, or start Task 002.
