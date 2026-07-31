@@ -4,6 +4,41 @@
 
 This protocol allows a local agent and an external reviewer to coordinate through repository files, commits, pull requests, and machine validation rather than relying on shared chat context.
 
+## Lifecycle states
+
+Task execution and acceptance follow distinct stages:
+
+### Agent execution states
+
+- **in_progress**: Active execution underway
+- **interrupted**: Execution stopped before completion (e.g., context limit, tool failures)
+- **cancelled**: User terminated execution before task completion
+- **submitted_for_review**: Technical implementation candidate complete; awaiting review
+
+Agent cancellation does not imply failure, technical completion, owner acceptance, or closure. Persisted repository evidence may establish candidate technical completion.
+
+### Review and acceptance states
+
+- **technical_completion**: Implementation candidate complete; all required artifacts present
+  - **candidate_complete**: Technical work finished; validation passed
+  - **changes_requested**: Reviewer identified required corrections
+- **reviewer_acceptance**: External reviewer formally accepted the technical implementation
+- **owner_acceptance**: Repository owner authorized formal closure or next phase
+  - **pending**: Technical/reviewer acceptance achieved; awaiting owner decision
+  - **accepted**: Owner explicitly authorized closure, merge, or next task
+- **formal_closure**: Task permanently closed; no further changes permitted without reopening
+
+### Critical distinctions
+
+- Agent execution (cancelled, interrupted) ≠ technical completion
+- Technical completion (candidate complete) ≠ reviewer acceptance
+- Reviewer acceptance ≠ owner acceptance
+- Owner acceptance ≠ formal closure (merge, archive, next-task start)
+
+A GitHub review submitted through the owner account is reviewer evidence unless the contract explicitly records an owner authorization decision.
+
+Only a new executable contract containing an unambiguous owner authorization may transition owner acceptance, formal closure, pull request merge, or next-task authorization.
+
 ## Required task fields
 
 Every task must declare:

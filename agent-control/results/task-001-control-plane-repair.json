@@ -1,0 +1,139 @@
+{
+  "protocol_version": 10,
+  "task_id": "task-001-control-plane-repair",
+  "subject_task_id": "task-001-core-research",
+  "status": "complete",
+  "branch": "agent/task-001-core-research",
+  "baseline_head": "c2e75c06474d1b0df1832d9c5a2a62a73ab34dbe",
+  "completed_at": "2026-07-30T14:24:53Z",
+
+  "objective": "Repair only the Task 001 lifecycle and continuity control plane. Replace the stale Review 11 execution contract with a truthful awaiting-owner-decision state, separate technical completion from owner acceptance and formal closure, strengthen startup reconciliation, and add a minimal deterministic consistency check.",
+
+  "files_changed": [
+    "AGENTS.md",
+    "agent-control/TASK_PROTOCOL.md",
+    "agent-control/CURRENT_TASK.yaml",
+    "state/CURRENT_STATE.yaml",
+    "agent-control/results/task-001.json",
+    "agent-control/results/task-001-control-plane-repair.json",
+    "scripts/check_control_state.py",
+    "scripts/test_control_state.sh"
+  ],
+
+  "changes_implemented": [
+    "Updated AGENTS.md startup sequence to read task protocol, current task, current state, and result file; compare lifecycle claims across sources; stop without writes on contradictions",
+    "Added lifecycle state definitions to TASK_PROTOCOL.md: agent execution, technical completion, reviewer acceptance, owner acceptance, formal closure",
+    "Documented that cancellation ≠ failure/completion/acceptance; GitHub reviews ≠ owner authorization unless explicitly recorded in contract",
+    "Added lifecycle records to CURRENT_STATE.yaml: cancelled_after_commit_and_push, candidate_complete, reviewer accepted, owner pending, awaiting_owner_decision, formal_closure false, Task 002 not_started",
+    "Added lifecycle records to task-001.json with identical semantic values",
+    "Replaced executable Protocol 10 contract with non-executable awaiting_owner_decision state in CURRENT_TASK.yaml",
+    "Created scripts/check_control_state.py: validates lifecycle consistency across task/state/result using only Python stdlib",
+    "Created scripts/test_control_state.sh: negative tests prove checker rejects stale status, unauthorized transitions, Task 002 start, and state/result mismatches"
+  ],
+
+  "lifecycle_state_written": {
+    "previous_agent_execution": "cancelled_after_commit_and_push",
+    "technical_completion": "candidate_complete",
+    "reviewer_acceptance": "accepted",
+    "latest_reviewer_record": "task-001-review-12",
+    "owner_acceptance": "pending",
+    "lifecycle_status": "awaiting_owner_decision",
+    "formal_closure": false,
+    "task_002_status": "not_started"
+  },
+
+  "validation": [
+    {
+      "command": "python3 -m json.tool agent-control/results/task-001.json >/dev/null",
+      "exit_code": 0,
+      "note": "task-001.json is valid JSON"
+    },
+    {
+      "command": "python3 -m json.tool agent-control/results/task-001-control-plane-repair.json >/dev/null",
+      "exit_code": 0,
+      "note": "This result file is valid JSON"
+    },
+    {
+      "command": "python3 scripts/check_control_state.py",
+      "exit_code": 0,
+      "note": "Production consistency checker passed: task/state/result agree on awaiting_owner_decision semantics"
+    },
+    {
+      "command": "bash scripts/test_control_state.sh",
+      "exit_code": 0,
+      "note": "All 5 negative tests passed: checker rejects stale status, unauthorized owner acceptance, formal_closure true, Task 002 started, and state/result mismatch"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "note": "No trailing whitespace"
+    },
+    {
+      "command": "git diff --exit-code c2e75c06474d1b0df1832d9c5a2a62a73ab34dbe...HEAD -- docs sources templates agent-control/VALIDATION_RECORD.txt agent-control/results/task-001-pr.md scripts/validate_source_records.py scripts/test_validation_negative.sh",
+      "exit_code": 0,
+      "note": "No forbidden paths modified; Task 001 research artifacts unchanged"
+    },
+    {
+      "command": "python3 inline script checking allowed paths only",
+      "exit_code": 0,
+      "note": "Only 8 allowed control-plane paths changed"
+    },
+    {
+      "command": "grep -q '^status: awaiting_owner_decision$' agent-control/CURRENT_TASK.yaml",
+      "exit_code": 0,
+      "note": "CURRENT_TASK.yaml status is awaiting_owner_decision"
+    },
+    {
+      "command": "grep -q 'owner_acceptance: pending' agent-control/CURRENT_TASK.yaml",
+      "exit_code": 0,
+      "note": "owner_acceptance is pending"
+    },
+    {
+      "command": "grep -q 'formal_closure: false' agent-control/CURRENT_TASK.yaml",
+      "exit_code": 0,
+      "note": "formal_closure is false"
+    },
+    {
+      "command": "grep -q 'task_002_status: not_started' agent-control/CURRENT_TASK.yaml",
+      "exit_code": 0,
+      "note": "task_002_status is not_started"
+    },
+    {
+      "command": "test \"$(git rev-parse --abbrev-ref HEAD)\" = \"agent/task-001-core-research\"",
+      "exit_code": 0,
+      "note": "On correct branch"
+    }
+  ],
+
+  "completion_conditions_met": [
+    "Startup instructions now compare task, state and result records rather than trusting one stale file",
+    "Lifecycle dimensions and owner-only transitions documented unambiguously in TASK_PROTOCOL.md",
+    "Task 001 research and technical artifacts remain unchanged from baseline c2e75c06",
+    "CURRENT_TASK, CURRENT_STATE and task-001 result agree on awaiting_owner_decision semantics",
+    "Production consistency checker passes on repository state",
+    "Negative tests prove checker rejects required contradictions and forbidden transitions",
+    "This repair result JSON truthfully records execution and validation"
+  ],
+
+  "research_preservation": {
+    "sources_verified": 8,
+    "research_questions_directly_covered": 4,
+    "research_questions_partially_covered": 6,
+    "research_questions_not_covered": 0,
+    "gate_1_status": "met_with_documented_limitations",
+    "note": "All Task 001 research content, evidence boundaries, RQ classifications, and Gate 1 reasoning preserved exactly from baseline"
+  },
+
+  "unresolved_limitations": [],
+
+  "next_action": "Changes committed and pushed to agent/task-001-core-research. Local HEAD verified equal to remote. PR #2 remains Draft, open, and unmerged. Task 002 remains not started. Task 001 remains not formally closed. Awaiting explicit owner authorization for formal closure, PR merge, or next-task initiation.",
+
+  "explicitly_not_done": [
+    "Did not interpret Review 12 as owner acceptance",
+    "Did not mark owner_acceptance as accepted",
+    "Did not mark Task 001 formally closed",
+    "Did not merge, close, or change PR #2 status",
+    "Did not start or prepare Task 002",
+    "Did not modify Task 001 research content, sources, evidence boundaries, RQ classifications, or Gate 1 reasoning"
+  ]
+}

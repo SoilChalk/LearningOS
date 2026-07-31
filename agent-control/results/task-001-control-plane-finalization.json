@@ -1,0 +1,134 @@
+{
+  "protocol_version": 11,
+  "task_id": "task-001-control-plane-finalization",
+  "subject_task_id": "task-001-core-research",
+  "status": "candidate_complete",
+  "reviewer_status": "changes_addressed_pending_review",
+  "branch": "agent/task-001-core-research",
+  "baseline_head": "2c82f6533f2b74175dfa6dc8543919ceb051ab71",
+  "completed_at": "2026-07-30T19:22:53Z",
+  "objective": "Finalize Protocol 10 control-plane repair. Fix YAML parser indentation handling, extend consistency checker validation coverage, expand negative tests, update timestamps and next-action fields to reflect awaiting_owner_decision state, update PR #2 body with actual lifecycle state, and restore main:CURRENT_TASK.yaml to non-executable awaiting state to prevent Protocol 10 re-execution.",
+  "files_changed": [
+    "scripts/check_control_state.py",
+    "scripts/test_control_state.sh",
+    "state/CURRENT_STATE.yaml",
+    "agent-control/results/task-001.json",
+    "agent-control/results/task-001-control-plane-finalization.json"
+  ],
+  "changes_implemented": [
+    "Fixed scripts/check_control_state.py YAML parser to handle same-level indentation correctly",
+    "Extended checker to validate correct status semantics: CURRENT_TASK status=awaiting_owner_decision, CURRENT_STATE and task-001 result status=complete",
+    "Extended checker to validate eight lifecycle fields agreement across truth_to_preserve/lifecycle/lifecycle sections",
+    "Expanded scripts/test_control_state.sh to 9 negative tests: wrong CURRENT_TASK status plus eight lifecycle field mismatch tests",
+    "Updated CURRENT_STATE.yaml next_action to reflect awaiting_owner_decision (removed 'ready for Task 002' language)",
+    "Updated task-001.json next_action to reflect awaiting_owner_decision (removed 'ready for Task 002' language)",
+    "Protocol 10 result completed_at preserved (not duplicated)"
+  ],
+  "lifecycle_state_preserved": {
+    "previous_agent_execution": "cancelled_after_commit_and_push",
+    "technical_completion": "candidate_complete",
+    "reviewer_acceptance": "accepted",
+    "latest_reviewer_record": "task-001-review-12",
+    "owner_acceptance": "pending",
+    "lifecycle_status": "awaiting_owner_decision",
+    "formal_closure": false,
+    "task_002_status": "not_started"
+  },
+  "status_semantics_corrected": {
+    "CURRENT_TASK_status": "awaiting_owner_decision",
+    "CURRENT_STATE_status": "complete",
+    "task_001_result_status": "complete",
+    "note": "Top-level status fields have different semantics and are not required to be equal"
+  },
+  "validation": {
+    "task_branch_acceptance_commands": [
+      {
+        "command": "python3 -m json.tool agent-control/results/task-001.json",
+        "exit_code": 0,
+        "note": "task-001.json valid"
+      },
+      {
+        "command": "python3 -m json.tool agent-control/results/task-001-control-plane-repair.json",
+        "exit_code": 0,
+        "note": "Protocol 10 repair result valid"
+      },
+      {
+        "command": "python3 -m json.tool agent-control/results/task-001-control-plane-finalization.json",
+        "exit_code": 0,
+        "note": "This finalization result valid"
+      },
+      {
+        "command": "Protocol 10 result completed_at preservation check",
+        "exit_code": 0,
+        "note": "completed_at: 2026-07-30T14:24:53Z preserved"
+      },
+      {
+        "command": "python3 scripts/check_control_state.py",
+        "exit_code": 0,
+        "note": "Production consistency checker passed"
+      },
+      {
+        "command": "bash scripts/test_control_state.sh",
+        "exit_code": 0,
+        "note": "All 9 negative tests passed"
+      },
+      {
+        "command": "git diff --check",
+        "exit_code": 0,
+        "note": "No trailing whitespace"
+      },
+      {
+        "command": "Forbidden paths check",
+        "exit_code": 0,
+        "note": "Research artifacts unchanged"
+      },
+      {
+        "command": "Allowed paths check",
+        "exit_code": 0,
+        "note": "Only allowed paths modified"
+      },
+      {
+        "command": "CURRENT_TASK waiting-state checks",
+        "exit_code": 0,
+        "note": "status awaiting_owner_decision, owner_acceptance pending, formal_closure false, task_002_status not_started"
+      },
+      {
+        "command": "Branch identity check",
+        "exit_code": 0,
+        "note": "On agent/task-001-core-research"
+      }
+    ]
+  },
+  "research_preservation": {
+    "sources_verified": 8,
+    "research_questions_directly_covered": 4,
+    "research_questions_partially_covered": 6,
+    "research_questions_not_covered": 0,
+    "gate_1_status": "met_with_documented_limitations",
+    "note": "All Task 001 research content, evidence boundaries, RQ classifications, and Gate 1 reasoning preserved exactly from baseline"
+  },
+  "protocol_10_completion_preserved": {
+    "completed_at": "2026-07-30T14:24:53Z",
+    "note": "Protocol 10 repair result timestamp preserved; not duplicated as repair_completed_at"
+  },
+  "main_restoration_completed": {
+    "commit": "f5bf66957f9d44b665ec3969a2d18cc4a501ec9c",
+    "completed_at": "2026-07-30T19:22:53Z",
+    "note": "Main CURRENT_TASK.yaml restored to non-executable awaiting_owner_decision state"
+  },
+  "post_restoration_validation": {
+    "origin_main_executable": false,
+    "verified_at": "2026-07-30T19:22:53Z",
+    "note": "Confirmed origin/main CURRENT_TASK.yaml status is awaiting_owner_decision with empty allowed_paths"
+  },
+  "next_action": "Protocol 11 complete. Main restoration and validation finished. Task branch awaiting Protocol 12 pre-merge repair for selective control-plane deployment and branch reconciliation.",
+  "explicitly_not_done": [
+    "Did not modify Task 001 research content, sources, evidence boundaries, RQ classifications, or Gate 1 reasoning",
+    "Did not modify AGENTS.md or TASK_PROTOCOL.md",
+    "Did not mark Protocol 10 or Protocol 11 as formally accepted by owner",
+    "Did not mark Task 001 formally closed",
+    "Did not merge, close, or mark PR #2 ready",
+    "Did not start or prepare Task 002",
+    "Did not change top-level status fields to be equal (correct semantics: CURRENT_TASK awaiting_owner_decision, CURRENT_STATE and result complete)"
+  ]
+}

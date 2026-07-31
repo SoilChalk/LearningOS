@@ -1,0 +1,256 @@
+{
+  "protocol_version": 8,
+  "task_id": "task-001-core-research",
+  "status": "complete",
+  "branch": "agent/task-001-core-research",
+  "review_cycle": "task-001-review-11",
+  "updated_at": "2026-07-29T21:00:00Z",
+  "lifecycle": {
+    "previous_agent_execution": "cancelled_after_commit_and_push",
+    "technical_completion": "candidate_complete",
+    "reviewer_acceptance": "accepted",
+    "latest_reviewer_record": "task-001-review-12",
+    "owner_acceptance": "pending",
+    "lifecycle_status": "awaiting_owner_decision",
+    "formal_closure": false,
+    "task_002_status": "not_started"
+  },
+  "last_completed_stage": "stage_5_results_and_validation",
+  "next_action": "Task 001 complete; Gate 1 met with documented limitations; awaiting owner authorization for formal closure, PR merge, or Task 002 initiation; owner acceptance pending; Task 002 not started",
+  "stages_completed": [
+    "stage_1_structure_established",
+    "stage_2_core_source_verification",
+    "stage_3_synthesis_matrix",
+    "stage_4_gates_and_state",
+    "stage_5_results_and_validation"
+  ],
+  "stages_in_progress": [],
+  "stages_remaining": [],
+  "source_count": 8,
+  "sources_fully_verified": 8,
+  "sources_target_minimum": 8,
+  "incomplete_candidates": 7,
+  "files_changed": [
+    "docs/RESEARCH_QUESTIONS.md",
+    "docs/DESIGN_GATES.md",
+    "docs/REFERENCE_SYSTEM_MATRIX.md",
+    "templates/SOURCE_RECORD.json",
+    "templates/SOURCE_LEDGER.schema.json",
+    "scripts/validate_source_records.py",
+    "scripts/test_validation_negative.sh",
+    "sources/source-ledger.json",
+    "sources/src-001-notebooklm.md",
+    "sources/src-002-chatgpt-study-mode.md",
+    "sources/src-003-learnlm.md",
+    "sources/src-004-tutor-copilot.md",
+    "sources/src-005-aleks-kst.md",
+    "state/CURRENT_STATE.yaml",
+    "agent-control/results/task-001.json",
+    "agent-control/results/task-001-pr.md",
+    "agent-control/VALIDATION_RECORD.txt",
+    "sources/src-006-kt-survey.md",
+    "sources/src-007-olm-meta-synthesis.md",
+    "sources/src-008-pmc-digital-logs.md"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m json.tool sources/source-ledger.json >/dev/null",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m json.tool templates/SOURCE_RECORD.json >/dev/null",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m json.tool templates/SOURCE_LEDGER.schema.json >/dev/null",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 scripts/validate_source_records.py",
+      "exit_code": 0
+    },
+    {
+      "command": "bash scripts/test_validation_negative.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "find . -maxdepth 3 -type f | sort",
+      "exit_code": 0
+    },
+    {
+      "note": "Verbatim grep command and exit code recorded in agent-control/VALIDATION_RECORD.txt to avoid self-reference",
+      "exit_code": 0
+    }
+  ],
+  "research_questions_addressed": {
+    "RQ1.1": {
+      "sources": ["src-001", "src-002"],
+      "coverage": "directly_covered",
+      "note": "Source-bound explanations via inline citations and file upload demonstrated"
+    },
+    "RQ1.2": {
+      "sources": ["src-001", "src-002", "src-005"],
+      "coverage": "partially_covered",
+      "note": "File upload and domain structures shown; leakage prevention mechanisms unclear"
+    },
+    "RQ2.1": {
+      "sources": ["src-001", "src-005"],
+      "coverage": "partially_covered",
+      "note": "Domain-specific structures demonstrated; vocabulary/notation constraints not addressed"
+    },
+    "RQ2.2": {
+      "sources": ["src-002"],
+      "coverage": "partially_covered",
+      "note": "Memory feature exists; multi-session mechanisms not detailed"
+    },
+    "RQ3.1": {
+      "sources": ["src-002", "src-003", "src-004", "src-007"],
+      "coverage": "directly_covered",
+      "note": "Teaching actions documented; automatic detection not claimed"
+    },
+    "RQ3.2": {
+      "sources": ["src-002", "src-007"],
+      "coverage": "partially_covered",
+      "note": "Adaptive scaffolding exists; automatic obstacle-type detection not demonstrated"
+    },
+    "RQ4.1": {
+      "sources": ["src-002", "src-003", "src-004", "src-006", "src-007", "src-008"],
+      "coverage": "directly_covered",
+      "note": "Observable vs. inferred distinguished; RCT evidence in specific contexts"
+    },
+    "RQ4.2": {
+      "sources": ["src-003", "src-006", "src-007", "src-008"],
+      "coverage": "partially_covered",
+      "note": "Temporal dynamics modeled; transition criteria not operational; intervention effectiveness unknown"
+    },
+    "RQ5.1": {
+      "sources": ["src-005", "src-006", "src-007"],
+      "coverage": "directly_covered",
+      "note": "KT data requirements and limitations documented for structured exercises"
+    },
+    "RQ5.2": {
+      "sources": ["src-006", "src-007", "src-008"],
+      "coverage": "partially_covered",
+      "note": "Structured exercise modeling demonstrated; cross-task unification not established"
+    }
+  },
+  "research_coverage": {
+    "layer_1_source_grounding": "directly_covered_with_partial_gaps",
+    "layer_2_course_boundaries": "partially_covered",
+    "layer_3_pedagogical_action": "directly_covered_with_partial_gaps",
+    "layer_4_learning_evidence": "directly_covered_with_partial_gaps",
+    "layer_5_learner_modeling": "directly_covered_with_partial_gaps"
+  },
+  "key_findings": [
+    "Source grounding with inline citations demonstrated as product feature (src-001 Gemini Notebook)",
+    "RCT evidence: LearnLM moved from 50th to 64th percentile (14 percentile rank difference), math, 8 weeks, 1,763 students in Sierra Leone (src-003)",
+    "RCT evidence: Tutor CoPilot +4 to +9 percentage points on topic mastery; 700+ tutors, 1,000+ students from underserved communities (src-004)",
+    "ChatGPT Study Mode documents user-requested teaching styles; design inference: whether explicit instruction is technically required vs. available option not directly stated (src-002)",
+    "Knowledge Space Theory enables learner modeling at scale: ~350 concepts → millions of states; 25-30 questions via Markovian procedures (src-005 ALEKS)",
+    "Knowledge Tracing survey: side information (response time, hints, attempts) provides richer signals than correctness alone for structured exercise interactions; exercise-level features (difficulty, discrimination) enable task-specific modeling (src-006)",
+    "OLM meta-synthesis: four OLM categories (inspectable, negotiable, editable, adaptive) form learner agency continuum; 26 studies demonstrate consistent gains in engagement, persistence, outcomes for inspectable OLMs; adaptive OLMs integrate learner model transparency with personalized feedback (src-007)",
+    "LMS digital logs review: 82 predictive models from 39 papers, average 0.72 accuracy after 5.85 weeks; behavioral trace data (views, downloads, submissions, forum contributions) orthogonal to summative performance; metadata-enriched feature engineering transforms raw interactions into outcome prediction measures (src-008)"
+  ],
+  "unresolved_issues": [
+    "Layer 1: Preventing model knowledge leakage when sources incomplete; handling ambiguous or conflicting source content",
+    "Layer 2: Vocabulary and notation constraint enforcement mechanisms; assessment criteria alignment; academic integrity preservation beyond external policy",
+    "Layer 3: Automatic obstacle-type detection (terminology gaps, prerequisite deficits, language barriers, procedural vs. conceptual confusion); lost context recovery strategies",
+    "Layer 4: Operational definitions for 'understood example' vs. 'can solve independently'; single-instance success vs. consistent performance criteria; intervention effectiveness (whether acting on predictions improves outcomes)",
+    "Layer 5: Unified learner model across reading, debugging, and structured exercises; transfer assumptions across task types; skill decomposition granularity for unstructured tasks; cross-domain knowledge state transfer"
+  ],
+  "gate_1_status": {
+    "entry_conditions": "all_met",
+    "activities": "complete",
+    "exit_conditions_individually": "all_pass",
+    "unresolved_gaps_documented": true,
+    "status": "met_with_documented_limitations",
+    "recommendation": "Gate 1 met; eight-source evidence base provides foundation for first vertical scenario design; documented limitations become Gate 2 constraints"
+  },
+  "stage_3_matrix_status": {
+    "artifact_status": "complete",
+    "stage_status": "complete",
+    "note": "Matrix rebuilt from eight-source ledger; all sources integrated with evidence boundaries"
+  },
+  "stage_5_results_and_validation_status": {
+    "artifact_status": "complete",
+    "stage_status": "complete",
+    "note": "All protocol-8 acceptance commands passed; commit pushed; SHA verified; PR body updated; post-push verification complete"
+  },
+  "execution_cycles": [
+    {
+      "cycle_id": "task-001-review-11-final-bookkeeping",
+      "started_at": "2026-07-29T21:00:00Z",
+      "decision": "complete_final_validation_record_corrections",
+      "review_11_outcome": "stale_reconciliation_statements_corrected",
+      "corrections": [
+        "VALIDATION_RECORD.txt: updated CURRENT_STATE.yaml reconciliation line to reflect all five stages and Task 001 completion",
+        "VALIDATION_RECORD.txt: updated task-001.json reconciliation line to reflect Review 09 finalization and Task 001 completion",
+        "task-001.json: review_cycle updated to task-001-review-11"
+      ],
+      "artifacts_updated": [
+        "agent-control/VALIDATION_RECORD.txt (reconciliation summaries corrected)",
+        "agent-control/results/task-001.json (Review 11 cycle recorded)"
+      ],
+      "note": "Review 11 bookkeeping-only correction; no sources, evidence boundaries, RQ classifications, or Gate 1 reasoning changed"
+    },
+    {
+      "cycle_id": "task-001-review-09-finalization",
+      "started_at": "2026-07-29T19:00:00Z",
+      "decision": "finalize_gate_1_and_task_001_completion",
+      "review_09_outcome": "research_synthesis_accepted_final_bookkeeping_corrected",
+      "corrections": [
+        "RQ coverage counts corrected to 4 directly_covered, 6 partially_covered, 0 not_covered",
+        "Gate 1 status finalized as met_with_documented_limitations",
+        "Stage 5 marked complete",
+        "Task 001 marked complete"
+      ],
+      "artifacts_updated": [
+        "docs/RESEARCH_QUESTIONS.md (coverage counts corrected)",
+        "docs/DESIGN_GATES.md (Gate 1 met with documented limitations)",
+        "state/CURRENT_STATE.yaml (Task 001 complete, Stage 5 complete)",
+        "agent-control/results/task-001.json (reconciled)",
+        "agent-control/results/task-001-pr.md (final state)",
+        "agent-control/VALIDATION_RECORD.txt (updated)"
+      ],
+      "note": "Review 09 bookkeeping-only corrections applied; no sources added or changed; Task 001 complete"
+    },
+    {
+      "cycle_id": "task-001-review-08-synthesis",
+      "started_at": "2026-07-29T17:00:00Z",
+      "decision": "complete_eight_source_evidence_correction_and_synthesis",
+      "review_08_outcome": "evidence_boundaries_corrected_matrix_rebuilt_gate_1_evaluated",
+      "evidence_corrections": [
+        "src-006: Removed source_grounding_strategy; limited scope to structured exercise interactions",
+        "src-007: Removed source grounding plus learner-model integration claims; changed to learner_model_transparency",
+        "src-008: Changed from learner state signal to outcome prediction; added prediction target limitation"
+      ],
+      "artifacts_updated": [
+        "docs/REFERENCE_SYSTEM_MATRIX.md (rebuilt from 8 sources)",
+        "docs/RESEARCH_QUESTIONS.md (coverage classifications added)",
+        "docs/DESIGN_GATES.md (8-source state, Gate 1 exit evaluation)",
+        "state/CURRENT_STATE.yaml (Stage 3 complete)",
+        "agent-control/results/task-001.json (reconciled)",
+        "agent-control/results/task-001-pr.md (8-source narrative)"
+      ],
+      "note": "Review 08 contract executed: evidence boundaries corrected, eight-source synthesis complete, Gate 1 exit conditions evaluated explicitly"
+    },
+    {
+      "cycle_id": "task-001-review-07-correction",
+      "started_at": "2026-07-29T08:58:59Z",
+      "decision": "continue_research_after_invalid_stop_rejection",
+      "review_07_outcome": "invalid_stop_condition_superseded_minimum_target_achieved",
+      "sources_added": 3,
+      "final_source_count": 8,
+      "accessible_sources_verified": [
+        "src-006 (KT survey): arXiv PDF download + local pdftotext",
+        "src-007 (Frontiers OLM): rendered web fetch",
+        "src-008 (PMC digital logs): Europe PMC XML endpoint"
+      ],
+      "inaccessible_after_fallbacks": [
+        "MDPI learning analytics (bot detection, DOI resolver failed)"
+      ],
+      "study_mode_regression_corrected": true,
+      "note": "Review 05 remains accepted. Stage 2 resume stop condition rejected per Review 07. Successfully retrieved three previously deferred candidates via alternate methods. Corrected Study Mode ledger entry to separate direct observations from design inferences. Stage 2 core source verification complete: minimum target (8) achieved."
+    }
+  ]
+}

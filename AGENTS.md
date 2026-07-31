@@ -16,8 +16,13 @@ Before changing files:
 1. Read `AGENTS.md`.
 2. Read `agent-control/TASK_PROTOCOL.md`.
 3. Read `agent-control/CURRENT_TASK.yaml`.
-4. Confirm the current task boundary in a short structured response.
-5. Stop if the task is not `ready` or a declared blocker prevents execution.
+4. Read `state/CURRENT_STATE.yaml` when present.
+5. Read the result file identified by `CURRENT_TASK.yaml` or the subject task when present.
+6. List all files actually read in the first response.
+7. Compare lifecycle claims across task contract, state, and result records.
+8. Stop without writes if task contract, current state, and result records disagree on the active task or lifecycle status. Chat or compressed-context claims must never silently resolve contradictions.
+9. Confirm the current task boundary in a short structured response.
+10. Stop if the task is not `ready` or a declared blocker prevents execution.
 
 ## Execution rules
 
