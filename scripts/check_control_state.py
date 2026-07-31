@@ -20,6 +20,7 @@ def parse_yaml_simple(content):
     """
     Simple YAML parser for the limited subset used in this repository.
     Handles only the required fields without external dependencies.
+    Fixed to handle same-level indentation correctly.
     """
     data = {}
     lines = content.split('\n')
@@ -39,8 +40,8 @@ def parse_yaml_simple(content):
         # Calculate indentation
         indent = len(line) - len(stripped)
 
-        # Pop stack if dedenting
-        while indent_stack and indent < indent_stack[-1]:
+        # Pop stack if dedenting - but preserve current level
+        while len(indent_stack) > 1 and indent < indent_stack[-1]:
             stack.pop()
             indent_stack.pop()
 
@@ -49,6 +50,12 @@ def parse_yaml_simple(content):
             key, _, value = stripped.partition(':')
             key = key.strip()
             value = value.strip()
+
+            # Get current context - handle same-level properly
+            if indent == indent_stack[-1] and len(stack) > 1:
+                # Same level as previous key - we're siblings, go back to parent
+                stack.pop()
+                indent_stack.pop()
 
             current = stack[-1]
 
@@ -138,45 +145,59 @@ def main():
     state_task_id = current_state.get('task_id', '')
     result_task_id = task_result.get('task_id', '')
 
-    # For control-plane-repair task, the subject is task-001-core-research
-    if task_task_id == 'task-001-control-plane-repair':
+    # For control-plane tasks, the subject is task-001-core-research
+    if 'control-plane' in task_task_id:
         expected_subject = get_nested(current_task, 'truth_to_preserve', 'subject_task_id')
-        if expected_subject != state_task_id:
-            errors.append(f"State task_id '{state_task_id}' does not match control repair subject '{expected_subject}'")
-        if expected_subject != result_task_id:
-            errors.append(f"Result task_id '{result_task_id}' does not match control repair subject '{expected_subject}'")
+        if expected_subject and expected_subject != state_task_id:
+            errors.append(f"State task_id '{state_task_id}' does not match control subject '{expected_subject}'")
+        if expected_subject and expected_subject != result_task_id:
+            errors.append(f"Result task_id '{result_task_id}' does not match control subject '{expected_subject}'")
     elif task_task_id == state_task_id == result_task_id:
         # Normal case: all match
         pass
     else:
         errors.append(f"Task IDs disagree: task={task_task_id}, state={state_task_id}, result={result_task_id}")
 
-    # Check for forbidden stale status
+    # Check status semantics - Protocol 11 correct semantics:
+    # CURRENT_TASK.yaml status must equal awaiting_owner_decision
+    # CURRENT_STATE.yaml status remains complete
+    # task-001.json status remains complete
     task_status = current_task.get('status', '')
-    if task_status == 'changes_requested':
-        # This is only allowed if we're in a control-plane-repair that's explicitly fixing it
-        if task_task_id != 'task-001-control-plane-repair':
-            errors.append(f"Stale 'changes_requested' status in CURRENT_TASK.yaml")
+    state_status = current_state.get('status', '')
+    result_status = task_result.get('status', '')
 
-    # Check lifecycle consistency
-    # Extract lifecycle from each source
+    if task_status != 'awaiting_owner_decision':
+        errors.append(f"CURRENT_TASK status is '{task_status}', must be 'awaiting_owner_decision'")
+
+    # State and result should remain 'complete' - don't require them to equal task status
+    if state_status != 'complete':
+        errors.append(f"CURRENT_STATE status is '{state_status}', should remain 'complete'")
+    if result_status != 'complete':
+        errors.append(f"task-001.json status is '{result_status}', should remain 'complete'")
+
+    # Check eight lifecycle fields must agree across truth_to_preserve/lifecycle/lifecycle
     task_lifecycle = current_task.get('truth_to_preserve', {})
     state_lifecycle = current_state.get('lifecycle', {})
     result_lifecycle = task_result.get('lifecycle', {})
 
-    # Required semantic values
-    required_checks = [
+    # Eight required lifecycle fields with expected values
+    lifecycle_checks = [
+        ('previous_agent_execution', 'cancelled_after_commit_and_push'),
+        ('technical_completion', 'candidate_complete'),
+        ('reviewer_acceptance', 'accepted'),
+        ('latest_reviewer_record', 'task-001-review-12'),
         ('owner_acceptance', 'pending'),
+        ('lifecycle_status', 'awaiting_owner_decision'),
         ('formal_closure', False),
         ('task_002_status', 'not_started'),
     ]
 
-    for field, expected in required_checks:
+    for field, expected in lifecycle_checks:
         task_val = task_lifecycle.get(field)
         state_val = state_lifecycle.get(field)
         result_val = result_lifecycle.get(field)
 
-        # All three should agree
+        # Check each source has the expected value
         if task_val != expected:
             errors.append(f"CURRENT_TASK truth_to_preserve.{field} is '{task_val}', expected '{expected}'")
         if state_val != expected:
@@ -184,11 +205,16 @@ def main():
         if result_val != expected:
             errors.append(f"task-001.json lifecycle.{field} is '{result_val}', expected '{expected}'")
 
+        # Check all three agree with each other
+        if not (task_val == state_val == result_val):
+            errors.append(f"Lifecycle field '{field}' mismatch: task='{task_val}', state='{state_val}', result='{result_val}'")
+
     # Check for forbidden transitions
     if task_lifecycle.get('owner_acceptance') == 'accepted':
         # Only allowed if explicitly authorized in the contract
         auth = current_task.get('owner_authorization', {})
-        if 'formally_close_task_001' not in auth.get('authorized', []):
+        authorized_list = auth.get('authorized', [])
+        if 'formally_close_task_001' not in authorized_list:
             errors.append("owner_acceptance marked 'accepted' without explicit authorization")
 
     if task_lifecycle.get('formal_closure') is True:

@@ -74,10 +74,12 @@ phase_constraints:
     - "Gate 1 has no unresolved gaps"
 
 next_action:
-  action: "Task 001 complete; Gate 1 met with documented limitations; ready for Task 002 initiation (not started)"
+  action: "Task 001 complete; Gate 1 met with documented limitations; awaiting owner authorization for formal closure, PR merge, or Task 002 initiation"
+  status: "Owner acceptance pending; Task 002 not started"
   priority:
-    - "Do not start Task 002 without explicit user instruction"
-    - "Do not merge PR #2"
+    - "Do not start Task 002 without explicit owner authorization"
+    - "Do not merge PR #2 without explicit owner authorization"
+    - "Do not mark Task 001 formally closed without explicit owner authorization"
     - "Preserve Draft status"
 
 gate_status:

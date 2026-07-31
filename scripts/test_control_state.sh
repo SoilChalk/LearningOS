@@ -3,11 +3,8 @@
 # Negative tests for control state consistency checker
 #
 # Proves the production checker rejects:
-# - Stale 'changes_requested' task status
-# - Owner acceptance marked 'accepted' without authorization
-# - formal_closure: true
-# - Task 002 started
-# - Mismatch between current state and result records
+# 1. CURRENT_TASK status is not awaiting_owner_decision
+# 2-9. Each of the eight lifecycle field mismatches
 #
 # The test creates temporary modified files and invokes the production
 # checker against them. It does NOT duplicate the checker implementation.
@@ -54,36 +51,76 @@ run_negative_test() {
     fi
 }
 
-# Test 1: Stale 'changes_requested' status
-run_negative_test "stale changes_requested status" "
-    sed -i.bak 's/^task_id: task-001-control-plane-repair$/task_id: task-001-core-research/' \
-        '$REPO_ROOT/agent-control/CURRENT_TASK.yaml'
-    sed -i.bak 's/^status: awaiting_owner_decision$/status: changes_requested/' \
+# Test 1: CURRENT_TASK status is not awaiting_owner_decision
+run_negative_test "CURRENT_TASK status not awaiting_owner_decision" "
+    sed -i.bak 's/^status: awaiting_owner_decision$/status: ready/' \
         '$REPO_ROOT/agent-control/CURRENT_TASK.yaml'
 "
 
-# Test 2: Owner acceptance marked 'accepted' without authorization
-run_negative_test "owner acceptance accepted without auth" "
+# Test 2: previous_agent_execution mismatch
+run_negative_test "previous_agent_execution mismatch" "
+    sed -i.bak 's/previous_agent_execution: cancelled_after_commit_and_push/previous_agent_execution: completed/' \
+        '$REPO_ROOT/agent-control/CURRENT_TASK.yaml'
+"
+
+# Test 3: technical_completion mismatch
+run_negative_test "technical_completion mismatch" "
+    sed -i.bak 's/technical_completion: candidate_complete/technical_completion: in_progress/' \
+        '$REPO_ROOT/state/CURRENT_STATE.yaml'
+"
+
+# Test 4: reviewer_acceptance mismatch
+run_negative_test "reviewer_acceptance mismatch" "
+    python3 -c \"
+import json
+with open('$REPO_ROOT/agent-control/results/task-001.json') as f:
+    data = json.load(f)
+data['lifecycle']['reviewer_acceptance'] = 'pending'
+with open('$REPO_ROOT/agent-control/results/task-001.json', 'w') as f:
+    json.dump(data, f, indent=2)
+\"
+"
+
+# Test 5: latest_reviewer_record mismatch
+run_negative_test "latest_reviewer_record mismatch" "
+    sed -i.bak 's/latest_reviewer_record: task-001-review-12/latest_reviewer_record: task-001-review-11/' \
+        '$REPO_ROOT/agent-control/CURRENT_TASK.yaml'
+"
+
+# Test 6: owner_acceptance mismatch
+run_negative_test "owner_acceptance mismatch" "
     sed -i.bak 's/owner_acceptance: pending/owner_acceptance: accepted/' \
-        '$REPO_ROOT/agent-control/CURRENT_TASK.yaml'
+        '$REPO_ROOT/state/CURRENT_STATE.yaml'
 "
 
-# Test 3: formal_closure true
-run_negative_test "formal closure true" "
+# Test 7: lifecycle_status mismatch
+run_negative_test "lifecycle_status mismatch" "
+    python3 -c \"
+import json
+with open('$REPO_ROOT/agent-control/results/task-001.json') as f:
+    data = json.load(f)
+data['lifecycle']['lifecycle_status'] = 'complete'
+with open('$REPO_ROOT/agent-control/results/task-001.json', 'w') as f:
+    json.dump(data, f, indent=2)
+\"
+"
+
+# Test 8: formal_closure mismatch
+run_negative_test "formal_closure mismatch" "
     sed -i.bak 's/formal_closure: false/formal_closure: true/' \
         '$REPO_ROOT/agent-control/CURRENT_TASK.yaml'
 "
 
-# Test 4: Task 002 started
-run_negative_test "task 002 started" "
-    sed -i.bak 's/task_002_status: not_started/task_002_status: in_progress/' \
-        '$REPO_ROOT/agent-control/CURRENT_TASK.yaml'
-"
-
-# Test 5: Mismatch between state and result
-run_negative_test "state/result mismatch" "
-    sed -i.bak 's/owner_acceptance: pending/owner_acceptance: accepted/' \
-        '$REPO_ROOT/state/CURRENT_STATE.yaml'
+# Test 9: task_002_status mismatch
+run_negative_test "task_002_status mismatch" "
+    python3 -c \"
+import json
+with open('$REPO_ROOT/agent-control/results/task-001.json') as f:
+    data = json.load(f)
+data['lifecycle']['task_002_status'] = 'in_progress'
+with open('$REPO_ROOT/agent-control/results/task-001.json', 'w') as f:
+    json.dump(data, f, indent=2)
+\"
 "
 
 # Restore originals
@@ -91,16 +128,20 @@ cp "$BACKUP_DIR/CURRENT_TASK.yaml" "$REPO_ROOT/agent-control/"
 cp "$BACKUP_DIR/CURRENT_STATE.yaml" "$REPO_ROOT/state/"
 cp "$BACKUP_DIR/task-001.json" "$REPO_ROOT/agent-control/results/"
 
+# Clean up .bak files
+rm -f "$REPO_ROOT/agent-control/CURRENT_TASK.yaml.bak"
+rm -f "$REPO_ROOT/state/CURRENT_STATE.yaml.bak"
+
 # Summary
 echo ""
 echo "=== Negative test summary ==="
 echo "Tests run: $test_count"
 echo "Tests passed: $pass_count"
 
-if [ "$pass_count" -eq "$test_count" ]; then
-    echo "✓ All negative tests passed"
+if [ "$pass_count" -eq "$test_count" ] && [ "$test_count" -ge 9 ]; then
+    echo "✓ All $test_count negative tests passed"
     exit 0
 else
-    echo "✗ Some tests failed"
+    echo "✗ Some tests failed or insufficient coverage (need 9, have $test_count)"
     exit 1
 fi

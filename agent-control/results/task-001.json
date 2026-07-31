@@ -16,7 +16,7 @@
     "task_002_status": "not_started"
   },
   "last_completed_stage": "stage_5_results_and_validation",
-  "next_action": "Task 001 complete; Gate 1 met with documented limitations; ready for Task 002 (not started)",
+  "next_action": "Task 001 complete; Gate 1 met with documented limitations; awaiting owner authorization for formal closure, PR merge, or Task 002 initiation; owner acceptance pending; Task 002 not started",
   "stages_completed": [
     "stage_1_structure_established",
     "stage_2_core_source_verification",
