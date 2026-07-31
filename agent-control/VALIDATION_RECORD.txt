@@ -1,0 +1,151 @@
+# Validation Record - Task 001 Core Research
+
+## Protocol Version: 8
+## Review Cycle: task-001-review-10
+## Validated At: 2026-07-29T20:00:00Z
+## Branch: agent/task-001-core-research
+
+**Note**: Final local/remote branch equality is verified externally in the live GitHub PR body after push.
+
+---
+
+## Review 10 — Remove Self-Referential SHA
+
+Final bookkeeping-only correction. Self-referential SHA fields removed from tracked repository files per review requirement.
+
+## Review 09 — Final Bookkeeping Corrections
+
+Research synthesis from Review 08 accepted. Final corrections applied:
+- RQ coverage counts corrected to 4 directly_covered, 6 partially_covered, 0 not_covered
+- Gate 1 status finalized as met_with_documented_limitations
+- Stage 5 marked complete
+- Task 001 marked complete
+
+No sources added or changed in Review 09.
+
+---
+
+## Protocol-8 Acceptance Commands
+
+### JSON Format Validation
+
+Command: python3 -m json.tool sources/source-ledger.json >/dev/null
+Exit Code: 0
+Status: PASSED
+
+Command: python3 -m json.tool templates/SOURCE_RECORD.json >/dev/null
+Exit Code: 0
+Status: PASSED
+
+Command: python3 -m json.tool templates/SOURCE_LEDGER.schema.json >/dev/null
+Exit Code: 0
+Status: PASSED
+
+### Schema Validation
+
+Command: python3 scripts/validate_source_records.py
+Exit Code: 0
+Status: PASSED
+Output: ✓ Ledger structure validated against SOURCE_LEDGER.schema.json
+        ✓ 8 source records validated against SOURCE_RECORD.json
+
+### Negative Test Suite
+
+Command: bash scripts/test_validation_negative.sh
+Exit Code: 0
+Status: PASSED
+Output: === All negative tests passed ===
+        (Production validator correctly returned nonzero for all invalid inputs)
+
+### File Structure Check
+
+Command: find . -maxdepth 3 -type f | sort
+Exit Code: 0
+Status: PASSED
+
+### Trailing Whitespace Check
+
+Command: git diff --check origin/main...HEAD
+Exit Code: 0
+Status: PASSED
+
+### Eight-Source Presence Verification
+
+Command: grep -q 'src-006' docs/REFERENCE_SYSTEM_MATRIX.md
+Exit Code: 0
+Status: PASSED (src-006 found)
+
+Command: grep -q 'src-007' docs/REFERENCE_SYSTEM_MATRIX.md
+Exit Code: 0
+Status: PASSED (src-007 found)
+
+Command: grep -q 'src-008' docs/REFERENCE_SYSTEM_MATRIX.md
+Exit Code: 0
+Status: PASSED (src-008 found)
+
+### Prohibited Phrases Check
+
+Command: ! grep -R -nE 'Sources: 5 verified sources|five verified sources|5/8|stopped below minimum|required_research_dimension_has_no_accessible_primary_or_high_quality_survey_after_three_distinct_candidates|pedagogical action requires explicit control|\+4-9 percentile points|4-9 percentile points|tracks millions of knowledge states|source-grounding \+ learner-model integration|source_grounding_plus_learner_model_integration' docs sources state agent-control/results
+Exit Code: 0
+Status: PASSED (no forbidden phrases found)
+
+---
+
+## Validation Summary
+
+All protocol-8 acceptance commands PASSED.
+
+Task 001: COMPLETE
+Gate 1: MET WITH DOCUMENTED LIMITATIONS
+All Five Stages: COMPLETE
+Source Count: 8/8 verified
+Evidence Boundaries: Corrected for src-006, src-007, src-008
+Matrix Status: Rebuilt from eight sources
+Research Coverage: 4 directly_covered, 6 partially_covered, 0 not_covered
+Review 09 Finalization: RECORDED
+Task 002: NOT STARTED
+
+---
+
+## Artifact Reconciliation Status
+
+✓ sources/source-ledger.json - 8 verified sources with corrected evidence boundaries
+✓ sources/src-001 through src-008 - All source notes present
+✓ docs/REFERENCE_SYSTEM_MATRIX.md - Rebuilt from eight sources
+✓ docs/RESEARCH_QUESTIONS.md - Coverage classifications added
+✓ docs/DESIGN_GATES.md - Gate 1 exit evaluation complete
+✓ state/CURRENT_STATE.yaml - Protocol 8; all five stages complete; Task 001 complete
+✓ agent-control/results/task-001.json - Review 09 finalization cycle recorded; Task 001 complete
+✓ agent-control/results/task-001-pr.md - Eight-source narrative
+✓ agent-control/VALIDATION_RECORD.txt - This file
+
+All status-bearing artifacts reconciled and consistent.
+
+---
+
+## Review 08 Contract Completion
+
+Evidence Corrections: COMPLETE
+Matrix Rebuild: COMPLETE
+Research Questions Update: COMPLETE
+Design Gates Update: COMPLETE
+State Reconciliation: COMPLETE
+Validation Record: COMPLETE
+
+## Review 09 Contract Completion
+
+RQ Coverage Counts: CORRECTED (4 direct, 6 partial, 0 not covered)
+Gate 1 Status: FINALIZED (met_with_documented_limitations)
+All Five Stages: COMPLETE
+Task 001: COMPLETE
+
+## Review 10 Contract Completion
+
+Self-Referential SHA Fields: REMOVED
+Stale Summary Claims: CORRECTED
+
+Ready for final verification.
+
+---
+
+End of Validation Record

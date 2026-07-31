@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Learning OS Source Record Template",
+  "description": "Template for documenting a single research source with observations, implications, and limitations",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "organization_or_authors",
+    "publication_date",
+    "source_type",
+    "url",
+    "accessed_at",
+    "research_question_ids",
+    "directly_supported_observations",
+    "design_implications",
+    "limitations_and_non_inferences",
+    "decision_affected",
+    "verification_status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^src-[0-9]{3}$",
+      "description": "Unique source identifier (e.g., src-001)",
+      "examples": ["src-001", "src-002"]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Full title of the source document or system"
+    },
+    "organization_or_authors": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Organization name or author list"
+    },
+    "publication_date": {
+      "type": "string",
+      "description": "Publication date or product launch date (YYYY, YYYY-MM, or YYYY-MM-DD)"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "product_documentation",
+        "research_paper_survey",
+        "research_paper_experiment",
+        "research_paper_simulation",
+        "research_paper_field_evaluation",
+        "technical_report",
+        "project_repository",
+        "official_blog_post"
+      ],
+      "description": "Classification of source type for evidence assessment"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Permanent or archive URL to the source"
+    },
+    "accessed_at": {
+      "type": "string",
+      "format": "date",
+      "description": "Date source was accessed and verified (YYYY-MM-DD)"
+    },
+    "research_question_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^RQ[1-5]\\.[1-2]$"
+      },
+      "minItems": 1,
+      "description": "Research questions this source addresses (e.g., RQ1.1, RQ3.2)"
+    },
+    "directly_supported_observations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 10
+      },
+      "minItems": 1,
+      "description": "Factual claims directly supported by source content, not inferences"
+    },
+    "design_implications": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 10
+      },
+      "minItems": 1,
+      "description": "Design decisions informed by this source with explicit reasoning"
+    },
+    "limitations_and_non_inferences": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 10
+      },
+      "minItems": 1,
+      "description": "What the source does NOT prove, cannot generalize, or explicitly limits"
+    },
+    "decision_affected": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "source_grounding_strategy",
+          "course_boundary_enforcement",
+          "pedagogical_action_selection",
+          "evidence_collection",
+          "learner_model_applicability",
+          "first_scenario_scope",
+          "state_schema_design",
+          "anti_pattern_avoidance"
+        ]
+      },
+      "minItems": 1,
+      "description": "Design decisions influenced by this source"
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "verified",
+        "partially_verified",
+        "awaiting_verification",
+        "verification_failed"
+      ],
+      "description": "Status of source content verification"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional additional context or clarifications"
+    }
+  }
+}

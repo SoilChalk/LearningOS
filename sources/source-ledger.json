@@ -1,0 +1,471 @@
+{
+  "$schema": "../templates/SOURCE_LEDGER.schema.json",
+  "schema_version": "1.0",
+  "generated_at": "2026-07-29T09:15:00Z",
+  "task_id": "task-001-core-research",
+  "status": "in_progress",
+  "stage": "stage_2_core_source_verification",
+  "source_count": 8,
+  "target_minimum": 8,
+  "target_maximum": 15,
+  "sources": [
+    {
+      "id": "src-001",
+      "title": "了解 Gemini Notebook (Learn about Gemini Notebook)",
+      "organization_or_authors": "Google",
+      "publication_date": "2026",
+      "source_type": "product_documentation",
+      "url": "https://support.google.com/gemininotebook/answer/16164461",
+      "accessed_at": "2026-07-29",
+      "research_question_ids": [
+        "RQ1.1",
+        "RQ2.1",
+        "RQ2.2"
+      ],
+      "directly_supported_observations": [
+        "System provides inline citations from uploaded sources (PDF, websites, YouTube videos, audio files, Google Docs, Google Slides)",
+        "Gemini Notebook designed to answer questions based on information provided in uploaded sources",
+        "System distinguishes three failure modes: safety flagging, unclear phrasing, no relevant information in sources",
+        "For Workspace/Education users: uploaded content NOT used for AI training; NOT subject to human review",
+        "Chinese official page accessed; product may be called Gemini Notebook or NotebookLM"
+      ],
+      "design_implications": [
+        "Source-bound AI architecture demonstrated as product feature",
+        "Material scope enforcement requires explicit failure mode messages",
+        "Citation mechanism presented as accuracy/transparency/trust feature",
+        "File upload pattern establishes basic course boundary"
+      ],
+      "limitations_and_non_inferences": [
+        "No learning effectiveness evidence provided",
+        "No pedagogical action specification",
+        "No learner modeling capability described",
+        "Product status uncertain (naming: Gemini Notebook vs. NotebookLM)",
+        "English documentation not accessible; relying on Chinese official page"
+      ],
+      "decision_affected": [
+        "source_grounding_strategy",
+        "course_boundary_enforcement"
+      ],
+      "verification_status": "verified",
+      "notes": "Product documentation in Chinese; describes feature set without effectiveness claims"
+    },
+    {
+      "id": "src-002",
+      "title": "Using Study Mode in ChatGPT",
+      "organization_or_authors": "OpenAI",
+      "publication_date": "2026",
+      "source_type": "product_documentation",
+      "url": "https://help.openai.com/en/articles/11780217-study-mode",
+      "accessed_at": "2026-07-29",
+      "research_question_ids": [
+        "RQ3.1",
+        "RQ3.2",
+        "RQ4.1"
+      ],
+      "directly_supported_observations": [
+        "User can instruct system to guide thinking (Socratic), explain in layers, check understanding, or use hints/quizzes/step-by-step",
+        "User specifies level: middle school, high school, college, beginner, or advanced",
+        "User can request: slow down, simpler language, analogy, deeper explanation, more advanced content",
+        "Documentation states 'there may be times when it gives a direct answer' - Socratic not always applied",
+        "Can upload files (notes, syllabus, worksheet, slides, textbook excerpt, problem photos) and reference specific sections",
+        "Memory feature saves learning goals, preferred explanation style, or topics studied before",
+        "Documentation explicitly states Study Mode 'does not replace your teacher, tutor, course materials' and 'can make mistakes'"
+      ],
+      "design_implications": [
+        "User-requested controls documented (Socratic, layered explanation, hints) - design inference: whether explicit instruction is technically required vs. available option not directly stated",
+        "Documentation mentions possible direct answers alongside Socratic guidance - design inference: whether Socratic is opt-in/default-off vs. context-dependent not technically specified",
+        "User can request adjustments ('slow down', 'simpler') - design inference: whether automatic adjustment never occurs vs. not documented",
+        "Material grounding via file upload + manual section reference",
+        "Evidence collection sparse: observes completion and responses, does not infer mastery"
+      ],
+      "limitations_and_non_inferences": [
+        "No learning effectiveness claims provided",
+        "System does NOT automatically detect when to explain vs. hint vs. quiz",
+        "No learner modeling or knowledge state tracking described",
+        "Material constraint shallow: requires manual section pointing",
+        "Academic integrity boundaries unclear: 'Follow the AI-use policies of your school' - defers to external policy"
+      ],
+      "decision_affected": [
+        "pedagogical_action_selection",
+        "evidence_collection",
+        "anti_pattern_avoidance"
+      ],
+      "verification_status": "verified",
+      "notes": "Product documentation accessed 2026-07-29; document updated '23小时前' (23 hours ago) from access date"
+    },
+    {
+      "id": "src-003",
+      "title": "Gemini 中的 LearnLM (LearnLM in Gemini)",
+      "organization_or_authors": "Google Cloud / Google DeepMind",
+      "publication_date": "2026-05",
+      "source_type": "product_documentation",
+      "url": "https://cloud.google.com/solutions/learnlm",
+      "accessed_at": "2026-07-29",
+      "research_question_ids": [
+        "RQ3.1",
+        "RQ3.2",
+        "RQ4.1",
+        "RQ4.2"
+      ],
+      "directly_supported_observations": [
+        "LearnLM built with education experts, optimized for learning based on rigorous research",
+        "Expert raters evaluated LearnLM against GPT-4o, Claude 3.5, Gemini 1.5 Pro on pedagogical elements like guidance and correcting mistakes beyond mere accuracy",
+        "RCT in Sierra Leone: 1,763 middle school students (grades 7-8), 8 weeks, 12+ hours usage minimum",
+        "Effect: math performance from 50th to 64th percentile (a difference of 14 percentile ranks)",
+        "Effect equivalent to 1.8 to 2.5 additional years of learning progress",
+        "With appropriate system instructions, Gemini leverages LearnLM learning science research to trigger pedagogical behaviors",
+        "Multiple technical reports cited: May 2026, November 2025, December 2024, May 2024"
+      ],
+      "design_implications": [
+        "Learning effectiveness measurable via RCT methodology in specific context",
+        "Pedagogical quality evaluated as separate dimension from accuracy",
+        "Learning science principles can be embedded in LLMs via training",
+        "System instructions enable pedagogical behavior activation",
+        "Minimum engagement threshold exists: 12+ hours over 8 weeks for observed effect"
+      ],
+      "limitations_and_non_inferences": [
+        "RCT context specific: Sierra Leone middle school students, math subject, 8-week period",
+        "Generalization to other contexts (subjects, age groups, countries) requires caution",
+        "Implementation details not disclosed in product page",
+        "Comparison baseline not specified ('from 50th to 64th percentile' - compared to what control group?)",
+        "Technical reports referenced but not directly linked in product page"
+      ],
+      "decision_affected": [
+        "pedagogical_action_selection",
+        "evidence_collection",
+        "learner_model_applicability"
+      ],
+      "verification_status": "verified",
+      "notes": "Chinese official Google Cloud page; RCT conducted with Fab AI partnership; percentile positions not percentage points"
+    },
+    {
+      "id": "src-004",
+      "title": "Tutor CoPilot: A Human-AI Approach for Scaling Real-Time Expertise",
+      "organization_or_authors": "Rose E. Wang, Ana T. Ribeiro, Carly D. Robinson, Susanna Loeb, Dorottya Demszky",
+      "publication_date": "2025-11",
+      "source_type": "research_paper_field_evaluation",
+      "url": "https://scale.stanford.edu/publications/tutor-copilot-human-ai-approach-scaling-real-time-expertise",
+      "accessed_at": "2026-07-29",
+      "research_question_ids": [
+        "RQ3.1",
+        "RQ3.2",
+        "RQ4.1",
+        "RQ4.2"
+      ],
+      "directly_supported_observations": [
+        "RCT with 700+ tutors and 1,000+ students from underserved communities",
+        "Students with tutors using Tutor CoPilot 4 percentage points more likely to master math topics (p<0.01)",
+        "Gains highest for students of lower-rated tutors: 9 percentage points",
+        "Analysis of 350,000+ messages shows system increases probing questions and reduces generic praise",
+        "System cost: approximately $20/tutor/year",
+        "System models expert thinking to assist tutors in real time",
+        "Human-AI collaboration: AI assists tutors who then interact with students (not direct AI-student)"
+      ],
+      "design_implications": [
+        "Human-AI collaboration model validated via RCT in real-world educational setting",
+        "AI assistance to human tutors produces measurable learning gains",
+        "System bridges skill gaps: larger gains for lower-rated tutors (9 p.p.) vs. average (4 p.p.)",
+        "Specific pedagogical behaviors measurable at message level: probing questions increase, generic praise decreases",
+        "Economic viability consideration: $20/tutor/year cited explicitly"
+      ],
+      "limitations_and_non_inferences": [
+        "Domain-specific: math tutoring in underserved communities",
+        "Tutor-mediated interaction, not direct AI-student tutoring",
+        "Implementation details not disclosed: how 'expert thinking' is modeled and delivered",
+        "Rating mechanism for tutors not specified",
+        "Mastery definition not provided in Stanford page abstract"
+      ],
+      "decision_affected": [
+        "pedagogical_action_selection",
+        "evidence_collection",
+        "learner_model_applicability"
+      ],
+      "verification_status": "verified",
+      "notes": "Stanford SCALE Initiative publication, November 2025; download available at scale.stanford.edu/sites/default/files/ai24_1054_v2.pdf"
+    },
+    {
+      "id": "src-005",
+      "title": "ALEKS Knowledge Space Theory",
+      "organization_or_authors": "McGraw Hill ALEKS / Jean-Paul Doignon, Jean-Claude Falmagne",
+      "publication_date": "2011",
+      "source_type": "product_documentation",
+      "url": "https://www.aleks.com/about_aleks/knowledge_space_theory",
+      "accessed_at": "2026-07-29",
+      "research_question_ids": [
+        "RQ2.1",
+        "RQ2.2",
+        "RQ5.1"
+      ],
+      "directly_supported_observations": [
+        "Knowledge Space Theory applies combinatorics and stochastic processes to modeling specific knowledge domains",
+        "Algebra 1 example: approximately 350 basic concepts giving rise to millions of empirically feasible knowledge states",
+        "Adaptive assessment using Markovian procedures can gauge student knowledge state in 25-30 questions despite millions of possible states",
+        "System determines 'precisely what each individual student knows, and what the student is ready to learn next'",
+        "Authoritative source: Learning Spaces by Doignon & Falmagne (Springer-Verlag, 2011)",
+        "Each domain (e.g., Algebra 1, Algebra 2) requires separate pre-built knowledge structure"
+      ],
+      "design_implications": [
+        "Knowledge modeling feasible at scale: 350 concepts → millions of states, assessment remains tractable (25-30 questions)",
+        "Prerequisite relationships mathematically modelable via combinatorial framework",
+        "Adaptive assessment can be efficient using stochastic (Markovian) procedures",
+        "Domain specificity critical: each course requires separate knowledge structure",
+        "'Ready to learn' is computable from knowledge state and structure"
+      ],
+      "limitations_and_non_inferences": [
+        "Learning effectiveness not claimed: describes assessment framework, not learning outcomes",
+        "Pedagogical action selection not addressed",
+        "Knowledge state construction method not detailed in product page",
+        "'Empirically feasible' knowledge state definition not provided",
+        "Question selection algorithm not disclosed",
+        "Granularity tradeoff unclear: is 350 concepts for Algebra 1 the right level?"
+      ],
+      "decision_affected": [
+        "learner_model_applicability",
+        "course_boundary_enforcement"
+      ],
+      "verification_status": "verified",
+      "notes": "Official ALEKS product page; theoretical foundation in Knowledge Space Theory (Doignon & Falmagne); product actively used in K-12 and higher education"
+    },
+    {
+      "id": "src-006",
+      "title": "A Survey of Knowledge Tracing: Models, Variants, and Applications",
+      "organization_or_authors": "Shuanghong Shen, Qi Liu, Zhenya Huang, et al. / University of Science and Technology of China",
+      "publication_date": "2024-04",
+      "source_type": "research_paper_survey",
+      "url": "https://arxiv.org/abs/2105.15106",
+      "accessed_at": "2026-07-29",
+      "research_question_ids": [
+        "RQ5.1",
+        "RQ5.2",
+        "RQ4.1"
+      ],
+      "directly_supported_observations": [
+        "KT monitors evolving knowledge states during problem-solving; learning sequence formulated as interactions with exercises, KCs, correctness, and side information",
+        "Three model categories: Bayesian (BKT, DBKT), Logistic (LFA, PFA, KTM), Deep Learning (DKT, transformers)",
+        "Side information recorded: response time, opportunity count, tutor intervention, engagement metrics provide comprehensive reflection of learning process",
+        "Individualization variants: different students exhibit different learning rates and prior knowledge (DKT-DSC clustering, FGKT individual representations)",
+        "Exercise-level modeling: difficulty and discrimination parameters enhance performance; FGKT obtains individual exercise representation through knowledge cells",
+        "Forgetting variants: DKT-Forget integrates exponential decay; temporal gap between interactions affects retention",
+        "Applications (Section V): knowledge states enable adaptive resource recommendation and personalized learning path generation"
+      ],
+      "design_implications": [
+        "Interaction evidence: side information (response time, hints, attempts) provides richer signals than correctness alone for structured exercise interactions",
+        "Learner state modeling for structured exercises: KT models estimate knowledge states from exercise sequences; applicability to open reading or debugging not demonstrated",
+        "Task-specific modeling: exercise difficulty, discrimination, type explicitly modeled for structured problem-solving",
+        "Temporal dynamics: forgetting curves, time gaps, opportunity counts affect knowledge state evolution in exercise contexts",
+        "Domain-specific training: KT models require course-specific exercise data (ASSISTments, EdNet datasets)",
+        "Evidence-based action: knowledge state estimates used for recommendation (application layer Section V)"
+      ],
+      "limitations_and_non_inferences": [
+        "Learning effectiveness: survey describes predictive accuracy, not direct learning outcome improvements from KT-guided interventions",
+        "Pedagogical action specification: models predict states; how to act is application layer",
+        "Cross-domain generalization: most datasets domain-specific (math tutoring); transfer not demonstrated",
+        "Task scope: KT models designed for structured exercise interactions; applicability to open reading, debugging, or unstructured tasks not established",
+        "Real-time constraints: transformer computational complexity may prevent instant feedback",
+        "Cold-start problem: new students with no history require different approaches",
+        "Explainability tradeoff: deep models more accurate but less interpretable than Bayesian/logistic"
+      ],
+      "decision_affected": [
+        "learner_model_applicability",
+        "evidence_collection",
+        "pedagogical_action_selection"
+      ],
+      "verification_status": "verified",
+      "notes": "arXiv v4 April 2024; IEEE Trans. journal version noted; full PDF downloaded via curl (7.5MB), pdftotext extraction (3,113 lines); verified problem definition, fundamental models, variants sections IV.A-D"
+    },
+    {
+      "id": "src-007",
+      "title": "Open learner models and pedagogical strategies in higher education: a meta-synthesis",
+      "organization_or_authors": "Robles Mucho et al. / Multi-institutional",
+      "publication_date": "2026-01-26",
+      "source_type": "research_paper_survey",
+      "url": "https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2025.1760183/full",
+      "accessed_at": "2026-07-29",
+      "research_question_ids": [
+        "RQ5.2",
+        "RQ4.1",
+        "RQ3.1"
+      ],
+      "directly_supported_observations": [
+        "Systematic review of 26 empirical studies on OLMs with pedagogical strategies in higher education (PROSPERO CRD420251237223)",
+        "Four OLM categories: Inspectable (view-only dashboards), Negotiable (bidirectional confidence calibration), Editable (learner modifies profile), Persuasive/Adaptive (AI/ML personalization)",
+        "Inspectable OLMs: transparency via dashboards; support performance/appraisal SRL phases; consistent gains in engagement, persistence, outcomes",
+        "Negotiable OLMs: dialogic feedback, confidence rating; improve confidence, self-assessment accuracy, motivation",
+        "Editable OLMs: goal-setting interfaces, portfolio systems; stronger initiative, ownership, persistence",
+        "Persuasive/Adaptive OLMs: intelligent tutoring systems, cognitive mapping, recommender algorithms; improvements in learning efficiency, time-on-task, cognitive engagement",
+        "Pedagogical strategies embedded: goal setting, reflective monitoring, confidence calibration, adaptive feedback, dialogic negotiation, performance visualization"
+      ],
+      "design_implications": [
+        "OLMs as metacognitive mediators (not purely analytical) when combined with pedagogical scaffolding",
+        "Learner agency continuum: system-guided reflection (inspectable) to learner-driven (editable) to adaptive co-regulation (AI-mediated)",
+        "Learner model transparency: inspectable OLMs expose learning data; negotiable/editable OLMs enable learner-model interaction; adaptive OLMs use learner models for personalization",
+        "Evidence-based action: OLM feedback enables informed decisions; adaptive models automate action selection based on learner state",
+        "Transparency as pedagogy: making models transparent encourages metacognitive engagement and autonomy",
+        "Scaffolding requirement: editable OLMs need mediation to ensure reflective (not arbitrary) inputs"
+      ],
+      "limitations_and_non_inferences": [
+        "Domain specificity: STEM predominance may limit transferability to humanities/social sciences",
+        "Short-term interventions: most studies short-term; longitudinal SRL development unclear",
+        "SRL operationalization heterogeneity: varied measures constrain quantitative comparison",
+        "Affective dimensions underexplored: more cognitive/metacognitive focus than emotional regulation",
+        "Ethical AI concerns: algorithmic bias, data privacy, learner agency in persuasive models need research",
+        "Learning effectiveness vs. SRL support: SRL improvements demonstrated; direct outcome gains varied",
+        "Cross-task model unification: OLM transparency demonstrated but unified model across reading, debugging, exercises not directly addressed"
+      ],
+      "decision_affected": [
+        "learner_model_applicability",
+        "evidence_collection",
+        "pedagogical_action_selection",
+        "anti_pattern_avoidance"
+      ],
+      "verification_status": "verified",
+      "notes": "Frontiers in Education Vol 10, published 2026-01-26 (DOI year 2025); full article (81KB) via rendered web fetch; meta-synthesis of 26 studies; four OLM categories, pedagogical strategies, SRL dimensions verified"
+    },
+    {
+      "id": "src-008",
+      "title": "Predicting student outcomes using digital logs of learning behaviors: Review, current standards, and suggestions for future work",
+      "organization_or_authors": "Arizmendi CJ, Bernacki ML, Raković M, Plumley RD, Urban CJ, Panter AT, Greene JA, Gates KM",
+      "publication_date": "2022-08-26",
+      "source_type": "research_paper_survey",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10556130/",
+      "accessed_at": "2026-07-29",
+      "research_question_ids": [
+        "RQ4.1",
+        "RQ4.2",
+        "RQ5.2"
+      ],
+      "directly_supported_observations": [
+        "LMS systems capture fine-grained learning activities with timestamps: frequency, time, patterns of interactions",
+        "Literature review: 39 papers, 82 predictive models; average accuracy 0.72 (SD=0.10) after 5.85 weeks (SD=3.67)",
+        "Three predictor categories: demographic, performance (prior grades/scores), behavioral trace data (LMS logs)",
+        "29 of 82 models used only behavioral predictors without demographics or grades",
+        "Behavioral trace data orthogonal to summative performance: views, downloads, submissions, forum contributions",
+        "Raw log data requires feature engineering: timestamps and actions mapped to meaningful measures using metadata",
+        "Metadata enrichment critical: semester alignment, file type, due date, relevance transforms raw events into predictive features",
+        "Machine learning for feature selection: embedded methods (decision trees, LASSO, elastic net) perform simultaneous selection and estimation",
+        "Model interpretability trade-off: regression coefficients explainable vs. neural networks high accuracy but black-box",
+        "Models predict dichotomous outcomes: pass/fail, at-risk/safe, above/below performance threshold",
+        "Equity considerations: demographic variables raise concerns; recommendation is to test fairness across groups, not use demographics as features",
+        "Privacy expectations differ in education: students may not expect data collection similar to commercial web tracking"
+      ],
+      "design_implications": [
+        "Interaction evidence for outcome prediction: LMS logs provide rich behavioral data for predicting course outcomes and at-risk status",
+        "Feature engineering requirement: metadata-enriched mapping necessary to transform events into predictive measures",
+        "Temporal dynamics for early intervention: early prediction (average 5.85 weeks) enables intervention before course completion",
+        "Model selection trade-offs: interpretable (elastic net) vs. high-accuracy black-box (neural nets); educational applications may require explainability",
+        "Equity as design constraint: models must work equally well across demographic groups",
+        "Privacy-preserving design: educational data collection carries different expectations than commercial contexts"
+      ],
+      "limitations_and_non_inferences": [
+        "Review scope: single-course outcome prediction in higher education; K-12, multi-course, longitudinal modeling unclear",
+        "Prediction target: models predict course outcomes and at-risk status, not conceptual mastery states or fine-grained knowledge component understanding",
+        "Implementation details sparse: most papers report accuracy but not real-time vs. batch, computational costs, LMS integration",
+        "Causality not established: predictive models identify correlations; cannot infer behavior changes cause outcome improvements",
+        "Intervention effectiveness unknown: paper reviews prediction models, not intervention studies",
+        "Learning theory integration weak: many models data-driven with limited grounding in learning science",
+        "Context specificity: course type, student population, institution affect performance; cross-context generalization requires validation",
+        "Cold start problem: students with no interaction history cannot be modeled early",
+        "Temporal stability unknown: models may not generalize to future semesters as course design or population changes"
+      ],
+      "decision_affected": [
+        "evidence_collection",
+        "learner_model_applicability",
+        "pedagogical_action_selection",
+        "anti_pattern_avoidance"
+      ],
+      "verification_status": "verified",
+      "notes": "Behavior Research Methods 2022-08-26; PMC10556130; 8 authors (Arizmendi, Bernacki, Raković, Plumley, Urban, Panter, Greene, Gates); full article 101 paragraphs ~80,500 chars via Europe PMC XML endpoint; direct URL blocked by CAPTCHA, XML fallback successful per Review 07 protocol; literature review of 39 papers, 82 models"
+    }
+  ],
+  "incomplete_candidates": [
+    {
+      "candidate_id": "candidate-bkt",
+      "title": "Bayesian Knowledge Tracing (BKT)",
+      "reason": "Primary paper (Corbett & Anderson, 1995) not directly accessible; evidence from search snippets and secondary sources insufficient per review requirements",
+      "alternative_attempted": "Multiple searches for accessible BKT papers; PDFs and institutional pages blocked or returned errors",
+      "research_questions": [
+        "RQ4.1",
+        "RQ5.1",
+        "RQ5.2"
+      ],
+      "status": "deferred"
+    },
+    {
+      "candidate_id": "candidate-cognitive-tutor",
+      "title": "Cognitive Tutors and ACT-R",
+      "reason": "Handbook chapter and primary papers not accessible via web fetch; HTTP/HTTPS restrictions prevent PDF access",
+      "alternative_attempted": "Searched for CMU PACT publications; multiple URLs attempted but PDFs blocked",
+      "research_questions": [
+        "RQ3.1",
+        "RQ3.2",
+        "RQ4.1",
+        "RQ5.1"
+      ],
+      "status": "deferred"
+    },
+    {
+      "candidate_id": "candidate-assistments",
+      "title": "ASSISTments System",
+      "reason": "Primary research papers not accessible; evidence from CMU/WPI publication snippets insufficient",
+      "alternative_attempted": "Multiple institutional repository URLs attempted; PDF access failed",
+      "research_questions": [
+        "RQ2.1",
+        "RQ3.1",
+        "RQ4.1"
+      ],
+      "status": "deferred"
+    },
+    {
+      "candidate_id": "candidate-its-meta-analysis",
+      "title": "ITS Effectiveness Meta-Analysis (Kulik & Fletcher 2016 or similar)",
+      "reason": "SAGE Journals paywall (HTTP 403); DTIC and IDA PDFs inaccessible",
+      "alternative_attempted": "Tried multiple meta-analysis sources; all behind paywalls or access restrictions",
+      "research_questions": [
+        "RQ4.1",
+        "RQ4.2"
+      ],
+      "status": "deferred"
+    },
+    {
+      "candidate_id": "candidate-duolingo-spaced-repetition",
+      "title": "Duolingo Spaced Repetition Optimization",
+      "reason": "arXiv HTML and PDF versions returned extraction errors",
+      "alternative_attempted": "Tried ar5iv.labs.arxiv.org and direct arxiv.org/pdf; both failed",
+      "research_questions": [
+        "RQ4.1",
+        "RQ5.1"
+      ],
+      "status": "deferred"
+    },
+    {
+      "candidate_id": "candidate-khan-academy-rct",
+      "title": "Khan Academy RCT Studies",
+      "reason": "Multiple blog posts reference RCTs but primary study documents (Berkeley, Toronto, IES) not directly accessible",
+      "alternative_attempted": "Tried to access referenced studies; NIH PMC returned HTTP 502 errors",
+      "research_questions": [
+        "RQ4.1",
+        "RQ4.2"
+      ],
+      "status": "deferred"
+    },
+    {
+      "candidate_id": "candidate-learning-analytics-engagement",
+      "title": "Learning Analytics on Student Engagement",
+      "reason": "MDPI platform blocked by Akamai security challenge",
+      "alternative_attempted": "Tried rendered mode; encountered bot detection",
+      "research_questions": [
+        "RQ4.1"
+      ],
+      "status": "deferred",
+      "partial_metadata": {
+        "publication": "MDPI Sustainability, 2023",
+        "url": "https://www.mdpi.com/2071-1050/15/10/7849"
+      },
+      "priority_dimensions": [
+        "learner-state change from interaction evidence"
+      ],
+      "review_07_attempts": "MDPI Akamai bot detection; DOI resolver failed; no accessible alternative found"
+    }
+  ],
+  "notes": "Review 07 correction cycle: Review 05 remains accepted. Stage 2 resume cycle stop condition rejected as invalid.\n\nAccessible source retrieval (Review 07): Successfully retrieved three previously deferred candidates via alternate methods:\n- src-006 (candidate-kt-survey-2024): arXiv PDF direct download + local pdftotext (full 3,113-line extraction)\n- src-007 (candidate-olm-meta-synthesis): Frontiers rendered web fetch (81KB full article)\n- src-008 (candidate-digital-logs-review): Europe PMC XML endpoint (101 paragraphs, ~80,500 chars)\n\nCurrent verified source count: 8/8 (minimum target met).\n\nInteraction evidence dimension: Now adequately covered by src-006 (KT survey side information section), src-007 (OLM interaction data collection), and src-008 (LMS behavioral trace data and feature engineering). One additional candidate (MDPI learning analytics) attempted but inaccessible via multiple fallback methods.\n\nStage 2 status: Minimum source target (8) achieved. Stage 2 core source verification complete."
+}
