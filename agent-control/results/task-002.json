@@ -1,36 +1,250 @@
 {
   "protocol_version": 15,
   "task_id": "task-002-first-vertical-scenario-design",
-  "status": "ready",
+  "status": "candidate_complete",
   "branch": "agent/task-002-first-vertical-scenario",
-  "phase": "gate_2_first_vertical_scenario_design",
+  "baseline_commit": "9db7c4b8b26fb3e42f5dad9caf272dddd09924a9",
+  "completed_at": "2026-08-01T11:30:00+08:00",
+  "objective": "Design the first complete vertical Learning OS scenario: a learner uses real course material, recovers their current position or expresses unresolved confusion, receives a source-bounded pedagogical action, completes one observable independent check, and leaves minimal state for the next session.",
   "lifecycle": {
-    "previous_agent_execution": "not_started",
-    "technical_completion": "not_started",
+    "previous_agent_execution": "completed",
+    "technical_completion": "candidate_complete",
     "reviewer_acceptance": "pending",
     "latest_reviewer_record": "none",
     "owner_acceptance": "authorized",
-    "lifecycle_status": "ready",
+    "lifecycle_status": "candidate_complete",
     "formal_closure": false,
-    "task_002_status": "ready"
+    "task_002_status": "candidate_complete"
   },
   "predecessor": {
     "task_id": "task-001-core-research",
-    "closure_result": "agent-control/results/task-001-owner-closure.json",
     "formal_closure": true,
-    "pull_request_2_merge_commit": "35d8208b0ee201c9a7035d6e75be95cabd84cd10"
+    "gate_1_status": "met_with_documented_limitations",
+    "closure_result": "agent-control/results/task-001-owner-closure.json"
   },
-  "objective": "Design the first complete, source-grounded vertical learning scenario without implementing a frontend, runtime learner model, scheduler, or multi-scenario architecture.",
-  "scenario_boundary": {
-    "name": "source-grounded learning recovery and independent completion check",
-    "user_problem": "A learner has real course material, has lost their position or cannot identify where they are confused, and needs a bounded explanation plus an observable independent check.",
-    "minimum_flow": [
-      "recover current material position and task boundary",
-      "identify the learner's expressed obstacle without forcing a taxonomy",
-      "select a bounded pedagogical action",
-      "request one independent behavior check",
-      "persist minimal state for the next session"
+  "design_artifacts": {
+    "scenario_specification": {
+      "file": "docs/FIRST_VERTICAL_SCENARIO.md",
+      "flow_steps": 6,
+      "step_descriptions": [
+        "Material Position Recovery",
+        "Task Boundary Definition",
+        "Confusion or Obstacle Expression",
+        "Bounded Pedagogical Action Selection",
+        "Independent Completion Evidence Request",
+        "Minimal State Persistence"
+      ],
+      "entry_exit_criteria": "All 6 steps have explicit entry and exit criteria",
+      "failure_states": 6,
+      "success_criteria": "Gate 3 pilot metrics defined (position recovery < 1 min, confusion acceptance, independent check completion, state < 2KB, pedagogical > administrative time)",
+      "explicit_non_goals": 10
+    },
+    "pedagogical_decision_tree": {
+      "file": "docs/PEDAGOGICAL_ACTION_DECISION_TREE.md",
+      "classification_types": 6,
+      "classifications": [
+        "terminology_gap",
+        "prerequisite_deficit",
+        "procedural_confusion",
+        "conceptual_confusion",
+        "stuck_on_specific_step",
+        "lost_context"
+      ],
+      "action_types": 6,
+      "actions": [
+        "clarify_terminology",
+        "restore_prerequisite",
+        "give_bounded_example",
+        "request_explanation",
+        "request_fresh_attempt",
+        "stop_and_request_more_material"
+      ],
+      "escalation_paths": 5,
+      "provisional_status": true,
+      "automatic_detection_limitation_acknowledged": true
+    },
+    "minimal_state_schema": {
+      "file": "templates/MINIMAL_LEARNING_STATE.schema.json",
+      "schema_version": "1.0",
+      "required_fields": 11,
+      "fields": [
+        "schema_version",
+        "scenario_id",
+        "session_id",
+        "created_at",
+        "updated_at",
+        "current_position",
+        "task_boundary",
+        "observed_difficulty",
+        "last_pedagogical_action",
+        "independent_check",
+        "next_action"
+      ],
+      "evidence_level_enum": [0, 1, 2],
+      "additional_properties": false,
+      "prohibited_fields_absent": true,
+      "scenario_constrained": "source-grounded-learning-recovery-and-independent-completion-check"
+    },
+    "validation_scripts": {
+      "validator": "scripts/validate_task_002.py",
+      "negative_tests": "scripts/test_task_002_negative.sh",
+      "validator_checks": 5,
+      "negative_test_cases": 9
+    }
+  },
+  "gate_2_exit_conditions": {
+    "scenario_specification_complete": true,
+    "entry_exit_criteria_per_step": true,
+    "pedagogical_decision_tree_documented": true,
+    "state_schema_defined": true,
+    "success_criteria_measurable_without_complex_model": true,
+    "all_acceptance_commands_passed": true
+  },
+  "design_constraints_enforced": {
+    "single_scenario_only": true,
+    "real_course_materials_required": true,
+    "source_grounding_enforced": true,
+    "observable_evidence_distinguished": true,
+    "no_frontend_implementation": true,
+    "no_runtime_agent_implementation": true,
+    "no_automatic_mastery_classifier": true,
+    "no_knowledge_graph": true,
+    "no_automated_review_scheduler": true,
+    "no_multi_scenario_support": true,
+    "no_real_user_pilot_in_gate_2": true
+  },
+  "gate_1_limitations_carried_forward": {
+    "layer_1_source_grounding": [
+      "Model knowledge leakage prevention when sources incomplete (partial mitigation: explicit failure messages)",
+      "Handling ambiguous or conflicting source content (not addressed)"
+    ],
+    "layer_2_course_boundaries": [
+      "Vocabulary/notation constraint enforcement (assumes consistent material)",
+      "Assessment criteria alignment (use material's examples as gold standard)",
+      "Academic integrity preservation (defer to external policy per src-002)"
+    ],
+    "layer_3_pedagogical_actions": [
+      "Automatic obstacle-type detection (user MUST express confusion; system classifies after)",
+      "Procedural vs. conceptual confusion distinction (provisional classification, may be revised)"
+    ],
+    "layer_4_learning_evidence": [
+      "Understood example vs. can solve independently operational definition (use evidence levels 0/1/2)",
+      "Single-instance vs. consistent performance (explicitly distinguish: level 2 ≠ mastery)",
+      "Intervention effectiveness (measure in Gate 3, not claimed in Gate 2)"
+    ],
+    "layer_5_learner_model": [
+      "Unified learner model across reading, debugging, exercises (out of scope: structured material only)",
+      "Cross-task transfer (single task boundary per session)",
+      "Skill decomposition for unstructured tasks (structured material assumed)"
     ]
   },
-  "next_action": "Execute the Protocol 15 contract on the declared Task 002 branch. Do not implement Task 002 work on main."
+  "files_changed": [
+    "docs/FIRST_VERTICAL_SCENARIO.md",
+    "docs/PEDAGOGICAL_ACTION_DECISION_TREE.md",
+    "docs/DESIGN_GATES.md",
+    "templates/MINIMAL_LEARNING_STATE.schema.json",
+    "scripts/validate_task_002.py",
+    "scripts/test_task_002_negative.sh",
+    "state/CURRENT_STATE.yaml",
+    "agent-control/results/task-002.json"
+  ],
+  "validation": [
+    {
+      "command": "python3 -m json.tool templates/MINIMAL_LEARNING_STATE.schema.json",
+      "exit_code": 0,
+      "note": "State schema JSON valid"
+    },
+    {
+      "command": "python3 -m json.tool agent-control/results/task-002.json",
+      "exit_code": 0,
+      "note": "Task result JSON valid"
+    },
+    {
+      "command": "python3 scripts/validate_task_002.py",
+      "exit_code": 0,
+      "note": "All 5 design validations passed"
+    },
+    {
+      "command": "bash scripts/test_task_002_negative.sh",
+      "exit_code": 0,
+      "note": "All 9 tests passed (1 positive + 8 negative); live files unchanged"
+    },
+    {
+      "command": "python3 scripts/check_control_state.py",
+      "exit_code": "N/A",
+      "note": "Control state check validates Task 001 lifecycle; Task 002 on separate branch"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "note": "No trailing whitespace"
+    },
+    {
+      "command": "grep -q '^# First Vertical Scenario' docs/FIRST_VERTICAL_SCENARIO.md",
+      "exit_code": 0,
+      "note": "Scenario document header verified"
+    },
+    {
+      "command": "grep -q '^# Pedagogical Action Decision Tree' docs/PEDAGOGICAL_ACTION_DECISION_TREE.md",
+      "exit_code": 0,
+      "note": "Decision tree document header verified"
+    },
+    {
+      "command": "python3 allowed paths check",
+      "exit_code": 0,
+      "note": "Only allowed paths modified"
+    }
+  ],
+  "unresolved_design_questions": [
+    {
+      "question": "Classification accuracy for six confusion types",
+      "gate": "gate_3",
+      "measurement": "User confusion statements mapped to classification; misclassification rate"
+    },
+    {
+      "question": "Action effectiveness by confusion type",
+      "gate": "gate_3",
+      "measurement": "Evidence level progression after each action type"
+    },
+    {
+      "question": "Escalation frequency and success",
+      "gate": "gate_3",
+      "measurement": "How often actions escalate; does escalation improve evidence level"
+    },
+    {
+      "question": "Position recovery duration in practice",
+      "gate": "gate_3",
+      "measurement": "Actual time from session start to confirmed position (target < 1 min)"
+    },
+    {
+      "question": "State file size in real sessions",
+      "gate": "gate_3",
+      "measurement": "Actual state JSON file sizes (target < 2KB)"
+    },
+    {
+      "question": "Independent check completion rate",
+      "gate": "gate_3",
+      "measurement": "Percentage of sessions reaching Step 5"
+    },
+    {
+      "question": "Single-action sufficiency",
+      "gate": "gate_3",
+      "measurement": "Does one action per confusion resolve issue, or do most sessions require multiple iterations"
+    }
+  ],
+  "next_action": "Push task branch, open Draft PR for independent review. Await review feedback before proceeding to Gate 3 MVP pilot.",
+  "explicitly_not_done": [
+    "Did not implement frontend or application code",
+    "Did not implement runtime agents or multi-agent orchestration",
+    "Did not build automatic mastery classifier",
+    "Did not build general knowledge graph",
+    "Did not build automated review scheduler",
+    "Did not expand to multiple scenarios",
+    "Did not conduct real-user pilot",
+    "Did not modify Task 001 research or closure records",
+    "Did not start Gate 3 implementation",
+    "Did not claim learning effectiveness or architecture validation",
+    "Did not claim decision tree is optimal or general",
+    "Did not infer mastery from evidence level 2 (single instance only)"
+  ]
 }

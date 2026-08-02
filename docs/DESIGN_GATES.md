@@ -110,35 +110,59 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ## Gate 2: First Vertical Scenario Design
 
-**Current Status**: NOT STARTED
+**Current Status**: CANDIDATE COMPLETE (task-002-first-vertical-scenario-design)
 
 ### Entry Conditions
-- [ ] Gate 1 exit conditions met
-- [ ] Provisional scenario identified from research
-- [ ] Minimum flow defined
-- [ ] Source-grounding strategy selected
-- [ ] Task boundary enforcement approach chosen
+- [x] Gate 1 exit conditions met
+- [x] Provisional scenario identified from research
+- [x] Minimum flow defined
+- [x] Source-grounding strategy selected
+- [x] Task boundary enforcement approach chosen
 
 ### Activities
-- Define complete user flow for first scenario
-- Specify source material handling
-- Design pedagogical action selection rules
-- Define minimal persistent state
-- Establish evidence collection points
-- Document what NOT to build
+- [x] Define complete user flow for first scenario
+- [x] Specify source material handling
+- [x] Design pedagogical action selection rules
+- [x] Define minimal persistent state
+- [x] Establish evidence collection points
+- [x] Document what NOT to build
 
 ### Exit Conditions
-- [ ] Scenario specification document complete
-- [ ] Entry/exit criteria for each flow step defined
-- [ ] Pedagogical action decision tree documented
-- [ ] State schema defined (current_position, observed_difficulty, evidence_level, next_action)
-- [ ] Success criteria measurable without complex learner model
+- [x] Scenario specification document complete (FIRST_VERTICAL_SCENARIO.md)
+- [x] Entry/exit criteria for each flow step defined (6 steps, each with explicit criteria)
+- [x] Pedagogical action decision tree documented (PEDAGOGICAL_ACTION_DECISION_TREE.md)
+- [x] State schema defined (MINIMAL_LEARNING_STATE.schema.json: current_position, task_boundary, observed_difficulty, last_pedagogical_action, independent_check, next_action)
+- [x] Success criteria measurable without complex learner model (evidence levels 0/1/2, no mastery inference)
+
+### Design Artifacts Created
+- **FIRST_VERTICAL_SCENARIO.md**: Complete 6-step flow (Material Position Recovery → Task Boundary Definition → Confusion Expression → Pedagogical Action → Independent Check → State Persistence); entry/exit criteria per step; failure states; measurable success criteria; explicit non-goals
+- **PEDAGOGICAL_ACTION_DECISION_TREE.md**: Six classification types (terminology gap, prerequisite deficit, procedural confusion, conceptual confusion, stuck on step, lost context); six actions (clarify term, restore prerequisite, give example, request explanation, fresh attempt, stop); escalation rules; provisional status acknowledged
+- **MINIMAL_LEARNING_STATE.schema.json**: JSON Schema with 11 required fields; evidence_level enum [0,1,2] only; additionalProperties: false; no speculative fields (no knowledge_graph, mastery estimates, cross-domain)
+- **validate_task_002.py**: Python validator using standard library only; checks document structure, cross-references, design constraints, Gate 1 limitations
+- **test_task_002_negative.sh**: Bash negative test suite (1 positive + 8 negative cases); isolated fixtures; hash verification
 
 ### Prohibited Activities
-- Building for multiple scenarios simultaneously
-- Implementing learner model before evidence design
-- Creating general-purpose knowledge graph
-- Developing automated review scheduler
+- [x] Building for multiple scenarios simultaneously (single scenario only)
+- [x] Implementing learner model before evidence design (state contains observable facts only)
+- [x] Creating general-purpose knowledge graph (no knowledge_graph field in schema)
+- [x] Developing automated review scheduler (next-action recommendation only, user decides when)
+
+### Documented Limitations Carried Forward
+**From Gate 1 RESEARCH_QUESTIONS.md and REFERENCE_SYSTEM_MATRIX.md:**
+- **Layer 1**: Model knowledge leakage prevention (partial: explicit failure messages); ambiguous source handling (not addressed)
+- **Layer 2**: Vocabulary/notation constraints (assumes consistent material); assessment alignment (use material's examples); academic integrity (defer to external policy)
+- **Layer 3**: Automatic obstacle detection (user MUST express confusion first); procedural vs. conceptual distinction (provisional classification)
+- **Layer 4**: "Understood" vs. "can solve" definition (evidence levels 0/1/2); single-instance vs. consistent performance (level 2 ≠ mastery); intervention effectiveness (measure in Gate 3)
+- **Layer 5**: Unified model across task types (out of scope); cross-task transfer (single task boundary); skill decomposition for unstructured tasks (structured material assumed)
+
+### Gate 2 Validation Results
+- All required documents created and validated
+- Every flow step has explicit entry/exit criteria
+- Decision tree maps observable evidence to source-bounded actions
+- State schema contains only fields used in this scenario (no speculative architecture)
+- Success criteria measurable without complex learner model
+- Design constraints enforced (single scenario, no frontend, no mastery claims)
+- Negative tests pass (8 invalid cases correctly rejected)
 
 ---
 
