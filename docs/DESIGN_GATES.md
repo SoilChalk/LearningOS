@@ -143,17 +143,18 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ### Validation Status
 - **Structural Validator**: 5 checks (scenario structure, decision tree, schema structure, cross-references, design constraints)
-- **Test Coverage**: 20 tests total
-  - 1 positive test (valid artifacts pass)
-  - 19 negative tests (schema violations, document structure, routing errors, obsolete fields)
+- **Test Coverage**: 27 tests total (Protocol 19)
+  - Structural tests: 21 (1 positive + 20 negative)
+  - Instance validation tests: 6 (3 positive + 3 negative)
 - **Schema Constraints**: Obstacle classification (6 core + null), material_scope_status (3 values), articulation_status (2 values), Draft-07 if/then citation rules, top-level allOf cross-object stop rule
+- **Instance Validation**: jsonschema 4.26.0 available; tests validate complete state instances against schema
 
 ### Gate 2 Status
 - **Implementation**: candidate_complete
 - **Independent Review**: pending
 - **Exit Conditions Accepted**: false
 - **Blocked By**: independent_review
-- **Reviewer Status**: Protocol 17 changes requested, Protocol 18 repairs complete
+- **Reviewer Status**: Protocol 18 repairs complete, Protocol 19 validation closure in progress
 
 ### Prohibited Activities
 - [x] Building for multiple scenarios simultaneously (single scenario only)
@@ -287,7 +288,7 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ---
 
-**Last Updated**: 2026-08-05T10:00:00+08:00
-**Protocol**: 18
-**Phase**: Gate 2 - Test and Audit Closure (candidate_complete)
+**Last Updated**: Protocol 19 substantive work (timestamp from Git commit metadata)
+**Protocol**: 19
+**Phase**: Gate 2 - Validation Closure (in_progress)
 **Next Phase**: Gate 2 Independent Review → Gate 3 MVP Pilot

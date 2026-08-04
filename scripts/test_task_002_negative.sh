@@ -1,39 +1,28 @@
 #!/usr/bin/env bash
 #
-# Task 002 Negative Test Suite
+# Task 002 Test Suite (Protocol 19)
 #
-# Proves the Task 002 validator correctly rejects invalid design artifacts.
-# All tests operate on temporary fixture copies. The production validator
-# is invoked with modified fixtures. Before/after hashes prove live files
-# remain unchanged.
+# Validates Task 002 design artifacts through structural and instance-level tests.
+# All tests operate on temporary fixture copies. Before/after hashes prove live
+# files remain unchanged.
 #
-# Test cases (20 total: 1 positive + 19 negative):
-# Positive 1: Valid design artifacts pass
-# Negative 1: Scenario document missing required section
-# Negative 2: Decision tree missing classification type
-# Negative 3: State schema with prohibited field (knowledge_graph)
-# Negative 4: State schema evidence_level includes level 3 (mastery inference)
-# Negative 5: State schema additionalProperties not false
-# Negative 6: Scenario does not reference decision tree
-# Negative 7: Scenario has wrong number of flow steps
-# Negative 8: Decision tree does not acknowledge provisional status
-# Negative 9: Step 1 missing Entry Criteria
-# Negative 10: Step 2 missing Exit Criteria
-# Negative 11: Step 3 missing Recovery Behavior
-# Negative 12: Step 4 missing Evidence Collection
-# Negative 13: Step 5 missing Entry Criteria
-# Negative 14: Step 6 missing Exit Criteria
-# Negative 15: Source-grounded action with zero citations (constraint removed)
-# Negative 16: Arbitrary property in bounded nested object
-# Negative 17: Nullable type with enum omitting null
-# Negative 18: cannot_articulate in core obstacle_classification enum
-# Negative 19: Undefined obstacle classification
-# Negative 20: Obsolete outside_corpus present
+# Test Coverage (26 total: 4 positive + 22 negative):
+#   Structural Tests (20 total: 1 positive + 19 negative):
+#     - Scenario document structure and flow steps
+#     - Decision tree classification and action types
+#     - State schema constraints and prohibited fields
+#     - Cross-document consistency
 #
-# Note: Instance-level validation tests for cannot_articulate and cross-object
-# stop rule would require a JSON Schema validator dependency. Since adding
-# dependencies during test execution would require network calls (prohibited),
-# these constraints are verified structurally in validate_task_002.py instead.
+#   Instance Validation Tests (6 total: 3 positive + 3 negative):
+#     - cannot_articulate + null obstacle + in_scope + request_explanation + citations (positive)
+#     - stop + missing_required_material + empty citations + stop_reason (positive)
+#     - stop + outside_supplied_corpus + empty citations + stop_reason (positive)
+#     - stop + in_scope + empty citations + stop_reason - INVALID (negative)
+#     - stop + missing_required_material + empty citations + NO stop_reason - INVALID (negative)
+#     - request_explanation + empty citations - INVALID (negative)
+#
+# Instance tests use jsonschema.Draft7Validator to validate complete minimal
+# learning state instances against the actual schema.
 
 set -euo pipefail
 
@@ -57,23 +46,35 @@ HASH_BEFORE_SCENARIO=$(shasum -a 256 "$REPO_ROOT/docs/FIRST_VERTICAL_SCENARIO.md
 HASH_BEFORE_TREE=$(shasum -a 256 "$REPO_ROOT/docs/PEDAGOGICAL_ACTION_DECISION_TREE.md" 2>/dev/null | awk '{print $1}' || echo "")
 HASH_BEFORE_SCHEMA=$(shasum -a 256 "$REPO_ROOT/templates/MINIMAL_LEARNING_STATE.schema.json" 2>/dev/null | awk '{print $1}' || echo "")
 
-test_count=0
+# Test counters - machine-derived from actual test execution
+positive_test_count=0
+negative_test_count=0
+structural_test_count=0
+instance_test_count=0
+total_test_count=0
 pass_count=0
+
+# Track test results by name
+declare -a test_results
 
 run_positive_test() {
     local test_name="$1"
     
-    test_count=$((test_count + 1))
+    positive_test_count=$((positive_test_count + 1))
+    structural_test_count=$((structural_test_count + 1))
+    total_test_count=$((total_test_count + 1))
     
     # Run validator on valid fixtures - should pass
     cd "$FIXTURE_DIR"
     if python3 scripts/validate_task_002.py >/dev/null 2>&1; then
-        echo "✓ Test $test_count passed: $test_name"
+        echo "✓ Test $total_test_count passed: $test_name"
         pass_count=$((pass_count + 1))
+        test_results+=("PASS: $test_name")
         cd "$REPO_ROOT"
         return 0
     else
-        echo "✗ Test $test_count FAILED: $test_name (validator rejected valid state)"
+        echo "✗ Test $total_test_count FAILED: $test_name (validator rejected valid state)"
+        test_results+=("FAIL: $test_name")
         cd "$REPO_ROOT"
         return 1
     fi
@@ -83,7 +84,9 @@ run_negative_test() {
     local test_name="$1"
     local modify_fn="$2"
 
-    test_count=$((test_count + 1))
+    negative_test_count=$((negative_test_count + 1))
+    structural_test_count=$((structural_test_count + 1))
+    total_test_count=$((total_test_count + 1))
 
     # Restore original fixtures
     cp "$REPO_ROOT/docs/FIRST_VERTICAL_SCENARIO.md" "$FIXTURE_DIR/docs/" 2>/dev/null || true
@@ -96,12 +99,14 @@ run_negative_test() {
     # Run validator - should fail
     cd "$FIXTURE_DIR"
     if python3 scripts/validate_task_002.py >/dev/null 2>&1; then
-        echo "✗ Test $test_count FAILED: $test_name (validator did not reject invalid state)"
+        echo "✗ Test $total_test_count FAILED: $test_name (validator did not reject invalid state)"
+        test_results+=("FAIL: $test_name")
         cd "$REPO_ROOT"
         return 1
     else
-        echo "✓ Test $test_count passed: $test_name"
+        echo "✓ Test $total_test_count passed: $test_name"
         pass_count=$((pass_count + 1))
+        test_results+=("PASS: $test_name")
         cd "$REPO_ROOT"
         return 0
     fi
@@ -351,6 +356,363 @@ with open('$FIXTURE_DIR/templates/MINIMAL_LEARNING_STATE.schema.json', 'w') as f
 \"
 "
 
+# === INSTANCE VALIDATION TESTS (Protocol 19) ===
+# These tests validate complete minimal learning state instances against the schema
+# using jsonschema.Draft7Validator. They test positive and negative cases for:
+# - cannot_articulate classification
+# - cross-object stop-action rules
+# - source-grounded action citation requirements
+
+run_instance_test() {
+    local test_type="$1"  # "positive" or "negative"
+    local test_name="$2"
+    local instance_json="$3"
+    
+    if [ "$test_type" = "positive" ]; then
+        positive_test_count=$((positive_test_count + 1))
+    else
+        negative_test_count=$((negative_test_count + 1))
+    fi
+    instance_test_count=$((instance_test_count + 1))
+    total_test_count=$((total_test_count + 1))
+    
+    # Run validation using jsonschema.Draft7Validator
+    set +e  # Temporarily disable exit on error
+    result=$(python3 - <<PY
+import json
+import sys
+try:
+    import jsonschema
+    
+    with open('$REPO_ROOT/templates/MINIMAL_LEARNING_STATE.schema.json') as f:
+        schema = json.load(f)
+    
+    instance = json.loads('''$instance_json''')
+    
+    validator = jsonschema.Draft7Validator(schema)
+    errors = list(validator.iter_errors(instance))
+    
+    if errors:
+        sys.exit(1)  # INVALID
+    else:
+        sys.exit(0)  # VALID
+except Exception as e:
+    print(f"ERROR: {e}", file=sys.stderr)
+    sys.exit(2)
+PY
+)
+    exit_code=$?
+    set -e  # Re-enable exit on error
+    
+    if [ "$test_type" = "positive" ]; then
+        # Positive test: should be VALID (exit 0)
+        if [ $exit_code -eq 0 ]; then
+            echo "✓ Test $total_test_count passed: $test_name (VALID as expected)"
+            pass_count=$((pass_count + 1))
+            test_results+=("PASS: $test_name")
+            return 0
+        else
+            echo "✗ Test $total_test_count FAILED: $test_name (expected VALID, got INVALID)"
+            test_results+=("FAIL: $test_name")
+            return 1
+        fi
+    else
+        # Negative test: should be INVALID (exit 1)
+        if [ $exit_code -eq 1 ]; then
+            echo "✓ Test $total_test_count passed: $test_name (INVALID as expected)"
+            pass_count=$((pass_count + 1))
+            test_results+=("PASS: $test_name")
+            return 0
+        else
+            echo "✗ Test $total_test_count FAILED: $test_name (expected INVALID, got VALID)"
+            test_results+=("FAIL: $test_name")
+            return 1
+        fi
+    fi
+}
+
+echo ""
+echo "=== Instance Validation Tests (Protocol 19) ==="
+
+# Instance Positive A: cannot_articulate + null obstacle + in_scope + request_explanation + citations
+positive_a=$(cat <<'JSON'
+{
+  "schema_version": "1.0",
+  "scenario_id": "source-grounded-learning-recovery-and-independent-completion-check",
+  "session_id": "session-2026-08-05T10:00:00Z",
+  "created_at": "2026-08-05T10:00:00+08:00",
+  "updated_at": "2026-08-05T10:05:00+08:00",
+  "current_position": {
+    "material_file": "course.pdf",
+    "section": "Chapter 3",
+    "confirmed_by_user": true,
+    "confirmed_at": "2026-08-05T10:01:00+08:00"
+  },
+  "task_boundary": {
+    "task_type": "understand_concept",
+    "scope_description": "Understand heap data structure",
+    "completion_criterion": "Explain heap operations independently"
+  },
+  "observed_difficulty": {
+    "user_statement": "I don't know what's confusing",
+    "obstacle_classification": null,
+    "material_scope_status": "in_scope",
+    "articulation_status": "cannot_articulate",
+    "expressed_at": "2026-08-05T10:03:00+08:00"
+  },
+  "last_pedagogical_action": {
+    "action_type": "request_explanation",
+    "material_citations": [
+      {
+        "file": "course.pdf",
+        "section": "Chapter 3"
+      }
+    ],
+    "delivered_at": "2026-08-05T10:04:00+08:00"
+  },
+  "independent_check": {
+    "requested": false,
+    "evidence_level": 0
+  },
+  "next_action": {
+    "recommendation": "Continue from current position",
+    "rationale": "evidence_level_0_continue_from_current"
+  }
+}
+JSON
+)
+run_instance_test "positive" "Instance Positive A: cannot_articulate + null obstacle + in_scope + request_explanation + citations" "$positive_a"
+
+# Instance Positive B: stop + missing_required_material + empty citations + stop_reason
+positive_b=$(cat <<'JSON'
+{
+  "schema_version": "1.0",
+  "scenario_id": "source-grounded-learning-recovery-and-independent-completion-check",
+  "session_id": "session-2026-08-05T11:00:00Z",
+  "created_at": "2026-08-05T11:00:00+08:00",
+  "updated_at": "2026-08-05T11:05:00+08:00",
+  "current_position": {
+    "material_file": "textbook.pdf",
+    "section": "Chapter 5",
+    "confirmed_by_user": true,
+    "confirmed_at": "2026-08-05T11:01:00+08:00"
+  },
+  "task_boundary": {
+    "task_type": "solve_problem",
+    "scope_description": "Solve dynamic programming problem",
+    "completion_criterion": "Solve similar problem independently"
+  },
+  "observed_difficulty": {
+    "user_statement": "Material doesn't cover memoization",
+    "obstacle_classification": "prerequisite_deficit",
+    "material_scope_status": "missing_required_material",
+    "articulation_status": "articulated",
+    "expressed_at": "2026-08-05T11:03:00+08:00"
+  },
+  "last_pedagogical_action": {
+    "action_type": "stop_and_request_more_material",
+    "action_details": {
+      "stop_reason": "Memoization prerequisite not covered in uploaded material"
+    },
+    "material_citations": [],
+    "delivered_at": "2026-08-05T11:04:00+08:00"
+  },
+  "independent_check": {
+    "requested": false,
+    "evidence_level": 0
+  },
+  "next_action": {
+    "recommendation": "Request material on memoization",
+    "rationale": "escalation_threshold_review_offline"
+  }
+}
+JSON
+)
+run_instance_test "positive" "Instance Positive B: stop + missing_required_material + empty citations + stop_reason" "$positive_b"
+
+# Instance Positive C: stop + outside_supplied_corpus + empty citations + stop_reason
+positive_c=$(cat <<'JSON'
+{
+  "schema_version": "1.0",
+  "scenario_id": "source-grounded-learning-recovery-and-independent-completion-check",
+  "session_id": "session-2026-08-05T12:00:00Z",
+  "created_at": "2026-08-05T12:00:00+08:00",
+  "updated_at": "2026-08-05T12:05:00+08:00",
+  "current_position": {
+    "material_file": "notes.pdf",
+    "section": "Lecture 2",
+    "confirmed_by_user": true,
+    "confirmed_at": "2026-08-05T12:01:00+08:00"
+  },
+  "task_boundary": {
+    "task_type": "understand_concept",
+    "scope_description": "Understand distributed consensus",
+    "completion_criterion": "Explain Raft algorithm"
+  },
+  "observed_difficulty": {
+    "user_statement": "Question about Paxos which isn't in the material",
+    "obstacle_classification": "lost_context",
+    "material_scope_status": "outside_supplied_corpus",
+    "articulation_status": "articulated",
+    "expressed_at": "2026-08-05T12:03:00+08:00"
+  },
+  "last_pedagogical_action": {
+    "action_type": "stop_and_request_more_material",
+    "action_details": {
+      "stop_reason": "Paxos algorithm not covered in uploaded corpus"
+    },
+    "material_citations": [],
+    "delivered_at": "2026-08-05T12:04:00+08:00"
+  },
+  "independent_check": {
+    "requested": false,
+    "evidence_level": 0
+  },
+  "next_action": {
+    "recommendation": "Request material on Paxos or refocus on Raft",
+    "rationale": "escalation_threshold_review_offline"
+  }
+}
+JSON
+)
+run_instance_test "positive" "Instance Positive C: stop + outside_supplied_corpus + empty citations + stop_reason" "$positive_c"
+
+# Instance Negative A: stop + in_scope + empty citations + stop_reason (INVALID - material is in_scope)
+negative_a=$(cat <<'JSON'
+{
+  "schema_version": "1.0",
+  "scenario_id": "source-grounded-learning-recovery-and-independent-completion-check",
+  "session_id": "session-2026-08-05T13:00:00Z",
+  "created_at": "2026-08-05T13:00:00+08:00",
+  "updated_at": "2026-08-05T13:05:00+08:00",
+  "current_position": {
+    "material_file": "book.pdf",
+    "section": "Chapter 1",
+    "confirmed_by_user": true,
+    "confirmed_at": "2026-08-05T13:01:00+08:00"
+  },
+  "task_boundary": {
+    "task_type": "solve_problem",
+    "scope_description": "Solve sorting problem",
+    "completion_criterion": "Implement quicksort"
+  },
+  "observed_difficulty": {
+    "user_statement": "Don't understand pivot selection",
+    "obstacle_classification": "procedural_confusion",
+    "material_scope_status": "in_scope",
+    "articulation_status": "articulated",
+    "expressed_at": "2026-08-05T13:03:00+08:00"
+  },
+  "last_pedagogical_action": {
+    "action_type": "stop_and_request_more_material",
+    "action_details": {
+      "stop_reason": "Need more examples"
+    },
+    "material_citations": [],
+    "delivered_at": "2026-08-05T13:04:00+08:00"
+  },
+  "independent_check": {
+    "requested": false,
+    "evidence_level": 0
+  },
+  "next_action": {
+    "recommendation": "Request more material",
+    "rationale": "escalation_threshold_review_offline"
+  }
+}
+JSON
+)
+run_instance_test "negative" "Instance Negative A: stop + in_scope + empty citations + stop_reason (invalid - material is in_scope)" "$negative_a"
+
+# Instance Negative B: stop + missing_required_material + empty citations + NO stop_reason
+negative_b=$(cat <<'JSON'
+{
+  "schema_version": "1.0",
+  "scenario_id": "source-grounded-learning-recovery-and-independent-completion-check",
+  "session_id": "session-2026-08-05T14:00:00Z",
+  "created_at": "2026-08-05T14:00:00+08:00",
+  "updated_at": "2026-08-05T14:05:00+08:00",
+  "current_position": {
+    "material_file": "slides.pdf",
+    "section": "Slide 10",
+    "confirmed_by_user": true,
+    "confirmed_at": "2026-08-05T14:01:00+08:00"
+  },
+  "task_boundary": {
+    "task_type": "understand_concept",
+    "scope_description": "Understand B-trees",
+    "completion_criterion": "Explain B-tree operations"
+  },
+  "observed_difficulty": {
+    "user_statement": "Missing prerequisite on balanced trees",
+    "obstacle_classification": "prerequisite_deficit",
+    "material_scope_status": "missing_required_material",
+    "articulation_status": "articulated",
+    "expressed_at": "2026-08-05T14:03:00+08:00"
+  },
+  "last_pedagogical_action": {
+    "action_type": "stop_and_request_more_material",
+    "action_details": {},
+    "material_citations": [],
+    "delivered_at": "2026-08-05T14:04:00+08:00"
+  },
+  "independent_check": {
+    "requested": false,
+    "evidence_level": 0
+  },
+  "next_action": {
+    "recommendation": "Request balanced tree material",
+    "rationale": "escalation_threshold_review_offline"
+  }
+}
+JSON
+)
+run_instance_test "negative" "Instance Negative B: stop + missing_required_material + empty citations + NO stop_reason" "$negative_b"
+
+# Instance Negative C: request_explanation + empty citations (source-grounded action without citations)
+negative_c=$(cat <<'JSON'
+{
+  "schema_version": "1.0",
+  "scenario_id": "source-grounded-learning-recovery-and-independent-completion-check",
+  "session_id": "session-2026-08-05T15:00:00Z",
+  "created_at": "2026-08-05T15:00:00+08:00",
+  "updated_at": "2026-08-05T15:05:00+08:00",
+  "current_position": {
+    "material_file": "manual.pdf",
+    "section": "Section 2.3",
+    "confirmed_by_user": true,
+    "confirmed_at": "2026-08-05T15:01:00+08:00"
+  },
+  "task_boundary": {
+    "task_type": "apply_to_example",
+    "scope_description": "Apply merge sort to example",
+    "completion_criterion": "Trace merge sort execution"
+  },
+  "observed_difficulty": {
+    "user_statement": "Confused about merge step",
+    "obstacle_classification": "procedural_confusion",
+    "material_scope_status": "in_scope",
+    "articulation_status": "articulated",
+    "expressed_at": "2026-08-05T15:03:00+08:00"
+  },
+  "last_pedagogical_action": {
+    "action_type": "request_explanation",
+    "material_citations": [],
+    "delivered_at": "2026-08-05T15:04:00+08:00"
+  },
+  "independent_check": {
+    "requested": false,
+    "evidence_level": 0
+  },
+  "next_action": {
+    "recommendation": "Retry after explanation",
+    "rationale": "evidence_level_0_continue_from_current"
+  }
+}
+JSON
+)
+run_instance_test "negative" "Instance Negative C: request_explanation + empty citations (source-grounded action without citations)" "$negative_c"
+
 # Verify live files unchanged
 HASH_AFTER_SCENARIO=$(shasum -a 256 "$REPO_ROOT/docs/FIRST_VERTICAL_SCENARIO.md" 2>/dev/null | awk '{print $1}' || echo "")
 HASH_AFTER_TREE=$(shasum -a 256 "$REPO_ROOT/docs/PEDAGOGICAL_ACTION_DECISION_TREE.md" 2>/dev/null | awk '{print $1}' || echo "")
@@ -372,14 +734,26 @@ fi
 
 # Summary
 echo ""
-echo "=== Negative test summary ==="
-echo "Tests run: $test_count"
+echo "=== Test Summary (Protocol 19) ==="
+echo "Structural tests: $structural_test_count (1 positive + $((structural_test_count - 1)) negative)"
+echo "Instance validation tests: $instance_test_count (3 positive + 3 negative)"
+echo "Total tests: $total_test_count"
 echo "Tests passed: $pass_count"
+echo ""
 
-if [ "$pass_count" -eq "$test_count" ] && [ "$test_count" -ge 20 ]; then
-    echo "✓ All $test_count tests passed (1 positive + 19 negative)"
+if [ "$pass_count" -eq "$total_test_count" ] && [ "$structural_test_count" -ge 20 ] && [ "$instance_test_count" -ge 6 ]; then
+    echo "✓ All $total_test_count tests passed"
+    echo "  - Structural: $structural_test_count tests (1 positive + $((structural_test_count - 1)) negative)"
+    echo "  - Instance validation: $instance_test_count tests (3 positive + 3 negative)"
+    echo ""
+    echo "=== Test Results by Name ==="
+    for result in "${test_results[@]}"; do
+        echo "  $result"
+    done
     exit 0
 else
-    echo "✗ Some tests failed or insufficient coverage (need 20, have $pass_count/$test_count)"
+    echo "✗ Tests failed"
+    echo "  Expected: $structural_test_count structural + $instance_test_count instance = $total_test_count total"
+    echo "  Passed: $pass_count/$total_test_count"
     exit 1
 fi

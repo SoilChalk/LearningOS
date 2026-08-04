@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """
-Task 002 Validation Script
+Task 002 Validation Script (Protocol 19)
 
 Validates Gate 2 design deliverables for the First Vertical Scenario.
-Uses only Python standard library. Returns 0 only when all required
-design artifacts pass validation.
+Uses only Python standard library for structural checks. Returns 0 only
+when all required design artifacts pass validation.
+
+Protocol 19 Addition: Checks jsonschema availability and version for
+instance validation tests.
 
 Validation Scope:
 - Required documents exist and have correct structure
@@ -13,12 +16,26 @@ Validation Scope:
 - Design constraints from Task Contract are enforced
 - Gate 1 limitations are acknowledged
 - PER-STEP validation: each of 6 steps has entry/exit criteria within its own text range
+- JSON Schema validation dependency availability
 """
 
 import json
 import re
 import sys
 from pathlib import Path
+
+
+def check_jsonschema_availability():
+    """Check if jsonschema is available and record version."""
+    print("Checking jsonschema availability...")
+    try:
+        import jsonschema
+        version = jsonschema.__version__
+        print(f"✓ jsonschema {version} available")
+        return True, version
+    except ImportError:
+        print("✗ jsonschema not available", file=sys.stderr)
+        return False, None
 
 
 def read_file(filepath):
@@ -554,9 +571,15 @@ def validate_design_constraints():
 
 def main():
     """Run all validations."""
-    print("=== Task 002 Gate 2 Design Validation ===\n")
+    print("=== Task 002 Gate 2 Design Validation (Protocol 19) ===\n")
 
     repo_root = Path(__file__).parent.parent
+
+    # Check jsonschema availability (Protocol 19)
+    jsonschema_available, jsonschema_version = check_jsonschema_availability()
+    if not jsonschema_available:
+        print("WARNING: jsonschema not available; instance validation tests will not run", file=sys.stderr)
+    print()
 
     # Check required files exist
     required_files = [
@@ -593,8 +616,12 @@ def main():
             failed += 1
 
     print(f"\n=== Validation Summary ===")
-    print(f"Checks passed: {passed}/{len(checks)}")
-    print(f"Checks failed: {failed}/{len(checks)}")
+    print(f"Structural checks passed: {passed}/{len(checks)}")
+    print(f"Structural checks failed: {failed}/{len(checks)}")
+    if jsonschema_available:
+        print(f"jsonschema version: {jsonschema_version}")
+    else:
+        print("jsonschema: NOT AVAILABLE (instance tests cannot run)")
 
     if failed == 0:
         print("\n✓ All Task 002 Gate 2 design validations passed")
