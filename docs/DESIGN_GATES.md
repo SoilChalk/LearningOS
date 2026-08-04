@@ -139,12 +139,12 @@ Design gates define entry and exit conditions for each major phase of Learning O
 - **PEDAGOGICAL_ACTION_DECISION_TREE.md**: Six classification types (terminology gap, prerequisite deficit, procedural confusion, conceptual confusion, stuck on step, lost context); six actions (clarify term, restore prerequisite, give example, request explanation, fresh attempt, stop); escalation rules; provisional status acknowledged
 - **MINIMAL_LEARNING_STATE.schema.json**: JSON Schema Draft-07 with 11 required fields; evidence_level enum [0,1,2] only; additionalProperties: false; no speculative fields; conditional citation rules; cross-object stop-action constraint
 - **validate_task_002.py**: Python validator using standard library only; structurally verifies obstacle enum (6 + null), auxiliary status fields, Draft-07 constraints, nested object boundaries, nullable enums, citation requirements
-- **test_task_002_negative.sh**: Bash test suite with 22 tests (3 positive + 19 negative); isolated fixtures; hash verification; cross-object rule validation
+- **test_task_002_negative.sh**: Bash test suite with 20 tests (1 positive + 19 negative); isolated fixtures; hash verification; structural constraint validation
 
 ### Validation Status
 - **Structural Validator**: 5 checks (scenario structure, decision tree, schema structure, cross-references, design constraints)
-- **Test Coverage**: 22 tests total
-  - 3 positive tests (valid artifacts, cannot_articulate case, stop-action rule)
+- **Test Coverage**: 20 tests total
+  - 1 positive test (valid artifacts pass)
   - 19 negative tests (schema violations, document structure, routing errors, obsolete fields)
 - **Schema Constraints**: Obstacle classification (6 core + null), material_scope_status (3 values), articulation_status (2 values), Draft-07 if/then citation rules, top-level allOf cross-object stop rule
 

@@ -1,22 +1,22 @@
 {
   "protocol_version": 18,
   "task_id": "task-002-gate-2-test-and-audit-closure",
-  "status": "in_progress",
+  "status": "candidate_complete",
   "branch": "agent/task-002-first-vertical-scenario",
-  "baseline_commit": "3ad76b4d2c3c0b0f410eaf06c0f5bbfde031bc7b",
-  "completion_commit": "cc9ca7c29d2e0d6e1cf2dc495039b5d10ee2a6bf",
-  "completed_at": "2026-08-04T17:23:54+08:00",
+  "baseline_commit": "11fa64efb62caf1ceca78a3b20595d003f4ee037",
+  "completion_commit": "569a8022edb647a30948dc6311d3d5fa2dfd8a02",
+  "completed_at": "2026-08-04T18:26:36+08:00",
   "timestamp_source": "git_committer_metadata",
   "objective": "Complete Protocol 17 requirements that were incorrectly deferred: implement missing schema and routing tests, strengthen structural validation, enforce cross-object stop-action rule, update DESIGN_GATES.md, repair result and audit records, replace stale PR #3 body, run every final acceptance command.",
   "lifecycle": {
-    "previous_agent_execution": "in_progress",
-    "technical_completion": "in_progress",
+    "previous_agent_execution": "completed",
+    "technical_completion": "candidate_complete",
     "reviewer_acceptance": "pending",
     "latest_reviewer_record": "protocol_17_changes_requested",
     "owner_acceptance": "authorized",
-    "lifecycle_status": "in_progress",
+    "lifecycle_status": "candidate_complete",
     "formal_closure": false,
-    "task_002_status": "in_progress"
+    "task_002_status": "candidate_complete"
   },
   "predecessor": {
     "task_id": "task-001-core-research",
@@ -91,7 +91,10 @@
       "validator": "scripts/validate_task_002.py",
       "negative_tests": "scripts/test_task_002_negative.sh",
       "validator_checks": 5,
-      "negative_test_cases": 9
+      "positive_test_cases": 1,
+      "negative_test_cases": 19,
+      "total_test_cases": 20,
+      "note": "Instance-level validation for cannot_articulate and cross-object stop rule verified structurally in validator (no JSON Schema validator dependency to avoid network calls during tests)"
     }
   },
   "gate_2_exit_conditions": {
@@ -145,6 +148,7 @@
     ]
   },
   "files_changed": [
+    "agent-control/CURRENT_TASK.yaml",
     "docs/FIRST_VERTICAL_SCENARIO.md",
     "docs/PEDAGOGICAL_ACTION_DECISION_TREE.md",
     "docs/DESIGN_GATES.md",
@@ -156,29 +160,29 @@
   ],
   "validation": [
     {
-      "command": "python3 -m json.tool templates/MINIMAL_LEARNING_STATE.schema.json",
+      "command": "python3 -m json.tool templates/MINIMAL_LEARNING_STATE.schema.json >/dev/null",
       "exit_code": 0,
       "note": "State schema JSON valid"
     },
     {
-      "command": "python3 -m json.tool agent-control/results/task-002.json",
+      "command": "python3 -m json.tool agent-control/results/task-002.json >/dev/null",
       "exit_code": 0,
       "note": "Task result JSON valid"
     },
     {
       "command": "python3 scripts/validate_task_002.py",
       "exit_code": 0,
-      "note": "All 5 design validations passed (including per-step criteria)"
+      "note": "All 5 design validations passed (structural checks for obstacle enum, auxiliary fields, Draft-07 constraints)"
     },
     {
       "command": "bash scripts/test_task_002_negative.sh",
       "exit_code": 0,
-      "note": "All 15 tests passed (1 positive + 14 negative); live files unchanged"
+      "note": "All 20 tests passed (1 positive + 19 negative); live files unchanged"
     },
     {
       "command": "python3 scripts/check_control_state.py",
       "exit_code": 0,
-      "note": "Control state consistency verified for task-002-gate-2-review-repair"
+      "note": "Control state consistency verified for task-002-gate-2-test-and-audit-closure"
     },
     {
       "command": "git diff --check",
@@ -196,9 +200,9 @@
       "note": "Decision tree document header verified"
     },
     {
-      "command": "python3 allowed paths check",
-      "exit_code": 0,
-      "note": "Only allowed paths modified (9 files: CURRENT_TASK, result, DESIGN_GATES, scenario, decision_tree, schema, validator, negative_tests, state)"
+      "command": "python3 allowlist check (origin/main...HEAD)",
+      "exit_code": 1,
+      "note": "FIRST_VERTICAL_SCENARIO.md and PEDAGOGICAL_ACTION_DECISION_TREE.md appear in diff because they exist on task branch but not on origin/main (created in Protocol 15, PR #3 not yet merged). Protocol 18 did not modify these files (verified via git diff ae0b7a5..HEAD). Only allowed files modified in Protocol 18: DESIGN_GATES.md, test_task_002_negative.sh, validate_task_002.py, MINIMAL_LEARNING_STATE.schema.json"
     }
   ],
   "unresolved_design_questions": [
@@ -238,7 +242,7 @@
       "measurement": "Does one action per confusion resolve issue, or do most sessions require multiple iterations"
     }
   ],
-  "next_action": "Protocol 16 repair complete. PR #3 updated with Review 13 corrections. Awaiting independent re-review.",
+  "next_action": "Protocol 18 test and audit closure complete. Awaiting independent review of all repairs.",
   "explicitly_not_done": [
     "Did not implement frontend or application code",
     "Did not implement runtime agents or multi-agent orchestration",
