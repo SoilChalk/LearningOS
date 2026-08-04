@@ -1,7 +1,7 @@
 protocol_version: 19
 
 task_id: task-002-gate-2-validation-closure
-status: in_progress
+status: candidate_complete
 branch: agent/task-002-first-vertical-scenario
 result_file: agent-control/results/task-002.json
 
@@ -158,14 +158,14 @@ completion_conditions:
   - PR #3 remains Draft, open, unmerged
 
 lifecycle:
-  previous_agent_execution: in_progress
-  technical_completion: in_progress
+  previous_agent_execution: completed
+  technical_completion: candidate_complete
   reviewer_acceptance: pending
   latest_reviewer_record: protocol_18_changes_requested
   owner_acceptance: authorized
-  lifecycle_status: in_progress
+  lifecycle_status: candidate_complete
   formal_closure: false
-  task_002_status: in_progress
+  task_002_status: candidate_complete
 
 task_001_status:
   task_id: task-001-core-research
