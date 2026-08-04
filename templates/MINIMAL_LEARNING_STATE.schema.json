@@ -113,7 +113,7 @@
     "observed_difficulty": {
       "type": "object",
       "description": "User's expressed confusion or obstacle (Step 3 output)",
-      "required": ["user_statement", "system_classification", "expressed_at"],
+      "required": ["user_statement", "obstacle_classification", "material_scope_status", "articulation_status", "expressed_at"],
       "additionalProperties": false,
       "properties": {
         "user_statement": {
@@ -121,9 +121,9 @@
           "description": "User's verbatim confusion expression (accept ANY natural language including 'I don't know what's confusing')",
           "minLength": 1
         },
-        "system_classification": {
-          "type": "string",
-          "description": "System's provisional classification for decision tree routing",
+        "obstacle_classification": {
+          "type": ["string", "null"],
+          "description": "System's provisional classification of the articulated obstacle (null when user cannot_articulate)",
           "enum": [
             "terminology_gap",
             "prerequisite_deficit",
@@ -131,7 +131,23 @@
             "conceptual_confusion",
             "stuck_on_specific_step",
             "lost_context",
-            "outside_corpus",
+            null
+          ]
+        },
+        "material_scope_status": {
+          "type": "string",
+          "description": "Whether confusion relates to uploaded material scope",
+          "enum": [
+            "in_scope",
+            "missing_required_material",
+            "outside_supplied_corpus"
+          ]
+        },
+        "articulation_status": {
+          "type": "string",
+          "description": "Whether user can articulate what's confusing",
+          "enum": [
+            "articulated",
             "cannot_articulate"
           ]
         },
@@ -210,6 +226,57 @@
           "description": "Number of times action escalated in this session",
           "minimum": 0,
           "default": 0
+        }
+      },
+      "if": {
+        "properties": {
+          "action_type": {
+            "enum": ["clarify_terminology", "restore_prerequisite", "give_bounded_example", "request_explanation", "request_fresh_attempt"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "material_citations": {
+            "minItems": 1
+          }
+        }
+      },
+      "else": {
+        "if": {
+          "properties": {
+            "action_type": {
+              "const": "stop_and_request_more_material"
+            }
+          }
+        },
+        "then": {
+          "anyOf": [
+            {
+              "properties": {
+                "material_citations": {
+                  "minItems": 0,
+                  "maxItems": 0
+                },
+                "action_details": {
+                  "required": ["stop_reason"],
+                  "properties": {
+                    "stop_reason": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "material_citations": {
+                  "minItems": 1
+                }
+              }
+            }
+          ]
         }
       }
     },

@@ -24,13 +24,13 @@ This decision tree maps observable interaction evidence to bounded pedagogical a
 
 **Required Inputs**:
 1. **User Confusion Statement** (verbatim from Step 3)
-2. **System Classification** (one of six types below)
-3. **Material Context** (section/problem where confusion occurred)
-4. **Task Boundary** (concept understanding vs. problem solving)
-5. **Material Scope Status** (in_scope, missing_required_material, outside_supplied_corpus)
-6. **Articulation Status** (articulated, cannot_articulate)
+2. **Obstacle Classification** (one of six types or null)
+3. **Material Scope Status** (in_scope, missing_required_material, outside_supplied_corpus)
+4. **Articulation Status** (articulated, cannot_articulate)
+5. **Material Context** (section/problem where confusion occurred)
+6. **Task Boundary** (concept understanding vs. problem solving)
 
-**Six Observable Classification Types** (core obstacle classifications):
+**Six Core Obstacle Classifications** (when user can articulate):
 1. **Terminology Gap**: User mentions unfamiliar term or asks "what does X mean?"
 2. **Prerequisite Deficit**: User states "I don't remember Y" or references earlier material
 3. **Procedural Confusion**: User understands goal but not steps ("I don't know how to...")
@@ -38,16 +38,7 @@ This decision tree maps observable interaction evidence to bounded pedagogical a
 5. **Lost Context**: User states "I forgot where I was" or "What am I solving?"
 6. **Stuck on Specific Step**: User identifies precise location ("I'm stuck at step 3")
 
-**Auxiliary Status Fields** (NOT core obstacle classifications):
-
-- **Material Scope Status**:
-  - `in_scope`: User confusion relates to uploaded material
-  - `missing_required_material`: User references section not uploaded
-  - `outside_supplied_corpus`: User query about topic not covered in any uploaded material
-
-- **Articulation Status**:
-  - `articulated`: User can express what's confusing ("I don't understand X")
-  - `cannot_articulate`: User states "I don't know what's confusing" or "everything is confusing"
+**Note**: When articulation_status is "cannot_articulate", obstacle_classification may be null.
 
 ### Output from Tree
 
