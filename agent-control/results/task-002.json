@@ -1,28 +1,82 @@
 {
-  "protocol_version": 18,
-  "task_id": "task-002-gate-2-test-and-audit-closure",
-  "status": "candidate_complete",
+  "protocol_version": 19,
+  "task_id": "task-002-gate-2-validation-closure",
+  "status": "in_progress",
   "branch": "agent/task-002-first-vertical-scenario",
-  "baseline_commit": "11fa64efb62caf1ceca78a3b20595d003f4ee037",
-  "completion_commit": "569a8022edb647a30948dc6311d3d5fa2dfd8a02",
-  "completed_at": "2026-08-04T18:26:36+08:00",
+  "baseline_commit": "aeddd893147fc3de30135ff9bece58b113257198",
+  "completion_commit": "063cf251a3b77fd2a9a9b82f936f5c3041326a62",
+  "completed_at": "2026-08-04T23:59:30+08:00",
   "timestamp_source": "git_committer_metadata",
-  "objective": "Complete Protocol 17 requirements that were incorrectly deferred: implement missing schema and routing tests, strengthen structural validation, enforce cross-object stop-action rule, update DESIGN_GATES.md, repair result and audit records, replace stale PR #3 body, run every final acceptance command.",
+  "objective": "Correct Protocol 18 completion-state and audit failures without reopening Gate 2 scenario design. Restore and execute required instance-level JSON Schema tests, make test counts machine-derived and internally consistent, replace invalid cumulative allowlist check with protocol-baseline check, correct future and unsupported audit timestamps, correct result record and PR body, rerun every final validation command.",
   "lifecycle": {
-    "previous_agent_execution": "completed",
-    "technical_completion": "candidate_complete",
+    "previous_agent_execution": "in_progress",
+    "technical_completion": "in_progress",
     "reviewer_acceptance": "pending",
-    "latest_reviewer_record": "protocol_17_changes_requested",
+    "latest_reviewer_record": "protocol_18_changes_requested",
     "owner_acceptance": "authorized",
-    "lifecycle_status": "candidate_complete",
+    "lifecycle_status": "in_progress",
     "formal_closure": false,
-    "task_002_status": "candidate_complete"
+    "task_002_status": "in_progress"
   },
   "predecessor": {
+    "protocol_18_head": "aeddd893147fc3de30135ff9bece58b113257198",
+    "pr_number": 3,
+    "pr_state": "draft_open_unmerged",
     "task_id": "task-001-core-research",
     "formal_closure": true,
     "gate_1_status": "met_with_documented_limitations",
     "closure_result": "agent-control/results/task-001-owner-closure.json"
+  },
+  "protocol_19_repairs": {
+    "repair_1_jsonschema_validation": {
+      "status": "complete",
+      "jsonschema_version": "4.26.0",
+      "validator_type": "Draft7Validator",
+      "availability_check": "pass"
+    },
+    "repair_2_instance_validation_tests": {
+      "status": "complete",
+      "tests_implemented": 6,
+      "positive_tests": 3,
+      "negative_tests": 3,
+      "test_names": [
+        "Instance Positive A: cannot_articulate + null obstacle + in_scope + request_explanation + citations",
+        "Instance Positive B: stop + missing_required_material + empty citations + stop_reason",
+        "Instance Positive C: stop + outside_supplied_corpus + empty citations + stop_reason",
+        "Instance Negative A: stop + in_scope + empty citations + stop_reason (invalid - material is in_scope)",
+        "Instance Negative B: stop + missing_required_material + empty citations + NO stop_reason",
+        "Instance Negative C: request_explanation + empty citations (source-grounded action without citations)"
+      ],
+      "all_tests_passed": true
+    },
+    "repair_3_machine_derived_counts": {
+      "status": "complete",
+      "structural_tests": 21,
+      "instance_tests": 6,
+      "total_tests": 27,
+      "positive_tests": 4,
+      "negative_tests": 23,
+      "counters": "machine_derived_from_actual_execution",
+      "test_summary_generated": true
+    },
+    "repair_4_correct_allowlist": {
+      "status": "pending_c2",
+      "protocol_baseline": "aeddd893147fc3de30135ff9bece58b113257198"
+    },
+    "repair_5_correct_timestamps": {
+      "status": "complete",
+      "completion_commit_timestamp": "2026-08-04T23:59:30+08:00",
+      "timestamp_source": "git_committer_metadata",
+      "future_timestamps_removed": true
+    },
+    "repair_6_correct_result_record": {
+      "status": "in_progress",
+      "protocol_19_metadata": "present",
+      "baseline_recorded": true,
+      "jsonschema_version_recorded": true,
+      "instance_tests_recorded": true,
+      "machine_derived_counts_recorded": true
+    }
   },
   "design_artifacts": {
     "scenario_specification": {
@@ -36,7 +90,7 @@
         "Independent Completion Evidence Request",
         "Minimal State Persistence"
       ],
-      "entry_exit_criteria": "All 6 steps have explicit entry and exit criteria",
+      "entry_exit_criteria": "All 6 steps have explicit entry/exit criteria per step",
       "failure_states": 6,
       "success_criteria": "Gate 3 pilot metrics defined (position recovery < 1 min, confusion acceptance, independent check completion, state < 2KB, pedagogical > administrative time)",
       "explicit_non_goals": 10
@@ -91,10 +145,11 @@
       "validator": "scripts/validate_task_002.py",
       "negative_tests": "scripts/test_task_002_negative.sh",
       "validator_checks": 5,
-      "positive_test_cases": 1,
-      "negative_test_cases": 19,
-      "total_test_cases": 20,
-      "note": "Instance-level validation for cannot_articulate and cross-object stop rule verified structurally in validator (no JSON Schema validator dependency to avoid network calls during tests)"
+      "structural_test_cases": 21,
+      "instance_test_cases": 6,
+      "total_test_cases": 27,
+      "jsonschema_availability_check": true,
+      "jsonschema_version": "4.26.0"
     }
   },
   "gate_2_exit_conditions": {
@@ -107,7 +162,7 @@
     "schema_enforces_source_grounding": true,
     "nested_objects_bounded": true,
     "success_criteria_measurable_without_complex_model": true,
-    "all_acceptance_commands_passed": true
+    "all_acceptance_commands_passed": false
   },
   "design_constraints_enforced": {
     "single_scenario_only": true,
@@ -147,62 +202,68 @@
       "Skill decomposition for unstructured tasks (structured material assumed)"
     ]
   },
-  "files_changed": [
+  "protocol_changed_paths": [
     "agent-control/CURRENT_TASK.yaml",
+    "docs/DESIGN_GATES.md",
+    "scripts/test_task_002_negative.sh",
+    "scripts/validate_task_002.py"
+  ],
+  "pr_cumulative_changed_paths": [
+    "agent-control/CURRENT_TASK.yaml",
+    "agent-control/results/task-002.json",
+    "docs/DESIGN_GATES.md",
     "docs/FIRST_VERTICAL_SCENARIO.md",
     "docs/PEDAGOGICAL_ACTION_DECISION_TREE.md",
-    "docs/DESIGN_GATES.md",
-    "templates/MINIMAL_LEARNING_STATE.schema.json",
-    "scripts/validate_task_002.py",
     "scripts/test_task_002_negative.sh",
+    "scripts/validate_task_002.py",
     "state/CURRENT_STATE.yaml",
-    "agent-control/results/task-002.json"
+    "templates/MINIMAL_LEARNING_STATE.schema.json"
   ],
   "validation": [
     {
       "command": "python3 -m json.tool templates/MINIMAL_LEARNING_STATE.schema.json >/dev/null",
-      "exit_code": 0,
-      "note": "State schema JSON valid"
+      "exit_code": "pending",
+      "note": "State schema JSON validity"
     },
     {
       "command": "python3 -m json.tool agent-control/results/task-002.json >/dev/null",
-      "exit_code": 0,
-      "note": "Task result JSON valid"
+      "exit_code": "pending",
+      "note": "Task result JSON validity"
     },
     {
       "command": "python3 scripts/validate_task_002.py",
-      "exit_code": 0,
-      "note": "All 5 design validations passed (structural checks for obstacle enum, auxiliary fields, Draft-07 constraints)"
+      "exit_code": "pending",
+      "note": "Design validations and jsonschema availability"
     },
     {
       "command": "bash scripts/test_task_002_negative.sh",
-      "exit_code": 0,
-      "note": "All 20 tests passed (1 positive + 19 negative); live files unchanged"
+      "exit_code": "pending",
+      "note": "All tests (27 total: 21 structural + 6 instance)"
     },
     {
       "command": "python3 scripts/check_control_state.py",
-      "exit_code": 0,
-      "note": "Control state consistency verified for task-002-gate-2-test-and-audit-closure"
+      "exit_code": "pending",
+      "note": "Control state consistency"
     },
     {
       "command": "git diff --check",
-      "exit_code": 0,
+      "exit_code": "pending",
       "note": "No trailing whitespace"
     },
     {
       "command": "grep -q '^# First Vertical Scenario' docs/FIRST_VERTICAL_SCENARIO.md",
-      "exit_code": 0,
-      "note": "Scenario document header verified"
+      "exit_code": "pending",
+      "note": "Scenario document header"
     },
     {
       "command": "grep -q '^# Pedagogical Action Decision Tree' docs/PEDAGOGICAL_ACTION_DECISION_TREE.md",
-      "exit_code": 0,
-      "note": "Decision tree document header verified"
+      "exit_code": "pending",
+      "note": "Decision tree document header"
     },
     {
-      "command": "python3 allowlist check (origin/main...HEAD)",
-      "exit_code": 1,
-      "note": "FIRST_VERTICAL_SCENARIO.md and PEDAGOGICAL_ACTION_DECISION_TREE.md appear in diff because they exist on task branch but not on origin/main (created in Protocol 15, PR #3 not yet merged). Protocol 18 did not modify these files (verified via git diff ae0b7a5..HEAD). Only allowed files modified in Protocol 18: DESIGN_GATES.md, test_task_002_negative.sh, validate_task_002.py, MINIMAL_LEARNING_STATE.schema.json"
+      "command": "Protocol 19 allowlist check (aeddd893...HEAD)",
+      "exit_code": "pending",
+      "note": "Protocol-baseline allowlist against aeddd893147fc3de30135ff9bece58b113257198"
     }
   ],
   "unresolved_design_questions": [
@@ -242,7 +303,7 @@
       "measurement": "Does one action per confusion resolve issue, or do most sessions require multiple iterations"
     }
   ],
-  "next_action": "Protocol 18 test and audit closure complete. Awaiting independent review of all repairs.",
+  "next_action": "Protocol 19 Phase 6-9: Complete audit finalization (C2), run all acceptance commands, update authority files to candidate_complete, push branch and update PR #3.",
   "explicitly_not_done": [
     "Did not implement frontend or application code",
     "Did not implement runtime agents or multi-agent orchestration",
