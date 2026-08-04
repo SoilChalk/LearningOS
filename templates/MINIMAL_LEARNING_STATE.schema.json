@@ -377,5 +377,52 @@
       }
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "last_pedagogical_action": {
+            "properties": {
+              "action_type": {
+                "const": "stop_and_request_more_material"
+              },
+              "material_citations": {
+                "maxItems": 0
+              }
+            },
+            "required": ["action_type", "material_citations"]
+          }
+        },
+        "required": ["last_pedagogical_action"]
+      },
+      "then": {
+        "properties": {
+          "observed_difficulty": {
+            "properties": {
+              "material_scope_status": {
+                "enum": ["missing_required_material", "outside_supplied_corpus"]
+              }
+            },
+            "required": ["material_scope_status"]
+          },
+          "last_pedagogical_action": {
+            "properties": {
+              "action_details": {
+                "required": ["stop_reason"],
+                "properties": {
+                  "stop_reason": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            "required": ["action_details"]
+          }
+        },
+        "required": ["observed_difficulty", "last_pedagogical_action"]
+      }
+    }
+  ]
 }

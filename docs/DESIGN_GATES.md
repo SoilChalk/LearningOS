@@ -1,8 +1,8 @@
 # Learning OS Design Gates
 
-**Generated**: 2026-07-29
-**Task**: task-001-core-research
-**Status**: Stage 3 - Eight-Source Synthesis Complete
+**Protocol**: 18
+**Task**: task-002-gate-2-test-and-audit-closure
+**Status**: Gate 2 Test and Audit Closure
 
 ---
 
@@ -110,7 +110,7 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ## Gate 2: First Vertical Scenario Design
 
-**Current Status**: CANDIDATE COMPLETE (task-002-first-vertical-scenario-design)
+**Current Status**: CANDIDATE COMPLETE (awaiting independent review)
 
 ### Entry Conditions
 - [x] Gate 1 exit conditions met
@@ -137,9 +137,23 @@ Design gates define entry and exit conditions for each major phase of Learning O
 ### Design Artifacts Created
 - **FIRST_VERTICAL_SCENARIO.md**: Complete 6-step flow (Material Position Recovery → Task Boundary Definition → Confusion Expression → Pedagogical Action → Independent Check → State Persistence); entry/exit criteria per step; failure states; measurable success criteria; explicit non-goals
 - **PEDAGOGICAL_ACTION_DECISION_TREE.md**: Six classification types (terminology gap, prerequisite deficit, procedural confusion, conceptual confusion, stuck on step, lost context); six actions (clarify term, restore prerequisite, give example, request explanation, fresh attempt, stop); escalation rules; provisional status acknowledged
-- **MINIMAL_LEARNING_STATE.schema.json**: JSON Schema with 11 required fields; evidence_level enum [0,1,2] only; additionalProperties: false; no speculative fields (no knowledge_graph, mastery estimates, cross-domain)
-- **validate_task_002.py**: Python validator using standard library only; checks document structure, cross-references, design constraints, Gate 1 limitations
-- **test_task_002_negative.sh**: Bash negative test suite (1 positive + 8 negative cases); isolated fixtures; hash verification
+- **MINIMAL_LEARNING_STATE.schema.json**: JSON Schema Draft-07 with 11 required fields; evidence_level enum [0,1,2] only; additionalProperties: false; no speculative fields; conditional citation rules; cross-object stop-action constraint
+- **validate_task_002.py**: Python validator using standard library only; structurally verifies obstacle enum (6 + null), auxiliary status fields, Draft-07 constraints, nested object boundaries, nullable enums, citation requirements
+- **test_task_002_negative.sh**: Bash test suite with 22 tests (3 positive + 19 negative); isolated fixtures; hash verification; cross-object rule validation
+
+### Validation Status
+- **Structural Validator**: 5 checks (scenario structure, decision tree, schema structure, cross-references, design constraints)
+- **Test Coverage**: 22 tests total
+  - 3 positive tests (valid artifacts, cannot_articulate case, stop-action rule)
+  - 19 negative tests (schema violations, document structure, routing errors, obsolete fields)
+- **Schema Constraints**: Obstacle classification (6 core + null), material_scope_status (3 values), articulation_status (2 values), Draft-07 if/then citation rules, top-level allOf cross-object stop rule
+
+### Gate 2 Status
+- **Implementation**: candidate_complete
+- **Independent Review**: pending
+- **Exit Conditions Accepted**: false
+- **Blocked By**: independent_review
+- **Reviewer Status**: Protocol 17 changes requested, Protocol 18 repairs complete
 
 ### Prohibited Activities
 - [x] Building for multiple scenarios simultaneously (single scenario only)
@@ -155,15 +169,6 @@ Design gates define entry and exit conditions for each major phase of Learning O
 - **Layer 4**: "Understood" vs. "can solve" definition (evidence levels 0/1/2); single-instance vs. consistent performance (level 2 ≠ mastery); intervention effectiveness (measure in Gate 3)
 - **Layer 5**: Unified model across task types (out of scope); cross-task transfer (single task boundary); skill decomposition for unstructured tasks (structured material assumed)
 
-### Gate 2 Validation Results
-- All required documents created and validated
-- Every flow step has explicit entry/exit criteria
-- Decision tree maps observable evidence to source-bounded actions
-- State schema contains only fields used in this scenario (no speculative architecture)
-- Success criteria measurable without complex learner model
-- Design constraints enforced (single scenario, no frontend, no mastery claims)
-- Negative tests pass (8 invalid cases correctly rejected)
-
 ---
 
 ## Gate 3: Minimum Viable Pilot
@@ -172,10 +177,14 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ### Entry Conditions
 - [ ] Gate 2 exit conditions met
+- [ ] Gate 2 independent review accepted
 - [ ] Scenario specification validated
 - [ ] Success criteria defined
 - [ ] Pilot materials identified (must be real, not synthetic)
 - [ ] Evidence collection protocol ready
+
+### Blocked By
+- Gate 2 independent review pending
 
 ### Activities
 - Implement minimum flow for single scenario
@@ -278,6 +287,7 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ---
 
-**Last Updated**: 2026-07-29T19:00:00Z
-**Phase**: Gate 1 - Core Research COMPLETE
-**Next Phase**: Gate 2 - First Vertical Scenario Design (ready to begin)
+**Last Updated**: 2026-08-05T10:00:00+08:00
+**Protocol**: 18
+**Phase**: Gate 2 - Test and Audit Closure (candidate_complete)
+**Next Phase**: Gate 2 Independent Review → Gate 3 MVP Pilot

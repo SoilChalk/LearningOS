@@ -342,6 +342,120 @@ def validate_state_schema():
         print("ERROR: last_pedagogical_action missing material_citations field", file=sys.stderr)
         return False
 
+    # STRUCTURAL CHECK: obstacle_classification enum exactly 6 + null
+    observed_difficulty = schema.get('properties', {}).get('observed_difficulty', {})
+    obstacle_props = observed_difficulty.get('properties', {}).get('obstacle_classification', {})
+    obstacle_enum = obstacle_props.get('enum', [])
+    
+    expected_obstacles = [
+        'terminology_gap',
+        'prerequisite_deficit',
+        'procedural_confusion',
+        'conceptual_confusion',
+        'stuck_on_specific_step',
+        'lost_context',
+        None
+    ]
+    
+    if set(obstacle_enum) != set(expected_obstacles):
+        print(f"ERROR: obstacle_classification enum must be exactly 6 strings + null, got {obstacle_enum}", file=sys.stderr)
+        return False
+    
+    # Check cannot_articulate is NOT in obstacle enum
+    if 'cannot_articulate' in obstacle_enum:
+        print("ERROR: cannot_articulate must not be in obstacle_classification enum", file=sys.stderr)
+        return False
+    
+    # Check obsolete outside_corpus is absent
+    if 'outside_corpus' in observed_difficulty.get('properties', {}):
+        print("ERROR: obsolete outside_corpus field must not exist", file=sys.stderr)
+        return False
+    
+    # STRUCTURAL CHECK: material_scope_status exactly 3 values
+    material_scope = observed_difficulty.get('properties', {}).get('material_scope_status', {})
+    material_scope_enum = material_scope.get('enum', [])
+    expected_scope = ['in_scope', 'missing_required_material', 'outside_supplied_corpus']
+    
+    if set(material_scope_enum) != set(expected_scope):
+        print(f"ERROR: material_scope_status enum must be exactly {expected_scope}, got {material_scope_enum}", file=sys.stderr)
+        return False
+    
+    # STRUCTURAL CHECK: articulation_status exactly 2 values
+    articulation = observed_difficulty.get('properties', {}).get('articulation_status', {})
+    articulation_enum = articulation.get('enum', [])
+    expected_articulation = ['articulated', 'cannot_articulate']
+    
+    if set(articulation_enum) != set(expected_articulation):
+        print(f"ERROR: articulation_status enum must be exactly {expected_articulation}, got {articulation_enum}", file=sys.stderr)
+        return False
+    
+    # STRUCTURAL CHECK: All nested objects with additionalProperties: false
+    def check_nested_additional_props(obj, path="root"):
+        if isinstance(obj, dict):
+            if obj.get('type') == 'object' and 'properties' in obj:
+                if obj.get('additionalProperties') is not False:
+                    print(f"ERROR: Nested object at {path} missing additionalProperties: false", file=sys.stderr)
+                    return False
+                for prop_name, prop_schema in obj.get('properties', {}).items():
+                    if not check_nested_additional_props(prop_schema, f"{path}.{prop_name}"):
+                        return False
+            elif 'items' in obj:
+                if not check_nested_additional_props(obj['items'], f"{path}[]"):
+                    return False
+        return True
+    
+    if not check_nested_additional_props(schema):
+        return False
+    
+    # STRUCTURAL CHECK: Nullable enums include null
+    def check_nullable_enums(obj, path="root"):
+        if isinstance(obj, dict):
+            if 'type' in obj and 'enum' in obj:
+                types = obj['type'] if isinstance(obj['type'], list) else [obj['type']]
+                if 'null' in types or ['string', 'null'] == obj['type'] or ['integer', 'null'] == obj['type']:
+                    if None not in obj['enum'] and 'null' not in obj['enum']:
+                        print(f"ERROR: Nullable field at {path} has enum without null: {obj['enum']}", file=sys.stderr)
+                        return False
+            if 'properties' in obj:
+                for prop_name, prop_schema in obj['properties'].items():
+                    if not check_nullable_enums(prop_schema, f"{path}.{prop_name}"):
+                        return False
+            if 'items' in obj:
+                if not check_nullable_enums(obj['items'], f"{path}[]"):
+                    return False
+        return True
+    
+    if not check_nullable_enums(schema):
+        return False
+    
+    # STRUCTURAL CHECK: Draft-07 citation condition exists
+    if 'if' not in last_action or 'then' not in last_action:
+        print("ERROR: last_pedagogical_action missing Draft-07 if/then citation constraints", file=sys.stderr)
+        return False
+    
+    # Check five source-grounded actions require minItems >= 1
+    source_grounded_actions = [
+        'clarify_terminology',
+        'restore_prerequisite',
+        'give_bounded_example',
+        'request_explanation',
+        'request_fresh_attempt'
+    ]
+    
+    if_clause = last_action.get('if', {})
+    action_enum_in_if = if_clause.get('properties', {}).get('action_type', {}).get('enum', [])
+    
+    if set(action_enum_in_if) != set(source_grounded_actions):
+        print(f"ERROR: if clause must check exactly these 5 actions: {source_grounded_actions}, got {action_enum_in_if}", file=sys.stderr)
+        return False
+    
+    then_clause = last_action.get('then', {})
+    citations_min = then_clause.get('properties', {}).get('material_citations', {}).get('minItems', 0)
+    
+    if citations_min < 1:
+        print(f"ERROR: then clause must require minItems >= 1 for citations, got {citations_min}", file=sys.stderr)
+        return False
+
     # Check no knowledge_graph, mastery_estimate, or similar speculative fields
     prohibited_keywords = ['knowledge_graph', 'mastery_estimate', 'skill_decomposition', 'cross_domain']
     schema_str = json.dumps(schema).lower()

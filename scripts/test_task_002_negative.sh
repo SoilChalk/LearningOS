@@ -7,21 +7,30 @@
 # is invoked with modified fixtures. Before/after hashes prove live files
 # remain unchanged.
 #
-# Negative test cases:
-# 1. Scenario document missing required section
-# 2. Decision tree missing classification type
-# 3. State schema with prohibited field (knowledge_graph)
-# 4. State schema evidence_level includes level 3 (mastery inference)
-# 5. State schema additionalProperties not false
-# 6. Scenario does not reference decision tree
-# 7. Scenario has wrong number of flow steps
-# 8. Decision tree does not acknowledge provisional status
-# 9. Step 1 missing Entry Criteria
-# 10. Step 2 missing Exit Criteria
-# 11. Step 3 missing Recovery Behavior
-# 12. Step 4 missing Evidence Collection
-# 13. Step 5 missing Entry Criteria
-# 14. Step 6 missing Exit Criteria
+# Test cases (22 total: 3 positive + 19 negative):
+# Positive 1: Valid design artifacts pass
+# Positive 2: cannot_articulate + null obstacle + in_scope + diagnostic action
+# Positive 3: stop action with empty citations and missing_required_material
+# Negative 1: Scenario document missing required section
+# Negative 2: Decision tree missing classification type
+# Negative 3: State schema with prohibited field (knowledge_graph)
+# Negative 4: State schema evidence_level includes level 3 (mastery inference)
+# Negative 5: State schema additionalProperties not false
+# Negative 6: Scenario does not reference decision tree
+# Negative 7: Scenario has wrong number of flow steps
+# Negative 8: Decision tree does not acknowledge provisional status
+# Negative 9: Step 1 missing Entry Criteria
+# Negative 10: Step 2 missing Exit Criteria
+# Negative 11: Step 3 missing Recovery Behavior
+# Negative 12: Step 4 missing Evidence Collection
+# Negative 13: Step 5 missing Entry Criteria
+# Negative 14: Step 6 missing Exit Criteria
+# Negative 15: Source-grounded action with zero citations
+# Negative 16: Arbitrary property in bounded nested object
+# Negative 17: Nullable type with enum omitting null
+# Negative 18: cannot_articulate in core obstacle_classification enum
+# Negative 19: Undefined obstacle classification
+# Negative 20: Obsolete outside_corpus present
 
 set -euo pipefail
 
@@ -255,6 +264,96 @@ with open('$FIXTURE_DIR/docs/FIRST_VERTICAL_SCENARIO.md', 'w') as f:
 \"
 "
 
+# Test 15: Positive test - cannot_articulate with null obstacle and diagnostic action
+run_positive_test "Positive: cannot_articulate + null obstacle + in_scope + diagnostic action"
+
+# Test 16: Source-grounded action with zero citations
+run_negative_test "Source-grounded action with zero citations" "
+    python3 -c \"
+import json
+with open('$FIXTURE_DIR/templates/MINIMAL_LEARNING_STATE.schema.json') as f:
+    schema = json.load(f)
+# Remove the if/then citation constraint to simulate unconstrained schema
+if 'if' in schema.get('properties', {}).get('last_pedagogical_action', {}):
+    del schema['properties']['last_pedagogical_action']['if']
+if 'then' in schema.get('properties', {}).get('last_pedagogical_action', {}):
+    del schema['properties']['last_pedagogical_action']['then']
+if 'else' in schema.get('properties', {}).get('last_pedagogical_action', {}):
+    del schema['properties']['last_pedagogical_action']['else']
+with open('$FIXTURE_DIR/templates/MINIMAL_LEARNING_STATE.schema.json', 'w') as f:
+    json.dump(schema, f, indent=2)
+\"
+"
+
+# Test 17: Arbitrary property in bounded nested object
+run_negative_test "Arbitrary property in bounded nested object" "
+    sed -i.bak 's/\"additionalProperties\": false/\"additionalProperties\": true/' '$FIXTURE_DIR/templates/MINIMAL_LEARNING_STATE.schema.json'
+    rm -f '$FIXTURE_DIR/templates/MINIMAL_LEARNING_STATE.schema.json.bak'
+"
+
+# Test 18: Nullable type with enum omitting null
+run_negative_test "Nullable type with enum omitting null" "
+    python3 -c \"
+import json
+with open('$FIXTURE_DIR/templates/MINIMAL_LEARNING_STATE.schema.json') as f:
+    schema = json.load(f)
+# Modify check_type to have type null but enum without null
+check_type = schema['properties']['independent_check']['properties']['check_type']
+check_type['type'] = ['string', 'null']
+check_type['enum'] = ['explain_concept', 'solve_similar_problem', 'apply_to_example', 'none']  # Missing null
+with open('$FIXTURE_DIR/templates/MINIMAL_LEARNING_STATE.schema.json', 'w') as f:
+    json.dump(schema, f, indent=2)
+\"
+"
+
+# Test 19: cannot_articulate in core obstacle_classification enum
+run_negative_test "cannot_articulate in core obstacle_classification enum" "
+    python3 -c \"
+import json
+with open('$FIXTURE_DIR/templates/MINIMAL_LEARNING_STATE.schema.json') as f:
+    schema = json.load(f)
+# Add cannot_articulate to obstacle_classification enum
+obstacle_enum = schema['properties']['observed_difficulty']['properties']['obstacle_classification']['enum']
+if 'cannot_articulate' not in obstacle_enum:
+    obstacle_enum.insert(0, 'cannot_articulate')
+with open('$FIXTURE_DIR/templates/MINIMAL_LEARNING_STATE.schema.json', 'w') as f:
+    json.dump(schema, f, indent=2)
+\"
+"
+
+# Test 20: Undefined obstacle classification
+run_negative_test "Undefined obstacle classification" "
+    python3 -c \"
+import json
+with open('$FIXTURE_DIR/templates/MINIMAL_LEARNING_STATE.schema.json') as f:
+    schema = json.load(f)
+# Add invalid classification to enum
+obstacle_enum = schema['properties']['observed_difficulty']['properties']['obstacle_classification']['enum']
+obstacle_enum.append('invalid_classification')
+with open('$FIXTURE_DIR/templates/MINIMAL_LEARNING_STATE.schema.json', 'w') as f:
+    json.dump(schema, f, indent=2)
+\"
+"
+
+# Test 21: Obsolete outside_corpus present
+run_negative_test "Obsolete outside_corpus present in schema" "
+    python3 -c \"
+import json
+with open('$FIXTURE_DIR/templates/MINIMAL_LEARNING_STATE.schema.json') as f:
+    schema = json.load(f)
+# Add outside_corpus field (obsolete from Protocol 17)
+schema['properties']['observed_difficulty']['properties']['outside_corpus'] = {
+    'type': 'boolean',
+    'description': 'Obsolete field from Protocol 16'
+}
+with open('$FIXTURE_DIR/templates/MINIMAL_LEARNING_STATE.schema.json', 'w') as f:
+    json.dump(schema, f, indent=2)
+\"
+"
+
+# Test 22: Positive test - stop action with empty citations and out-of-scope material
+run_positive_test "Positive: stop action with empty citations and missing_required_material"
+
 # Verify live files unchanged
 HASH_AFTER_SCENARIO=$(shasum -a 256 "$REPO_ROOT/docs/FIRST_VERTICAL_SCENARIO.md" 2>/dev/null | awk '{print $1}' || echo "")
 HASH_AFTER_TREE=$(shasum -a 256 "$REPO_ROOT/docs/PEDAGOGICAL_ACTION_DECISION_TREE.md" 2>/dev/null | awk '{print $1}' || echo "")
@@ -280,10 +379,10 @@ echo "=== Negative test summary ==="
 echo "Tests run: $test_count"
 echo "Tests passed: $pass_count"
 
-if [ "$pass_count" -eq "$test_count" ] && [ "$test_count" -ge 15 ]; then
-    echo "✓ All $test_count tests passed (1 positive + 14 negative)"
+if [ "$pass_count" -eq "$test_count" ] && [ "$test_count" -ge 22 ]; then
+    echo "✓ All $test_count tests passed (3 positive + 19 negative)"
     exit 0
 else
-    echo "✗ Some tests failed or insufficient coverage (need 15, have $pass_count/$test_count)"
+    echo "✗ Some tests failed or insufficient coverage (need 22, have $pass_count/$test_count)"
     exit 1
 fi
