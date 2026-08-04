@@ -1,14 +1,14 @@
-protocol_version: 15
-updated_at: "2026-08-01T11:30:00+08:00"
-task_id: task-002-first-vertical-scenario-design
-phase: gate_2_first_vertical_scenario_design
+protocol_version: 16
+updated_at: "2026-08-04T12:00:00+08:00"
+task_id: task-002-gate-2-review-repair
+phase: gate_2_review_repair
 status: candidate_complete
 
 lifecycle:
   previous_agent_execution: completed
   technical_completion: candidate_complete
   reviewer_acceptance: pending
-  latest_reviewer_record: none
+  latest_reviewer_record: review_13_changes_requested
   owner_acceptance: authorized
   lifecycle_status: candidate_complete
   formal_closure: false
@@ -41,10 +41,12 @@ gate_status:
     entry_conditions_met: true
     implementation_started: true
     implementation_completed: true
-    exit_conditions_met: true
+    exit_conditions_met: false
+    blocked_by: review_13_changes_requested
   gate_3_mvp_pilot:
     status: not_started
-    entry_conditions_met: true
+    entry_conditions_met: false
+    blocked_by: gate_2_independent_review
   gate_4_iteration:
     status: not_started
 
@@ -62,10 +64,10 @@ design_artifacts:
   negative_tests: scripts/test_task_002_negative.sh
 
 next_action:
-  action: "Gate 2 design candidate complete. Awaiting independent review before Gate 3 MVP pilot."
-  status: "Design validated; ready for review"
+  action: "Protocol 16 repair complete. PR #3 updated. Awaiting independent review."
+  status: "Review 13 issues corrected; ready for re-review"
   priority:
-    - "Independent review of design artifacts"
-    - "Verify all Gate 2 exit conditions met"
+    - "Independent reviewer re-review of corrected artifacts"
+    - "Verify all Review 13 issues resolved"
     - "If accepted, proceed to Gate 3 pilot planning"
-    - "If changes requested, iterate on design"
+    - "If further changes needed, iterate on repair"

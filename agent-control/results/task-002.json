@@ -1,6 +1,6 @@
 {
-  "protocol_version": 15,
-  "task_id": "task-002-first-vertical-scenario-design",
+  "protocol_version": 16,
+  "task_id": "task-002-gate-2-review-repair",
   "status": "candidate_complete",
   "branch": "agent/task-002-first-vertical-scenario",
   "baseline_commit": "9db7c4b8b26fb3e42f5dad9caf272dddd09924a9",
@@ -10,7 +10,7 @@
     "previous_agent_execution": "completed",
     "technical_completion": "candidate_complete",
     "reviewer_acceptance": "pending",
-    "latest_reviewer_record": "none",
+    "latest_reviewer_record": "review_13_changes_requested",
     "owner_acceptance": "authorized",
     "lifecycle_status": "candidate_complete",
     "formal_closure": false,
@@ -95,8 +95,12 @@
   "gate_2_exit_conditions": {
     "scenario_specification_complete": true,
     "entry_exit_criteria_per_step": true,
+    "per_step_validation_implemented": true,
     "pedagogical_decision_tree_documented": true,
+    "classification_model_normalized": true,
     "state_schema_defined": true,
+    "schema_enforces_source_grounding": true,
+    "nested_objects_bounded": true,
     "success_criteria_measurable_without_complex_model": true,
     "all_acceptance_commands_passed": true
   },
@@ -162,17 +166,17 @@
     {
       "command": "python3 scripts/validate_task_002.py",
       "exit_code": 0,
-      "note": "All 5 design validations passed"
+      "note": "All 5 design validations passed (including per-step criteria)"
     },
     {
       "command": "bash scripts/test_task_002_negative.sh",
       "exit_code": 0,
-      "note": "All 9 tests passed (1 positive + 8 negative); live files unchanged"
+      "note": "All 15 tests passed (1 positive + 14 negative); live files unchanged"
     },
     {
       "command": "python3 scripts/check_control_state.py",
-      "exit_code": "N/A",
-      "note": "Control state check validates Task 001 lifecycle; Task 002 on separate branch"
+      "exit_code": 0,
+      "note": "Control state consistency verified for task-002-gate-2-review-repair"
     },
     {
       "command": "git diff --check",
@@ -192,7 +196,7 @@
     {
       "command": "python3 allowed paths check",
       "exit_code": 0,
-      "note": "Only allowed paths modified"
+      "note": "Only allowed paths modified (9 files: CURRENT_TASK, result, DESIGN_GATES, scenario, decision_tree, schema, validator, negative_tests, state)"
     }
   ],
   "unresolved_design_questions": [
@@ -232,7 +236,7 @@
       "measurement": "Does one action per confusion resolve issue, or do most sessions require multiple iterations"
     }
   ],
-  "next_action": "Push task branch, open Draft PR for independent review. Await review feedback before proceeding to Gate 3 MVP pilot.",
+  "next_action": "Protocol 16 repair complete. PR #3 updated with Review 13 corrections. Awaiting independent re-review.",
   "explicitly_not_done": [
     "Did not implement frontend or application code",
     "Did not implement runtime agents or multi-agent orchestration",

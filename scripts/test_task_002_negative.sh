@@ -16,6 +16,12 @@
 # 6. Scenario does not reference decision tree
 # 7. Scenario has wrong number of flow steps
 # 8. Decision tree does not acknowledge provisional status
+# 9. Step 1 missing Entry Criteria
+# 10. Step 2 missing Exit Criteria
+# 11. Step 3 missing Recovery Behavior
+# 12. Step 4 missing Evidence Collection
+# 13. Step 5 missing Entry Criteria
+# 14. Step 6 missing Exit Criteria
 
 set -euo pipefail
 
@@ -151,6 +157,104 @@ run_negative_test "Decision tree missing provisional status" "
     rm -f '$FIXTURE_DIR/docs/PEDAGOGICAL_ACTION_DECISION_TREE.md.bak'
 "
 
+# Test 9: Step 1 missing Entry Criteria
+run_negative_test "Step 1 missing Entry Criteria" "
+    python3 -c \"
+import re
+with open('$FIXTURE_DIR/docs/FIRST_VERTICAL_SCENARIO.md') as f:
+    content = f.read()
+# Find Step 1 section
+step1_start = content.find('### Step 1:')
+step2_start = content.find('### Step 2:', step1_start)
+# Remove **Entry Criteria** line from Step 1
+step1_section = content[step1_start:step2_start]
+step1_modified = step1_section.replace('**Entry Criteria**', '**REMOVED_CRITERIA**', 1)
+new_content = content[:step1_start] + step1_modified + content[step2_start:]
+with open('$FIXTURE_DIR/docs/FIRST_VERTICAL_SCENARIO.md', 'w') as f:
+    f.write(new_content)
+\"
+"
+
+# Test 10: Step 2 missing Exit Criteria
+run_negative_test "Step 2 missing Exit Criteria" "
+    python3 -c \"
+import re
+with open('$FIXTURE_DIR/docs/FIRST_VERTICAL_SCENARIO.md') as f:
+    content = f.read()
+step2_start = content.find('### Step 2:')
+step3_start = content.find('### Step 3:', step2_start)
+step2_section = content[step2_start:step3_start]
+step2_modified = step2_section.replace('**Exit Criteria**', '**REMOVED_CRITERIA**', 1)
+new_content = content[:step2_start] + step2_modified + content[step3_start:]
+with open('$FIXTURE_DIR/docs/FIRST_VERTICAL_SCENARIO.md', 'w') as f:
+    f.write(new_content)
+\"
+"
+
+# Test 11: Step 3 missing Recovery Behavior
+run_negative_test "Step 3 missing Recovery Behavior" "
+    python3 -c \"
+import re
+with open('$FIXTURE_DIR/docs/FIRST_VERTICAL_SCENARIO.md') as f:
+    content = f.read()
+step3_start = content.find('### Step 3:')
+step4_start = content.find('### Step 4:', step3_start)
+step3_section = content[step3_start:step4_start]
+step3_modified = step3_section.replace('**Recovery Behavior**', '**REMOVED_BEHAVIOR**', 1)
+new_content = content[:step3_start] + step3_modified + content[step4_start:]
+with open('$FIXTURE_DIR/docs/FIRST_VERTICAL_SCENARIO.md', 'w') as f:
+    f.write(new_content)
+\"
+"
+
+# Test 12: Step 4 missing Evidence Collection
+run_negative_test "Step 4 missing Evidence Collection" "
+    python3 -c \"
+import re
+with open('$FIXTURE_DIR/docs/FIRST_VERTICAL_SCENARIO.md') as f:
+    content = f.read()
+step4_start = content.find('### Step 4:')
+step5_start = content.find('### Step 5:', step4_start)
+step4_section = content[step4_start:step5_start]
+step4_modified = step4_section.replace('**Evidence Collection**', '**REMOVED_COLLECTION**', 1)
+new_content = content[:step4_start] + step4_modified + content[step5_start:]
+with open('$FIXTURE_DIR/docs/FIRST_VERTICAL_SCENARIO.md', 'w') as f:
+    f.write(new_content)
+\"
+"
+
+# Test 13: Step 5 missing Entry Criteria
+run_negative_test "Step 5 missing Entry Criteria" "
+    python3 -c \"
+import re
+with open('$FIXTURE_DIR/docs/FIRST_VERTICAL_SCENARIO.md') as f:
+    content = f.read()
+step5_start = content.find('### Step 5:')
+step6_start = content.find('### Step 6:', step5_start)
+step5_section = content[step5_start:step6_start]
+step5_modified = step5_section.replace('**Entry Criteria**', '**REMOVED_CRITERIA**', 1)
+new_content = content[:step5_start] + step5_modified + content[step6_start:]
+with open('$FIXTURE_DIR/docs/FIRST_VERTICAL_SCENARIO.md', 'w') as f:
+    f.write(new_content)
+\"
+"
+
+# Test 14: Step 6 missing Exit Criteria
+run_negative_test "Step 6 missing Exit Criteria" "
+    python3 -c \"
+import re
+with open('$FIXTURE_DIR/docs/FIRST_VERTICAL_SCENARIO.md') as f:
+    content = f.read()
+step6_start = content.find('### Step 6:')
+flow_summary_start = content.find('## Complete Flow Summary', step6_start)
+step6_section = content[step6_start:flow_summary_start]
+step6_modified = step6_section.replace('**Exit Criteria**', '**REMOVED_CRITERIA**', 1)
+new_content = content[:step6_start] + step6_modified + content[flow_summary_start:]
+with open('$FIXTURE_DIR/docs/FIRST_VERTICAL_SCENARIO.md', 'w') as f:
+    f.write(new_content)
+\"
+"
+
 # Verify live files unchanged
 HASH_AFTER_SCENARIO=$(shasum -a 256 "$REPO_ROOT/docs/FIRST_VERTICAL_SCENARIO.md" 2>/dev/null | awk '{print $1}' || echo "")
 HASH_AFTER_TREE=$(shasum -a 256 "$REPO_ROOT/docs/PEDAGOGICAL_ACTION_DECISION_TREE.md" 2>/dev/null | awk '{print $1}' || echo "")
@@ -176,10 +280,10 @@ echo "=== Negative test summary ==="
 echo "Tests run: $test_count"
 echo "Tests passed: $pass_count"
 
-if [ "$pass_count" -eq "$test_count" ] && [ "$test_count" -ge 9 ]; then
-    echo "✓ All $test_count tests passed (1 positive + 8 negative)"
+if [ "$pass_count" -eq "$test_count" ] && [ "$test_count" -ge 15 ]; then
+    echo "✓ All $test_count tests passed (1 positive + 14 negative)"
     exit 0
 else
-    echo "✗ Some tests failed or insufficient coverage (need 9, have $pass_count/$test_count)"
+    echo "✗ Some tests failed or insufficient coverage (need 15, have $pass_count/$test_count)"
     exit 1
 fi

@@ -47,6 +47,7 @@
       "type": "object",
       "description": "User's current location in course material (Step 1 output)",
       "required": ["material_file", "section", "confirmed_by_user"],
+      "additionalProperties": false,
       "properties": {
         "material_file": {
           "type": "string",
@@ -82,6 +83,7 @@
       "type": "object",
       "description": "Defined scope of current learning task (Step 2 output)",
       "required": ["task_type", "scope_description", "completion_criterion"],
+      "additionalProperties": false,
       "properties": {
         "task_type": {
           "type": "string",
@@ -112,6 +114,7 @@
       "type": "object",
       "description": "User's expressed confusion or obstacle (Step 3 output)",
       "required": ["user_statement", "system_classification", "expressed_at"],
+      "additionalProperties": false,
       "properties": {
         "user_statement": {
           "type": "string",
@@ -134,6 +137,7 @@
         },
         "material_context": {
           "type": "object",
+          "additionalProperties": false,
           "properties": {
             "section": {"type": "string"},
             "page": {"type": ["string", "null"]},
@@ -151,6 +155,7 @@
       "type": "object",
       "description": "Most recent teaching action taken (Step 4 output)",
       "required": ["action_type", "material_citations", "delivered_at"],
+      "additionalProperties": false,
       "properties": {
         "action_type": {
           "type": "string",
@@ -166,6 +171,7 @@
         },
         "action_details": {
           "type": "object",
+          "additionalProperties": false,
           "properties": {
             "term_clarified": {"type": ["string", "null"]},
             "prerequisite_concept": {"type": ["string", "null"]},
@@ -180,6 +186,7 @@
           "description": "Material sections cited in this action (source-grounding constraint)",
           "items": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
               "file": {"type": "string"},
               "section": {"type": "string"},
@@ -210,6 +217,7 @@
       "type": "object",
       "description": "Independent completion evidence collection (Step 5 output)",
       "required": ["requested", "evidence_level"],
+      "additionalProperties": false,
       "properties": {
         "requested": {
           "type": "boolean",
@@ -218,7 +226,7 @@
         "check_type": {
           "type": ["string", "null"],
           "description": "Type of independent behavior requested",
-          "enum": ["explain_concept", "solve_similar_problem", "apply_to_example", "none"]
+          "enum": ["explain_concept", "solve_similar_problem", "apply_to_example", "none", null]
         },
         "user_response": {
           "type": ["string", "null"],
@@ -232,6 +240,7 @@
         "evaluation": {
           "type": ["object", "null"],
           "description": "What was correct/incorrect in user response",
+          "additionalProperties": false,
           "properties": {
             "correct_elements": {
               "type": "array",
@@ -254,6 +263,7 @@
       "type": "object",
       "description": "Recommendation for next session (Step 6 output)",
       "required": ["recommendation", "rationale"],
+      "additionalProperties": false,
       "properties": {
         "recommendation": {
           "type": "string",
@@ -279,6 +289,7 @@
     "session_metadata": {
       "type": "object",
       "description": "Session metrics for Gate 3 pilot measurement (NOT part of core state logic)",
+      "additionalProperties": false,
       "properties": {
         "duration_seconds": {
           "type": ["integer", "null"],

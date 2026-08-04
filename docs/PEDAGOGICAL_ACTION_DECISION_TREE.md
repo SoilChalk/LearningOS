@@ -27,14 +27,27 @@ This decision tree maps observable interaction evidence to bounded pedagogical a
 2. **System Classification** (one of six types below)
 3. **Material Context** (section/problem where confusion occurred)
 4. **Task Boundary** (concept understanding vs. problem solving)
+5. **Material Scope Status** (in_scope, missing_required_material, outside_supplied_corpus)
+6. **Articulation Status** (articulated, cannot_articulate)
 
-**Six Observable Classification Types**:
+**Six Observable Classification Types** (core obstacle classifications):
 1. **Terminology Gap**: User mentions unfamiliar term or asks "what does X mean?"
 2. **Prerequisite Deficit**: User states "I don't remember Y" or references earlier material
 3. **Procedural Confusion**: User understands goal but not steps ("I don't know how to...")
 4. **Conceptual Confusion**: User understands steps but not why ("Why does this work?")
 5. **Lost Context**: User states "I forgot where I was" or "What am I solving?"
 6. **Stuck on Specific Step**: User identifies precise location ("I'm stuck at step 3")
+
+**Auxiliary Status Fields** (NOT core obstacle classifications):
+
+- **Material Scope Status**:
+  - `in_scope`: User confusion relates to uploaded material
+  - `missing_required_material`: User references section not uploaded
+  - `outside_supplied_corpus`: User query about topic not covered in any uploaded material
+
+- **Articulation Status**:
+  - `articulated`: User can express what's confusing ("I don't understand X")
+  - `cannot_articulate`: User states "I don't know what's confusing" or "everything is confusing"
 
 ### Output from Tree
 
@@ -275,31 +288,59 @@ Terminol. Prereq.  (steps)   Explain.  Attempt  Request
 ## Action Routing Logic (Pseudocode)
 
 ```python
-def select_pedagogical_action(user_statement, classification, material_context, task_boundary):
+def select_pedagogical_action(user_statement, classification, material_context, task_boundary, material_scope_status, articulation_status):
     """
     Route user confusion to ONE pedagogical action.
-    
+
     Args:
         user_statement: verbatim user confusion (string)
         classification: one of six types (string)
         material_context: section/problem location (dict)
         task_boundary: concept vs. problem, scope (dict)
-    
+        material_scope_status: in_scope | missing_required_material | outside_supplied_corpus
+        articulation_status: articulated | cannot_articulate
+
     Returns:
         action: dict with action_type, action_spec, material_citations
     """
-    
+
+    # Check material scope FIRST (highest priority)
+    if material_scope_status == "outside_supplied_corpus":
+        return {"action_type": "stop_and_request_more_material",
+                "reason": "topic_not_in_corpus"}
+
+    if material_scope_status == "missing_required_material":
+        return {"action_type": "stop_and_request_more_material",
+                "reason": "required_section_not_uploaded"}
+
+    # Check articulation status
+    if articulation_status == "cannot_articulate":
+        # User can't express what's confusing
+        # Give bounded example from current section OR diagnostic prompt
+        example_section = find_worked_example(material_context, task_boundary)
+        if example_section:
+            return {"action_type": "give_bounded_example",
+                    "material_citations": [example_section],
+                    "reason": "diagnostic_example_for_unarticulated_confusion"}
+        else:
+            return {"action_type": "request_explanation",
+                    "prompt": "Can you walk through what you've tried so far?",
+                    "material_citations": [material_context["current_section"]],
+                    "reason": "diagnostic_prompt_for_unarticulated_confusion"}
+
+    # Material in scope, confusion articulated → Route by classification
+
     # Rule Set 1: Terminology Gap
     if classification == "terminology_gap":
         term = extract_unfamiliar_term(user_statement)
         definition_section = find_term_in_material(term, material_context)
         if definition_section is None:
-            return {"action_type": "stop_and_request_more_material", 
+            return {"action_type": "stop_and_request_more_material",
                     "reason": "term_not_in_corpus"}
         return {"action_type": "clarify_terminology",
                 "term": term,
                 "material_citations": [definition_section]}
-    
+
     # Rule Set 2: Prerequisite Deficit
     elif classification == "prerequisite_deficit":
         prerequisite = extract_prerequisite_concept(user_statement)
@@ -310,7 +351,7 @@ def select_pedagogical_action(user_statement, classification, material_context, 
         return {"action_type": "restore_prerequisite",
                 "prerequisite": prerequisite,
                 "material_citations": [prereq_section]}
-    
+
     # Rule Set 3: Procedural Confusion or Lost Context
     elif classification in ["procedural_confusion", "lost_context"]:
         example_section = find_worked_example(material_context, task_boundary)
@@ -319,13 +360,13 @@ def select_pedagogical_action(user_statement, classification, material_context, 
                     "reason": "no_similar_example_in_corpus"}
         return {"action_type": "give_bounded_example",
                 "material_citations": [example_section]}
-    
+
     # Rule Set 4: Conceptual Confusion
     elif classification == "conceptual_confusion":
         return {"action_type": "request_explanation",
                 "prompt": "Can you explain why [X] works?",
                 "material_citations": [material_context["current_section"]]}
-    
+
     # Rule Set 5: Stuck on Specific Step
     elif classification == "stuck_on_specific_step":
         stuck_step = extract_step_number(user_statement)
@@ -333,12 +374,7 @@ def select_pedagogical_action(user_statement, classification, material_context, 
         return {"action_type": "request_fresh_attempt",
                 "hint": hint,
                 "material_citations": [material_context["current_section"]]}
-    
-    # Rule Set 6: Outside Corpus or Cannot Articulate
-    elif classification == "outside_corpus":
-        return {"action_type": "stop_and_request_more_material",
-                "reason": "topic_not_in_corpus"}
-    
+
     # Fallback: Cannot classify
     else:
         # Default to giving example from current section
