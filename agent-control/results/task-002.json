@@ -1,22 +1,22 @@
 {
-  "protocol_version": 17,
-  "task_id": "task-002-gate-2-final-review-repair",
-  "status": "candidate_complete",
+  "protocol_version": 18,
+  "task_id": "task-002-gate-2-test-and-audit-closure",
+  "status": "in_progress",
   "branch": "agent/task-002-first-vertical-scenario",
   "baseline_commit": "3ad76b4d2c3c0b0f410eaf06c0f5bbfde031bc7b",
   "completion_commit": "cc9ca7c29d2e0d6e1cf2dc495039b5d10ee2a6bf",
   "completed_at": "2026-08-04T17:23:54+08:00",
   "timestamp_source": "git_committer_metadata",
-  "objective": "Final repair of Task 002 Gate 2 design artifacts. Structurally separate classification fields (obstacle_classification, material_scope_status, articulation_status), enforce conditional citation rules via Draft-07 if/then, add missing negative tests, correct audit metadata, update DESIGN_GATES.md status.",
+  "objective": "Complete Protocol 17 requirements that were incorrectly deferred: implement missing schema and routing tests, strengthen structural validation, enforce cross-object stop-action rule, update DESIGN_GATES.md, repair result and audit records, replace stale PR #3 body, run every final acceptance command.",
   "lifecycle": {
-    "previous_agent_execution": "completed",
-    "technical_completion": "candidate_complete",
+    "previous_agent_execution": "in_progress",
+    "technical_completion": "in_progress",
     "reviewer_acceptance": "pending",
-    "latest_reviewer_record": "protocol_16_changes_requested",
+    "latest_reviewer_record": "protocol_17_changes_requested",
     "owner_acceptance": "authorized",
-    "lifecycle_status": "candidate_complete",
+    "lifecycle_status": "in_progress",
     "formal_closure": false,
-    "task_002_status": "candidate_complete"
+    "task_002_status": "in_progress"
   },
   "predecessor": {
     "task_id": "task-001-core-research",

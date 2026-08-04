@@ -1,18 +1,18 @@
-protocol_version: 17
-updated_at: "2026-08-04T17:23:54+08:00"
-task_id: task-002-gate-2-final-review-repair
-phase: gate_2_final_review_repair
-status: candidate_complete
+protocol_version: 18
+updated_at: "2026-08-05T09:15:00+08:00"
+task_id: task-002-gate-2-test-and-audit-closure
+phase: gate_2_test_and_audit_closure
+status: in_progress
 
 lifecycle:
-  previous_agent_execution: completed
-  technical_completion: candidate_complete
+  previous_agent_execution: in_progress
+  technical_completion: in_progress
   reviewer_acceptance: pending
-  latest_reviewer_record: protocol_16_changes_requested
+  latest_reviewer_record: protocol_17_changes_requested
   owner_acceptance: authorized
-  lifecycle_status: candidate_complete
+  lifecycle_status: in_progress
   formal_closure: false
-  task_002_status: candidate_complete
+  task_002_status: in_progress
 
 predecessor:
   task_id: task-001-core-research
@@ -37,12 +37,12 @@ gate_status:
     status: formally_closed
     exit_result: met_with_documented_limitations
   gate_2_first_scenario:
-    status: candidate_complete
+    status: in_progress
     entry_conditions_met: true
     implementation_started: true
-    implementation_completed: true
+    implementation_completed: false
     exit_conditions_met: false
-    blocked_by: review_13_changes_requested
+    blocked_by: protocol_18_repairs
   gate_3_mvp_pilot:
     status: not_started
     entry_conditions_met: false
@@ -64,10 +64,12 @@ design_artifacts:
   negative_tests: scripts/test_task_002_negative.sh
 
 next_action:
-  action: "Protocol 16 repair complete. PR #3 updated. Awaiting independent review."
-  status: "Review 13 issues corrected; ready for re-review"
+  action: "Protocol 18 test and audit closure in progress"
+  status: "Implementing deferred Protocol 17 requirements"
   priority:
-    - "Independent reviewer re-review of corrected artifacts"
-    - "Verify all Review 13 issues resolved"
-    - "If accepted, proceed to Gate 3 pilot planning"
-    - "If further changes needed, iterate on repair"
+    - "Implement missing tests (21 total)"
+    - "Strengthen structural validation"
+    - "Enforce cross-object stop-action rule"
+    - "Update DESIGN_GATES.md"
+    - "Repair result and authority metadata"
+    - "Final validation and PR update"
