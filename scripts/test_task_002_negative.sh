@@ -1,28 +1,31 @@
 #!/usr/bin/env bash
 #
-# Task 002 Test Suite (Protocol 19)
+# Task 002 Test Suite (Protocol 19-20)
 #
 # Validates Task 002 design artifacts through structural and instance-level tests.
 # All tests operate on temporary fixture copies. Before/after hashes prove live
 # files remain unchanged.
 #
-# Test Coverage (26 total: 4 positive + 22 negative):
-#   Structural Tests (20 total: 1 positive + 19 negative):
-#     - Scenario document structure and flow steps
-#     - Decision tree classification and action types
-#     - State schema constraints and prohibited fields
-#     - Cross-document consistency
+# Test Coverage (actual runtime counters are authoritative):
+#   Structural Tests: 21 (1 positive + 20 negative)
+#   Instance Validation Tests: 6 (3 positive + 3 negative)
+#   Total Tests: 27 (4 positive + 23 negative)
 #
-#   Instance Validation Tests (6 total: 3 positive + 3 negative):
-#     - cannot_articulate + null obstacle + in_scope + request_explanation + citations (positive)
-#     - stop + missing_required_material + empty citations + stop_reason (positive)
-#     - stop + outside_supplied_corpus + empty citations + stop_reason (positive)
-#     - stop + in_scope + empty citations + stop_reason - INVALID (negative)
-#     - stop + missing_required_material + empty citations + NO stop_reason - INVALID (negative)
-#     - request_explanation + empty citations - INVALID (negative)
+# Structural tests verify:
+#   - Scenario document structure and flow steps
+#   - Decision tree classification and action types
+#   - State schema constraints and prohibited fields
+#   - Cross-document consistency
 #
-# Instance tests use jsonschema.Draft7Validator to validate complete minimal
-# learning state instances against the actual schema.
+# Instance validation tests (jsonschema.Draft7Validator):
+#   Positive:
+#     - cannot_articulate + null obstacle + in_scope + request_explanation + citations
+#     - stop + missing_required_material + empty citations + stop_reason
+#     - stop + outside_supplied_corpus + empty citations + stop_reason
+#   Negative:
+#     - stop + in_scope + empty citations + stop_reason (INVALID - material is in_scope)
+#     - stop + missing_required_material + empty citations + NO stop_reason (INVALID)
+#     - request_explanation + empty citations (INVALID - source-grounded without citations)
 
 set -euo pipefail
 
@@ -116,8 +119,9 @@ run_negative_test() {
 if [ -f "$REPO_ROOT/docs/FIRST_VERTICAL_SCENARIO.md" ]; then
     run_positive_test "Valid design artifacts pass"
 else
-    echo "⊘ Test 1 skipped: Design artifacts not yet created"
-    test_count=$((test_count + 1))
+    echo "⊘ Structural test 1 skipped: Design artifacts not yet created"
+    structural_test_count=$((structural_test_count + 1))
+    total_test_count=$((total_test_count + 1))
 fi
 
 # Test 1: Scenario document missing required section
