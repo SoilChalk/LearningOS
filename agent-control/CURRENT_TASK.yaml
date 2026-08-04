@@ -1,110 +1,33 @@
-protocol_version: 16
+protocol_version: 17
 
-task_id: task-002-gate-2-review-repair
+task_id: task-002-gate-2-final-review-repair
 status: ready
 branch: agent/task-002-first-vertical-scenario
 result_file: agent-control/results/task-002.json
 
 objective: >
-  Repair the Task 002 Gate 2 design artifacts in response to Review 13 findings.
-  Correct control-state transitions, validation gaps, classification model
-  inconsistencies, schema enforcement failures, and stale metadata. This is a
-  strictly scoped repair task; it does not authorize PR merge, Gate 3 start,
-  pilot execution, or API calls.
+  Final repair of Task 002 Gate 2 design artifacts. Structurally separate
+  classification fields in schema (obstacle_classification, material_scope_status,
+  articulation_status), enforce conditional citation rules, add missing negative
+  tests, correct audit metadata, and update DESIGN_GATES.md status.
 
 owner_authorization:
-  recorded_at: "2026-08-04T12:00:00+08:00"
-  source_instruction: "Owner Authorization — Protocol 16 Gate 2 Review Repair"
+  recorded_at: "2026-08-04T16:00:00+08:00"
+  source_instruction: "Owner Authorization — Protocol 17 Gate 2 Final Review Repair"
   scope: >
-    Repair Task 002 design artifacts per Review 13. Keep PR #3 Draft, open,
-    unmerged. Do not start Gate 3, conduct pilot, or make API calls.
-  authorized_actions:
-    - publish_protocol_16_contract_on_main
-    - synchronize_task_branch_with_protocol_16_contract
-    - repair_control_state_transition
-    - repair_per_step_validation
-    - normalize_classification_model
-    - repair_state_schema
-    - repair_stale_claims
-    - run_all_acceptance_commands_with_actual_exit_codes
-    - commit_and_push_repair
-    - update_pr_3_body
-  prohibited_actions:
-    - merge_pr_3
-    - mark_pr_3_ready
-    - start_gate_3
-    - conduct_pilot
-    - make_api_calls
-    - begin_another_task
-
-lifecycle:
-  previous_agent_execution: not_started
-  technical_completion: not_started
-  reviewer_acceptance: pending
-  latest_reviewer_record: review_13_changes_requested
-  owner_acceptance: authorized
-  lifecycle_status: ready
-  formal_closure: false
-  task_002_status: ready_for_repair
-
-predecessor:
-  task_id: task-002-first-vertical-scenario-design
-  protocol_version: 15
-  candidate_head: d9cc4463254eda7508550d979ba913f53e6e1abe
+    Final repair for PR #3. Separate classification fields structurally, enforce
+    conditional citations, add negative tests, correct audit metadata. Keep PR #3
+    Draft, open, unmerged. No Gate 3, pilot, or API calls.
+  
+baseline:
+  commit: 3ad76b4d2c3c0b0f410eaf06c0f5bbfde031bc7b
+  protocol: 16
   review_status: changes_requested
-  review_id: review_13
-  pr_number: 3
-  pr_state: draft_open_unmerged
-
-task_001_status:
-  task_id: task-001-core-research
-  closure_result: agent-control/results/task-001-owner-closure.json
-  formal_closure: true
-  pull_request_2_merge_commit: 35d8208b0ee201c9a7035d6e75be95cabd84cd10
-  gate_1_exit: met_with_documented_limitations
-
-inputs:
-  - agent-control/CURRENT_TASK.yaml
-  - agent-control/results/task-002.json
-  - docs/DESIGN_GATES.md
-  - docs/FIRST_VERTICAL_SCENARIO.md
-  - docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
-  - templates/MINIMAL_LEARNING_STATE.schema.json
-  - scripts/validate_task_002.py
-  - scripts/test_task_002_negative.sh
-  - state/CURRENT_STATE.yaml
-
-review_13_findings:
-  blocking_issues:
-    - >
-      check_control_state.py was not run; result marked it N/A while claiming
-      all acceptance commands passed
-    - >
-      CURRENT_TASK (ready/not_started) disagrees with CURRENT_STATE and
-      task-002.json (candidate_complete); checker requires agreement
-    - >
-      validate_task_002.py checks only phrase presence, not actual per-step
-      entry/exit criteria
-    - >
-      Classification model inconsistent: docs/result claim 6 types, schema
-      allows 8, outside-corpus and cannot-articulate routing contradictory,
-      pseudocode missing cannot_articulate handling
-    - >
-      Schema does not enforce source grounding: material_citations permits
-      zero items, nested objects permit arbitrary fields, check_type
-      nullable-enum conflict
-    - >
-      CURRENT_STATE prematurely sets Gate 3 entry_conditions_met=true while
-      reviewer_acceptance=pending
-    - >
-      task-002.json has stale next_action, DESIGN_GATES.md has stale Gate 1/2
-      summary, completion timestamp lacks auditable source
 
 allowed_paths:
   - agent-control/CURRENT_TASK.yaml
   - agent-control/results/task-002.json
   - docs/DESIGN_GATES.md
-  - docs/FIRST_VERTICAL_SCENARIO.md
   - docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
   - templates/MINIMAL_LEARNING_STATE.schema.json
   - scripts/validate_task_002.py
@@ -115,6 +38,7 @@ forbidden_paths:
   - sources/**
   - docs/RESEARCH_QUESTIONS.md
   - docs/REFERENCE_SYSTEM_MATRIX.md
+  - docs/FIRST_VERTICAL_SCENARIO.md
   - agent-control/results/task-001*.json
   - agent-control/VALIDATION_RECORD.txt
   - agent-control/TASK_PROTOCOL.md
@@ -122,79 +46,71 @@ forbidden_paths:
   - scripts/check_control_state.py
   - scripts/test_control_state.sh
 
-repair_phases:
-  phase_0_preflight:
-    - verify working tree clean
-    - verify PR #3 Draft, open, unmerged, mergeable
-    - verify task branch HEAD d9cc4463254eda7508550d979ba913f53e6e1abe
-    - verify Task 001 formally closed
-    - verify Gate 3 not started
+repair_requirements:
+  repair_1_separate_classification_fields:
+    description: >
+      Replace eight-value system_classification with separate fields:
+      obstacle_classification (6 values + null), material_scope_status (3 values),
+      articulation_status (2 values)
+    changes:
+      - observed_difficulty schema structure
+      - obstacle_classification enum: [terminology_gap, prerequisite_deficit,
+        procedural_confusion, conceptual_confusion, stuck_on_specific_step,
+        lost_context, null]
+      - material_scope_status enum: [in_scope, missing_required_material,
+        outside_supplied_corpus]
+      - articulation_status enum: [articulated, cannot_articulate]
+      - cannot_articulate never a core obstacle classification
+      - outside_corpus removed entirely
+      - when cannot_articulate, obstacle may be null
+      - prose, pseudocode, schema, validator, result must use identical names
   
-  phase_1_publish_contract:
-    - publish Protocol 16 on main with protocol_version 16
-    - synchronize task branch with Protocol 16 contract
-
-  phase_2_control_state:
-    - align CURRENT_TASK.yaml, CURRENT_STATE.yaml, task-002.json
-    - all three must agree on task_id, status, lifecycle fields
-    - final state: status=candidate_complete
-    - Gate 3: status=not_started, entry_conditions_met=false,
-      blocked_by=gate_2_independent_review
-    - run python3 scripts/check_control_state.py with actual exit code
-
-  phase_3_per_step_validation:
-    - fix validate_task_002.py to validate each Step 1-6 independently
-    - verify Entry/Exit Criteria, Recovery Behavior, Evidence Collection
-      within each step's text range
-    - add negative tests for missing criteria per step
-    - verify tests use isolated fixtures, leave live files unchanged
-
-  phase_4_classification_model:
-    - use exactly 6 core classifications: terminology_gap,
-      prerequisite_deficit, procedural_confusion, conceptual_confusion,
-      stuck_on_specific_step, lost_context
-    - separate material_scope_status (in_scope, missing_required_material,
-      outside_supplied_corpus) from obstacle classification
-    - separate articulation_status (articulated, cannot_articulate) from
-      obstacle classification
-    - outside_supplied_corpus or missing_required_material →
-      stop_and_request_more_material
-    - cannot_articulate → bounded diagnostic prompt or source-grounded example
-    - cannot_articulate must not fall through silently
-    - all routing must be explicit
-    - pseudocode, prose, schema, validator, result must use same definitions
-
-  phase_5_schema_repair:
-    - evidence levels: [0, 1, 2] only (level 2 = one instance, not mastery)
-    - add additionalProperties: false to all bounded nested objects
-    - correct nullable-enum conflicts
-    - enforce citation rules: source-grounded actions require ≥1 citation
-      (stop_and_request_more_material may use empty list with failure reason)
-    - no mastery estimates, knowledge graphs, cross-course profiles,
-      review schedules, generalized learner-model state
-    - validator must reject: source-grounded action with zero citations,
-      arbitrary nested fields, nullable-enum conflicts,
-      cannot_articulate as core classification, undefined routes
-
-  phase_6_stale_claims:
-    - correct task-002.json next_action (branch pushed, PR #3 exists)
-    - correct DESIGN_GATES.md stale summaries
-    - correct any claim that Gate 3 entry conditions met
-    - correct any claim all acceptance commands passed before they pass
-    - derive completion timestamp from final repair commit Git metadata
-    - record timestamp source explicitly
-
-  phase_7_validation:
-    - run all acceptance commands with actual exit codes
-    - record every command and exit code
-    - do not mark all_acceptance_commands_passed unless all actually passed
-
-  phase_8_commit_push_stop:
-    - commit repair with clear message
-    - push task branch
-    - update PR #3 body with Protocol 16 status
-    - keep PR #3 Draft, open, unmerged
-    - stop without merge, Ready transition, Gate 3 start, API calls
+  repair_2_conditional_citation_rules:
+    description: >
+      Use Draft-07 if/then to enforce minItems: 1 for source-grounded actions,
+      allow empty list only for stop_and_request_more_material with stop_reason
+    changes:
+      - schema if/then conditional for action_type
+      - validator must inspect and enforce actual conditional structure
+      - clarify_terminology, restore_prerequisite, give_bounded_example,
+        request_explanation, request_fresh_attempt require ≥1 citation
+      - stop_and_request_more_material allows empty only with stop_reason
+  
+  repair_3_missing_negative_tests:
+    description: Add 5+ new negative tests plus 1 positive cannot_articulate test
+    new_tests:
+      - source-grounded action with zero citations
+      - arbitrary field in bounded nested object
+      - nullable type with enum omitting null
+      - cannot_articulate in core obstacle enum
+      - undefined classification or missing route
+      - positive: cannot_articulate + null obstacle + in_scope + diagnostic action
+    total_tests: "21+ (1 positive + 20 negative)"
+  
+  repair_4_audit_metadata:
+    description: >
+      Update task-002.json to Protocol 17, derive timestamp from C1 Git metadata
+    changes:
+      - protocol_version: 17
+      - task_id: task-002-gate-2-final-review-repair
+      - baseline_commit: 3ad76b4d2c3c0b0f410eaf06c0f5bbfde031bc7b
+      - completion_commit: <C1>
+      - completed_at: <C1 exact Git committer timestamp>
+      - timestamp_source: git_committer_metadata
+      - all changed paths including CURRENT_TASK
+      - actual test counts
+      - actual exit codes
+  
+  repair_5_design_gates_status:
+    description: Update DESIGN_GATES.md header/footer, no longer claim Task 001 Stage 3 active
+    changes:
+      - Gate 2: candidate_complete, independent_review=pending,
+        exit_conditions_accepted=false, blocked_by=independent_review
+      - validator description updated
+      - negative test count updated
+      - Protocol 17 status
+      - next phase wording corrected
+      - do not mark Gate 2 formally accepted
 
 acceptance_commands:
   - python3 -m json.tool templates/MINIMAL_LEARNING_STATE.schema.json >/dev/null
@@ -210,7 +126,6 @@ acceptance_commands:
     import subprocess, sys
     allowed = {
         'agent-control/CURRENT_TASK.yaml',
-        'docs/FIRST_VERTICAL_SCENARIO.md',
         'docs/PEDAGOGICAL_ACTION_DECISION_TREE.md',
         'docs/DESIGN_GATES.md',
         'templates/MINIMAL_LEARNING_STATE.schema.json',
@@ -229,29 +144,42 @@ acceptance_commands:
     PY
 
 completion_conditions:
-  - All Review 13 blocking issues corrected
-  - Control state consistent across CURRENT_TASK, CURRENT_STATE, result
-  - Per-step validation verifies criteria within each step's text
-  - Classification model consistent and explicit across all files
-  - Schema enforces source grounding and prohibits speculative fields
-  - Gate 3 correctly marked not_started with entry_conditions_met=false
-  - All stale claims corrected
-  - All acceptance commands pass with actual exit codes
+  - obstacle enum contains exactly 6 strings plus null
+  - auxiliary status fields exist separately in schema
+  - no old outside_corpus or core cannot_articulate remains
+  - conditional citation constraints exist in schema
+  - all 5+ missing negative cases executed
+  - audit timestamps match C1 Git metadata
+  - DESIGN_GATES no longer contains stale active-state summaries
+  - all acceptance commands pass
   - PR #3 remains Draft, open, unmerged
 
-stop_conditions:
-  - Working tree not clean at preflight
-  - PR #3 not Draft/open/unmerged/mergeable
-  - Task branch HEAD not d9cc446
-  - Task 001 not formally closed
-  - Gate 3 already started
-  - Any repair would require modifying forbidden paths
-  - Validation fails and cannot be corrected within allowed paths
+lifecycle:
+  previous_agent_execution: not_started
+  technical_completion: not_started
+  reviewer_acceptance: pending
+  latest_reviewer_record: protocol_16_changes_requested
+  owner_acceptance: authorized
+  lifecycle_status: ready
+  formal_closure: false
+  task_002_status: ready_for_final_repair
 
-completion_process:
-  - Execute all repair phases in order
-  - Record all validation exit codes
-  - Commit and push repair
-  - Update PR #3 body
-  - Keep PR #3 Draft, open, unmerged
-  - Stop without merge, Ready transition, or Gate 3 start
+task_001_status:
+  task_id: task-001-core-research
+  closure_result: agent-control/results/task-001-owner-closure.json
+  formal_closure: true
+  pull_request_2_merge_commit: 35d8208b0ee201c9a7035d6e75be95cabd84cd10
+  gate_1_exit: met_with_documented_limitations
+
+predecessor:
+  protocol_16_head: 3ad76b4d2c3c0b0f410eaf06c0f5bbfde031bc7b
+  pr_number: 3
+  pr_state: draft_open_unmerged
+
+prohibited_actions:
+  - merge_pr_3
+  - mark_pr_3_ready
+  - start_gate_3
+  - conduct_pilot
+  - make_api_calls
+  - begin_another_task
