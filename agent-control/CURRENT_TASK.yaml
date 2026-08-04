@@ -1,7 +1,7 @@
 protocol_version: 17
 
 task_id: task-002-gate-2-final-review-repair
-status: ready
+status: candidate_complete
 branch: agent/task-002-first-vertical-scenario
 result_file: agent-control/results/task-002.json
 
@@ -155,14 +155,14 @@ completion_conditions:
   - PR #3 remains Draft, open, unmerged
 
 lifecycle:
-  previous_agent_execution: not_started
-  technical_completion: not_started
+  previous_agent_execution: completed
+  technical_completion: candidate_complete
   reviewer_acceptance: pending
   latest_reviewer_record: protocol_16_changes_requested
   owner_acceptance: authorized
-  lifecycle_status: ready
+  lifecycle_status: candidate_complete
   formal_closure: false
-  task_002_status: ready_for_final_repair
+  task_002_status: candidate_complete
 
 task_001_status:
   task_id: task-001-core-research
