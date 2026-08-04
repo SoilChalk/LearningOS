@@ -1,11 +1,13 @@
 {
-  "protocol_version": 16,
-  "task_id": "task-002-gate-2-review-repair",
+  "protocol_version": 17,
+  "task_id": "task-002-gate-2-final-review-repair",
   "status": "candidate_complete",
   "branch": "agent/task-002-first-vertical-scenario",
-  "baseline_commit": "9db7c4b8b26fb3e42f5dad9caf272dddd09924a9",
-  "completed_at": "2026-08-01T11:30:00+08:00",
-  "objective": "Design the first complete vertical Learning OS scenario: a learner uses real course material, recovers their current position or expresses unresolved confusion, receives a source-bounded pedagogical action, completes one observable independent check, and leaves minimal state for the next session.",
+  "baseline_commit": "3ad76b4d2c3c0b0f410eaf06c0f5bbfde031bc7b",
+  "completion_commit": "cc9ca7c29d2e0d6e1cf2dc495039b5d10ee2a6bf",
+  "completed_at": "2026-08-04T17:23:54+08:00",
+  "timestamp_source": "git_committer_metadata",
+  "objective": "Final repair of Task 002 Gate 2 design artifacts. Structurally separate classification fields (obstacle_classification, material_scope_status, articulation_status), enforce conditional citation rules via Draft-07 if/then, add missing negative tests, correct audit metadata, update DESIGN_GATES.md status.",
   "lifecycle": {
     "previous_agent_execution": "completed",
     "technical_completion": "candidate_complete",
