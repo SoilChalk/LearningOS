@@ -1,44 +1,46 @@
-protocol_version: 17
+protocol_version: 18
 
-task_id: task-002-gate-2-final-review-repair
+task_id: task-002-gate-2-test-and-audit-closure
 status: ready
 branch: agent/task-002-first-vertical-scenario
 result_file: agent-control/results/task-002.json
 
 objective: >
-  Final repair of Task 002 Gate 2 design artifacts. Structurally separate
-  classification fields in schema (obstacle_classification, material_scope_status,
-  articulation_status), enforce conditional citation rules, add missing negative
-  tests, correct audit metadata, and update DESIGN_GATES.md status.
+  Complete Protocol 17 requirements that were incorrectly deferred: implement
+  missing schema and routing tests, strengthen structural validation, enforce
+  cross-object stop-action rule, update DESIGN_GATES.md, repair result and audit
+  records, replace stale PR #3 body, run every final acceptance command. This is
+  a test-and-audit closure task. Does not authorize new scenario design, Gate 3,
+  pilot, or API calls.
 
 owner_authorization:
-  recorded_at: "2026-08-04T16:00:00+08:00"
-  source_instruction: "Owner Authorization — Protocol 17 Gate 2 Final Review Repair"
+  recorded_at: "2026-08-05T09:00:00+08:00"
+  source_instruction: "Owner Decision — Publish and Execute Protocol 18"
   scope: >
-    Final repair for PR #3. Separate classification fields structurally, enforce
-    conditional citations, add negative tests, correct audit metadata. Keep PR #3
-    Draft, open, unmerged. No Gate 3, pilot, or API calls.
-  
+    Publish Protocol 18 contract to main, synchronize task branch, execute all
+    deferred repairs from Protocol 17. Keep PR #3 Draft, open, unmerged. No Gate 3,
+    pilot, or API calls. Do not defer any declared completion condition.
+
 baseline:
-  commit: 3ad76b4d2c3c0b0f410eaf06c0f5bbfde031bc7b
-  protocol: 16
+  commit: 11fa64efb62caf1ceca78a3b20595d003f4ee037
+  protocol: 17
   review_status: changes_requested
 
 allowed_paths:
   - agent-control/CURRENT_TASK.yaml
   - agent-control/results/task-002.json
   - docs/DESIGN_GATES.md
-  - docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
   - templates/MINIMAL_LEARNING_STATE.schema.json
   - scripts/validate_task_002.py
   - scripts/test_task_002_negative.sh
   - state/CURRENT_STATE.yaml
+  - docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
 
 forbidden_paths:
+  - docs/FIRST_VERTICAL_SCENARIO.md
   - sources/**
   - docs/RESEARCH_QUESTIONS.md
   - docs/REFERENCE_SYSTEM_MATRIX.md
-  - docs/FIRST_VERTICAL_SCENARIO.md
   - agent-control/results/task-001*.json
   - agent-control/VALIDATION_RECORD.txt
   - agent-control/TASK_PROTOCOL.md
@@ -47,70 +49,101 @@ forbidden_paths:
   - scripts/test_control_state.sh
 
 repair_requirements:
-  repair_1_separate_classification_fields:
+  repair_1_implement_missing_tests:
     description: >
-      Replace eight-value system_classification with separate fields:
-      obstacle_classification (6 values + null), material_scope_status (3 values),
-      articulation_status (2 values)
-    changes:
-      - observed_difficulty schema structure
-      - obstacle_classification enum: [terminology_gap, prerequisite_deficit,
-        procedural_confusion, conceptual_confusion, stuck_on_specific_step,
-        lost_context, null]
-      - material_scope_status enum: [in_scope, missing_required_material,
-        outside_supplied_corpus]
-      - articulation_status enum: [articulated, cannot_articulate]
-      - cannot_articulate never a core obstacle classification
-      - outside_corpus removed entirely
-      - when cannot_articulate, obstacle may be null
-      - prose, pseudocode, schema, validator, result must use identical names
-  
-  repair_2_conditional_citation_rules:
+      Add 5 negative tests plus 1+ positive tests to reach minimum 21 total
+      (2 positive + 19 negative)
+    new_negative_tests:
+      - source-grounded action with zero material_citations
+      - arbitrary property inside bounded nested object
+      - nullable type whose enum omits null
+      - cannot_articulate in core obstacle_classification enum
+      - undefined obstacle classification or missing explicit route
+    new_positive_tests:
+      - cannot_articulate + null obstacle + in_scope + diagnostic action with citations
+      - stop-action cross-object rule compliance
+    requirements:
+      - retain all existing 15 tests
+      - minimum 21 total tests (2 positive + 19 negative)
+      - operate only on temporary fixtures
+      - verify live files unchanged
+      - no network calls
+
+  repair_2_strengthen_structural_validation:
     description: >
-      Use Draft-07 if/then to enforce minItems: 1 for source-grounded actions,
-      allow empty list only for stop_and_request_more_material with stop_reason
-    changes:
-      - schema if/then conditional for action_type
-      - validator must inspect and enforce actual conditional structure
-      - clarify_terminology, restore_prerequisite, give_bounded_example,
-        request_explanation, request_fresh_attempt require ≥1 citation
-      - stop_and_request_more_material allows empty only with stop_reason
-  
-  repair_3_missing_negative_tests:
-    description: Add 5+ new negative tests plus 1 positive cannot_articulate test
-    new_tests:
-      - source-grounded action with zero citations
-      - arbitrary field in bounded nested object
-      - nullable type with enum omitting null
-      - cannot_articulate in core obstacle enum
-      - undefined classification or missing route
-      - positive: cannot_articulate + null obstacle + in_scope + diagnostic action
-    total_tests: "21+ (1 positive + 20 negative)"
-  
-  repair_4_audit_metadata:
+      Update scripts/validate_task_002.py to structurally verify schema constraints,
+      not just search for keywords
+    structural_checks:
+      - obstacle_classification enum exactly 6 strings plus null
+      - cannot_articulate absent from obstacle enum
+      - obsolete outside_corpus absent entirely
+      - material_scope_status exactly 3 values
+      - articulation_status exactly 2 values
+      - all bounded nested objects have additionalProperties: false
+      - every nullable enum includes null
+      - Draft-07 citation condition exists
+      - five source-grounded actions require minItems >= 1
+      - stop action with empty citations requires non-empty stop_reason
+      - all declared obstacle and auxiliary-status routes explicitly defined
+
+  repair_3_enforce_cross_object_stop_rule:
     description: >
-      Update task-002.json to Protocol 17, derive timestamp from C1 Git metadata
+      For stop_and_request_more_material with empty citations, require both:
+      action_details.stop_reason non-empty AND material_scope_status not in_scope
+    implementation:
+      - use Draft-07 top-level if/then or smallest valid refactor
+      - add instance-level tests executing schema validation
+      - empty citations valid only when material_scope_status is
+        missing_required_material or outside_supplied_corpus
+      - invalid when material_scope_status is in_scope even with stop_reason
+
+  repair_4_update_design_gates:
+    description: Update DESIGN_GATES.md to reflect Protocol 18 state
     changes:
-      - protocol_version: 17
-      - task_id: task-002-gate-2-final-review-repair
-      - baseline_commit: 3ad76b4d2c3c0b0f410eaf06c0f5bbfde031bc7b
-      - completion_commit: <C1>
-      - completed_at: <C1 exact Git committer timestamp>
-      - timestamp_source: git_committer_metadata
-      - all changed paths including CURRENT_TASK
-      - actual test counts
-      - actual exit codes
-  
-  repair_5_design_gates_status:
-    description: Update DESIGN_GATES.md header/footer, no longer claim Task 001 Stage 3 active
-    changes:
+      - remove stale Task 001 Stage 3 active-state metadata
+      - Protocol 18
       - Gate 2: candidate_complete, independent_review=pending,
         exit_conditions_accepted=false, blocked_by=independent_review
-      - validator description updated
-      - negative test count updated
-      - Protocol 17 status
-      - next phase wording corrected
+      - Gate 3: not_started, blocked_by=gate_2_independent_review
+      - update validator description
+      - update test counts (positive/negative/total)
+      - update current task ID
+      - update review status
+      - update footer/last-updated metadata
       - do not mark Gate 2 formally accepted
+
+  repair_5_repair_result_and_authority_metadata:
+    description: Align all three authority files to candidate_complete state
+    changes:
+      - task_id: task-002-gate-2-test-and-audit-closure
+      - status: candidate_complete
+      - lifecycle all fields aligned
+      - baseline: 11fa64efb62caf1ceca78a3b20595d003f4ee037
+      - completion_commit from C1
+      - completed_at from C1 exact Git committer timestamp
+      - timestamp_source: git_committer_metadata
+      - complete changed-path list including CURRENT_TASK.yaml
+      - actual validator check count
+      - actual positive/negative/total test counts
+      - every final validation command and actual exit code
+      - next_action: awaiting independent Protocol 18 review
+      - reviewer_acceptance: pending
+      - Gate 3: not_started
+      - no stale Protocol 16/17 text or counts
+
+  repair_6_replace_pr_body:
+    description: Update PR #3 body with Protocol 18 status
+    required_content:
+      - Protocol 18
+      - contract publication commit
+      - C1, C2, any C3
+      - final head
+      - actual changed files
+      - actual test counts
+      - every acceptance command and exit code
+      - reviewer acceptance pending
+      - Gate 2 not formally accepted
+      - Gate 3 not started
 
 acceptance_commands:
   - python3 -m json.tool templates/MINIMAL_LEARNING_STATE.schema.json >/dev/null
@@ -144,25 +177,27 @@ acceptance_commands:
     PY
 
 completion_conditions:
-  - obstacle enum contains exactly 6 strings plus null
-  - auxiliary status fields exist separately in schema
-  - no old outside_corpus or core cannot_articulate remains
-  - conditional citation constraints exist in schema
-  - all 5+ missing negative cases executed
-  - audit timestamps match C1 Git metadata
-  - DESIGN_GATES no longer contains stale active-state summaries
-  - all acceptance commands pass
+  - minimum 21 tests (2 positive + 19 negative) all pass
+  - validator structurally checks obstacle enum, auxiliary fields, routes
+  - cross-object stop rule enforced in schema or validator
+  - instance tests verify stop-action rule
+  - DESIGN_GATES.md reflects Protocol 18 state
+  - all three authority files aligned to candidate_complete
+  - result record has C1 timestamp from Git metadata
+  - actual test counts recorded
+  - all acceptance commands pass with exit_code=0
+  - PR #3 body reflects Protocol 18
   - PR #3 remains Draft, open, unmerged
 
 lifecycle:
   previous_agent_execution: not_started
   technical_completion: not_started
   reviewer_acceptance: pending
-  latest_reviewer_record: protocol_16_changes_requested
+  latest_reviewer_record: protocol_17_changes_requested
   owner_acceptance: authorized
   lifecycle_status: ready
   formal_closure: false
-  task_002_status: ready_for_final_repair
+  task_002_status: ready_for_test_and_audit_closure
 
 task_001_status:
   task_id: task-001-core-research
@@ -172,7 +207,7 @@ task_001_status:
   gate_1_exit: met_with_documented_limitations
 
 predecessor:
-  protocol_16_head: 3ad76b4d2c3c0b0f410eaf06c0f5bbfde031bc7b
+  protocol_17_head: 11fa64efb62caf1ceca78a3b20595d003f4ee037
   pr_number: 3
   pr_state: draft_open_unmerged
 
@@ -183,3 +218,11 @@ prohibited_actions:
   - conduct_pilot
   - make_api_calls
   - begin_another_task
+  - defer_any_declared_requirement
+
+stop_rule:
+  blocked_condition: >
+    If any required item cannot be completed, set status: blocked,
+    technical_completion: blocked, lifecycle_status: blocked.
+    Record exact blocker and stop. Do not label candidate_complete
+    while any Protocol 18 requirement remains deferred.
