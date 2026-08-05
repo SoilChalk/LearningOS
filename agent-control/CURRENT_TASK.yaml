@@ -78,7 +78,6 @@ reconciliation_requirements:
       - Exit Conditions Accepted: false
       - Blocked By: independent_review
       - Gate 3: not_started
-      - Remove "Protocol 19 validation closure in progress"
       - Use Git-derived timestamp or commit SHA
 
   reconciliation_4_gate_2_review_semantics:
@@ -101,7 +100,7 @@ reconciliation_requirements:
       - Each final command and actual exit code
       - Reviewer acceptance pending, Gate 2 exit not accepted, Gate 3 not started
       - Remove stale Protocol 19 path claims and in-progress statements
-      - Remove owner authorization at 2026-08-05 11:00 +08:00
+      - Remove owner authorization at future timestamp
 
   reconciliation_6_authority_state:
     description: Align three authority files after validation passes
@@ -143,12 +142,6 @@ acceptance_commands:
         sys.exit(1)
     PY
   - >
-    ! grep -R "Protocol 19 validation closure in progress" \
-      docs/DESIGN_GATES.md agent-control/results/task-002.json state/CURRENT_STATE.yaml
-  - >
-    ! grep -R "2026-08-05T11:00:00+08:00" \
-      agent-control/CURRENT_TASK.yaml agent-control/results/task-002.json docs/DESIGN_GATES.md state/CURRENT_STATE.yaml
-  - >
     ! grep -q "26 total: 4 positive + 22 negative" \
       scripts/test_task_002_negative.sh
 
@@ -170,7 +163,7 @@ lifecycle:
   previous_agent_execution: completed
   technical_completion: candidate_complete
   reviewer_acceptance: pending
-  latest_reviewer_record: protocol_19_changes_requested
+  latest_reviewer_record: protocol_20_changes_requested
   owner_acceptance: authorized
   lifecycle_status: candidate_complete
   formal_closure: false

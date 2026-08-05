@@ -139,11 +139,11 @@ Design gates define entry and exit conditions for each major phase of Learning O
 - **PEDAGOGICAL_ACTION_DECISION_TREE.md**: Six classification types (terminology gap, prerequisite deficit, procedural confusion, conceptual confusion, stuck on step, lost context); six actions (clarify term, restore prerequisite, give example, request explanation, fresh attempt, stop); escalation rules; provisional status acknowledged
 - **MINIMAL_LEARNING_STATE.schema.json**: JSON Schema Draft-07 with 11 required fields; evidence_level enum [0,1,2] only; additionalProperties: false; no speculative fields; conditional citation rules; cross-object stop-action constraint
 - **validate_task_002.py**: Python validator using standard library only; structurally verifies obstacle enum (6 + null), auxiliary status fields, Draft-07 constraints, nested object boundaries, nullable enums, citation requirements
-- **test_task_002_negative.sh**: Bash test suite with 20 tests (1 positive + 19 negative); isolated fixtures; hash verification; structural constraint validation
+- **test_task_002_negative.sh**: 27 tests total (21 structural + 6 instance validation, 4 positive + 23 negative); isolated fixtures; hash verification; structural constraint validation
 
 ### Validation Status
 - **Structural Validator**: 5 checks (scenario structure, decision tree, schema structure, cross-references, design constraints)
-- **Test Coverage**: 27 tests total (Protocol 19)
+- **Test Coverage**: 27 tests total
   - Structural tests: 21 (1 positive + 20 negative)
   - Instance validation tests: 6 (3 positive + 3 negative)
 - **Schema Constraints**: Obstacle classification (6 core + null), material_scope_status (3 values), articulation_status (2 values), Draft-07 if/then citation rules, top-level allOf cross-object stop rule
@@ -154,7 +154,7 @@ Design gates define entry and exit conditions for each major phase of Learning O
 - **Independent Review**: pending
 - **Exit Conditions Accepted**: false
 - **Blocked By**: independent_review
-- **Reviewer Status**: Protocol 19 validation closure complete, Protocol 20 audit reconciliation in progress
+- **Reviewer Status**: Protocol 20 audit reconciliation complete; awaiting independent re-review
 
 ### Prohibited Activities
 - [x] Building for multiple scenarios simultaneously (single scenario only)
@@ -288,7 +288,7 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ---
 
-**Last Updated**: Protocol 20 C1 (41efc70, 2026-08-05T02:37:01+08:00)
+**Last Updated**: Protocol 20 C4
 **Protocol**: 20
-**Phase**: Gate 2 - Audit Reconciliation (in_progress)
+**Phase**: Gate 2 - Audit Reconciliation (candidate_complete)
 **Next Phase**: Gate 2 Independent Review → Gate 3 MVP Pilot

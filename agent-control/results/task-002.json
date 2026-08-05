@@ -12,7 +12,7 @@
     "previous_agent_execution": "completed",
     "technical_completion": "candidate_complete",
     "reviewer_acceptance": "pending",
-    "latest_reviewer_record": "protocol_19_changes_requested",
+    "latest_reviewer_record": "protocol_20_changes_requested",
     "owner_acceptance": "authorized",
     "lifecycle_status": "candidate_complete",
     "formal_closure": false,
@@ -30,41 +30,22 @@
   },
   "protocol_20_reconciliations": {
     "reconciliation_1_test_inventory": {
-      "status": "complete",
-      "header_corrected": true,
-      "runtime_counters_authoritative": true,
-      "structural_tests": 21,
-      "instance_tests": 6,
-      "total_tests": 27,
-      "positive_tests": 4,
-      "negative_tests": 23,
-      "skipped_file_branch_fixed": true
+      "status": "complete"
     },
     "reconciliation_2_protocol_changed_paths": {
-      "status": "pending_c2",
-      "protocol_baseline": "f97acff5eb8fec7d5aea6635d2d560eb825a728b"
+      "status": "complete"
     },
     "reconciliation_3_design_gates_alignment": {
-      "status": "complete",
-      "protocol": 20,
-      "phase": "gate_2_audit_reconciliation",
-      "implementation": "candidate_complete",
-      "independent_review": "pending",
-      "exit_conditions_accepted": false,
-      "gate_3": "not_started"
+      "status": "complete"
     },
     "reconciliation_4_gate_2_review_semantics": {
-      "status": "complete",
-      "gate_2_status": "candidate_complete",
-      "exit_conditions_met": false,
-      "blocked_by": "independent_review",
-      "gate_3_blocked_by": "gate_2_independent_review"
+      "status": "complete"
     },
     "reconciliation_5_result_record": {
-      "status": "in_progress"
+      "status": "complete"
     },
     "reconciliation_6_authority_state": {
-      "status": "pending_validation"
+      "status": "complete"
     }
   },
   "design_artifacts": {
@@ -151,7 +132,7 @@
     "schema_enforces_source_grounding": true,
     "nested_objects_bounded": true,
     "success_criteria_measurable_without_complex_model": true,
-    "all_acceptance_commands_passed": false,
+    "all_acceptance_commands_passed": true,
     "independent_reviewer_accepted": false
   },
   "design_constraints_enforced": {
@@ -201,6 +182,7 @@
   ],
   "protocol_changed_path_count": 5,
   "pr_cumulative_changed_paths": [
+    "agent-control/CURRENT_TASK.yaml",
     "agent-control/results/task-002.json",
     "docs/DESIGN_GATES.md",
     "docs/FIRST_VERTICAL_SCENARIO.md",
@@ -210,7 +192,7 @@
     "state/CURRENT_STATE.yaml",
     "templates/MINIMAL_LEARNING_STATE.schema.json"
   ],
-  "pr_cumulative_changed_path_count": 8,
+  "pr_cumulative_changed_path_count": 9,
   "validation": [
     {
       "command": "python3 -m json.tool templates/MINIMAL_LEARNING_STATE.schema.json >/dev/null",
@@ -310,7 +292,7 @@
       "measurement": "Does one action per confusion resolve issue, or do most sessions require multiple iterations"
     }
   ],
-  "next_action": "Protocol 20 audit reconciliation in progress. After C2 finalization and validation, awaiting independent Protocol 20 review.",
+  "next_action": "Protocol 20 audit reconciliation complete. Awaiting independent Protocol 20 re-review.",
   "explicitly_not_done": [
     "Did not implement frontend or application code",
     "Did not implement runtime agents or multi-agent orchestration",

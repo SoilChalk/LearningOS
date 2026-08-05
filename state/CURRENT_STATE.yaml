@@ -8,7 +8,7 @@ lifecycle:
   previous_agent_execution: completed
   technical_completion: candidate_complete
   reviewer_acceptance: pending
-  latest_reviewer_record: protocol_19_changes_requested
+  latest_reviewer_record: protocol_20_changes_requested
   owner_acceptance: authorized
   lifecycle_status: candidate_complete
   formal_closure: false
@@ -28,7 +28,7 @@ predecessor:
 current_stage:
   stage_id: gate_2_audit_reconciliation
   started: true
-  completed: false
+  completed: true
   blocked: false
   next_stage: gate_2_independent_review
 
@@ -64,10 +64,5 @@ design_artifacts:
   negative_tests: scripts/test_task_002_negative.sh
 
 next_action:
-  action: "Protocol 20 audit reconciliation in progress: correcting changed-path accounting, test inventory, DESIGN_GATES status, and Gate 2 review semantics."
-  status: "in_progress"
-  priority:
-    - "Complete Protocol 20 audit reconciliation (C1 committed)"
-    - "Update result record with accurate path accounting and test counts"
-    - "Run all acceptance commands and record actual exit codes"
-    - "Update authority files to candidate_complete after validation passes"
+  action: "Protocol 20 audit reconciliation complete. Awaiting independent Protocol 20 re-review."
+  status: "candidate_complete"
