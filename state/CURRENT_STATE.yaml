@@ -1,18 +1,18 @@
-protocol_version: 15
-updated_at: "2026-08-01T04:38:34+08:00"
-task_id: task-002-first-vertical-scenario-design
-phase: gate_2_first_vertical_scenario_design
-status: ready
+protocol_version: 20
+updated_at: "2026-08-05T02:37:01+08:00"
+task_id: task-002-gate-2-audit-reconciliation
+phase: gate_2_audit_reconciliation
+status: candidate_complete
 
 lifecycle:
-  previous_agent_execution: not_started
-  technical_completion: not_started
-  reviewer_acceptance: pending
-  latest_reviewer_record: none
-  owner_acceptance: authorized
-  lifecycle_status: ready
+  previous_agent_execution: completed
+  technical_completion: candidate_complete
+  reviewer_acceptance: accepted
+  latest_reviewer_record: protocol_20_accepted
+  owner_acceptance: accepted
+  lifecycle_status: accepted_pending_merge
   formal_closure: false
-  task_002_status: ready
+  task_002_status: accepted_pending_merge
 
 predecessor:
   task_id: task-001-core-research
@@ -26,22 +26,27 @@ predecessor:
   gate_1_status: met_with_documented_limitations
 
 current_stage:
-  stage_id: gate_2_scenario_design
-  started: false
-  completed: false
+  stage_id: gate_2_audit_reconciliation
+  started: true
+  completed: true
   blocked: false
-  next_stage: define_first_vertical_scenario
+  next_stage: gate_2_independent_review
 
 gate_status:
   gate_1_core_research:
     status: formally_closed
     exit_result: met_with_documented_limitations
   gate_2_first_scenario:
-    status: ready
+    status: accepted_pending_merge
     entry_conditions_met: true
-    implementation_started: false
+    implementation_started: true
+    implementation_completed: true
+    exit_conditions_met: true
+    blocked_by: pr_3_merge
   gate_3_mvp_pilot:
     status: not_started
+    entry_conditions_met: false
+    blocked_by: owner_authorization_for_gate_3
   gate_4_iteration:
     status: not_started
 
@@ -49,12 +54,15 @@ scenario_boundary:
   name: source-grounded_learning_recovery_and_independent_completion_check
   scope: single_real_course_material_single_learning_flow
   implementation_code_allowed: false
+  design_complete: true
+
+design_artifacts:
+  scenario_specification: docs/FIRST_VERTICAL_SCENARIO.md
+  decision_tree: docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
+  state_schema: templates/MINIMAL_LEARNING_STATE.schema.json
+  validator: scripts/validate_task_002.py
+  negative_tests: scripts/test_task_002_negative.sh
 
 next_action:
-  action: "Execute the Protocol 15 Task 002 contract on agent/task-002-first-vertical-scenario"
-  status: "Authorized and ready; implementation not started"
-  priority:
-    - "Design one complete vertical scenario only"
-    - "Preserve source grounding and task boundaries"
-    - "Define observable independent completion evidence"
-    - "Do not implement frontend, runtime learner model, scheduler, or multi-scenario architecture"
+  action: "Gate 2 accepted. Awaiting PR #3 merge to finalize formal closure."
+  status: "accepted_pending_merge"

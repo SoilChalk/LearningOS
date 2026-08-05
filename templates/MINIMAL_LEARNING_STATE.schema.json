@@ -1,0 +1,428 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://learningos.local/schemas/minimal-learning-state.schema.json",
+  "title": "Minimal Learning State",
+  "description": "State persistence schema for the Source-Grounded Learning Recovery and Independent Completion Check scenario. Contains only data needed for session resumption and next-action recommendation. Does NOT contain inferred learner states, knowledge graphs, or speculative architecture.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "scenario_id",
+    "session_id",
+    "created_at",
+    "updated_at",
+    "current_position",
+    "task_boundary",
+    "observed_difficulty",
+    "last_pedagogical_action",
+    "independent_check",
+    "next_action"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Schema version for compatibility checking",
+      "const": "1.0"
+    },
+    "scenario_id": {
+      "type": "string",
+      "description": "Identifies the scenario this state belongs to",
+      "const": "source-grounded-learning-recovery-and-independent-completion-check"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Unique identifier for this learning session",
+      "pattern": "^session-[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "created_at": {
+      "type": "string",
+      "description": "ISO 8601 timestamp when session started",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "ISO 8601 timestamp when state last saved",
+      "format": "date-time"
+    },
+    "current_position": {
+      "type": "object",
+      "description": "User's current location in course material (Step 1 output)",
+      "required": ["material_file", "section", "confirmed_by_user"],
+      "additionalProperties": false,
+      "properties": {
+        "material_file": {
+          "type": "string",
+          "description": "Name of uploaded file user is working from",
+          "minLength": 1
+        },
+        "section": {
+          "type": "string",
+          "description": "Section heading, chapter number, or page range",
+          "minLength": 1
+        },
+        "page": {
+          "type": ["string", "null"],
+          "description": "Page number if applicable (optional)"
+        },
+        "problem_number": {
+          "type": ["string", "null"],
+          "description": "Specific problem or example number if applicable (optional)"
+        },
+        "confirmed_by_user": {
+          "type": "boolean",
+          "description": "Whether user explicitly confirmed this position",
+          "const": true
+        },
+        "confirmed_at": {
+          "type": "string",
+          "description": "ISO 8601 timestamp when position confirmed",
+          "format": "date-time"
+        }
+      }
+    },
+    "task_boundary": {
+      "type": "object",
+      "description": "Defined scope of current learning task (Step 2 output)",
+      "required": ["task_type", "scope_description", "completion_criterion"],
+      "additionalProperties": false,
+      "properties": {
+        "task_type": {
+          "type": "string",
+          "description": "Type of learning task",
+          "enum": ["understand_concept", "solve_problem", "apply_to_example", "explain_reasoning"]
+        },
+        "scope_description": {
+          "type": "string",
+          "description": "What user is trying to achieve",
+          "minLength": 1
+        },
+        "start_section": {
+          "type": "string",
+          "description": "Material section where task begins"
+        },
+        "end_section": {
+          "type": ["string", "null"],
+          "description": "Material section where task ends (if different from start)"
+        },
+        "completion_criterion": {
+          "type": "string",
+          "description": "Observable criterion for task completion (e.g., 'solve similar problem independently')",
+          "minLength": 1
+        }
+      }
+    },
+    "observed_difficulty": {
+      "type": "object",
+      "description": "User's expressed confusion or obstacle (Step 3 output)",
+      "required": ["user_statement", "obstacle_classification", "material_scope_status", "articulation_status", "expressed_at"],
+      "additionalProperties": false,
+      "properties": {
+        "user_statement": {
+          "type": "string",
+          "description": "User's verbatim confusion expression (accept ANY natural language including 'I don't know what's confusing')",
+          "minLength": 1
+        },
+        "obstacle_classification": {
+          "type": ["string", "null"],
+          "description": "System's provisional classification of the articulated obstacle (null when user cannot_articulate)",
+          "enum": [
+            "terminology_gap",
+            "prerequisite_deficit",
+            "procedural_confusion",
+            "conceptual_confusion",
+            "stuck_on_specific_step",
+            "lost_context",
+            null
+          ]
+        },
+        "material_scope_status": {
+          "type": "string",
+          "description": "Whether confusion relates to uploaded material scope",
+          "enum": [
+            "in_scope",
+            "missing_required_material",
+            "outside_supplied_corpus"
+          ]
+        },
+        "articulation_status": {
+          "type": "string",
+          "description": "Whether user can articulate what's confusing",
+          "enum": [
+            "articulated",
+            "cannot_articulate"
+          ]
+        },
+        "material_context": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "section": {"type": "string"},
+            "page": {"type": ["string", "null"]},
+            "problem": {"type": ["string", "null"]}
+          }
+        },
+        "expressed_at": {
+          "type": "string",
+          "description": "ISO 8601 timestamp when confusion expressed",
+          "format": "date-time"
+        }
+      }
+    },
+    "last_pedagogical_action": {
+      "type": "object",
+      "description": "Most recent teaching action taken (Step 4 output)",
+      "required": ["action_type", "material_citations", "delivered_at"],
+      "additionalProperties": false,
+      "properties": {
+        "action_type": {
+          "type": "string",
+          "description": "Type of pedagogical action delivered",
+          "enum": [
+            "clarify_terminology",
+            "restore_prerequisite",
+            "give_bounded_example",
+            "request_explanation",
+            "request_fresh_attempt",
+            "stop_and_request_more_material"
+          ]
+        },
+        "action_details": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "term_clarified": {"type": ["string", "null"]},
+            "prerequisite_concept": {"type": ["string", "null"]},
+            "example_shown": {"type": ["string", "null"]},
+            "explanation_requested": {"type": ["string", "null"]},
+            "hint_provided": {"type": ["string", "null"]},
+            "stop_reason": {"type": ["string", "null"]}
+          }
+        },
+        "material_citations": {
+          "type": "array",
+          "description": "Material sections cited in this action (source-grounding constraint)",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "file": {"type": "string"},
+              "section": {"type": "string"},
+              "page": {"type": ["string", "null"]}
+            },
+            "required": ["file", "section"]
+          },
+          "minItems": 0
+        },
+        "delivered_at": {
+          "type": "string",
+          "description": "ISO 8601 timestamp when action delivered",
+          "format": "date-time"
+        },
+        "user_response": {
+          "type": ["string", "null"],
+          "description": "User's response to action (e.g., 'okay', 'still confused', 'I see')"
+        },
+        "escalation_count": {
+          "type": "integer",
+          "description": "Number of times action escalated in this session",
+          "minimum": 0,
+          "default": 0
+        }
+      },
+      "if": {
+        "properties": {
+          "action_type": {
+            "enum": ["clarify_terminology", "restore_prerequisite", "give_bounded_example", "request_explanation", "request_fresh_attempt"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "material_citations": {
+            "minItems": 1
+          }
+        }
+      },
+      "else": {
+        "if": {
+          "properties": {
+            "action_type": {
+              "const": "stop_and_request_more_material"
+            }
+          }
+        },
+        "then": {
+          "anyOf": [
+            {
+              "properties": {
+                "material_citations": {
+                  "minItems": 0,
+                  "maxItems": 0
+                },
+                "action_details": {
+                  "required": ["stop_reason"],
+                  "properties": {
+                    "stop_reason": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "material_citations": {
+                  "minItems": 1
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "independent_check": {
+      "type": "object",
+      "description": "Independent completion evidence collection (Step 5 output)",
+      "required": ["requested", "evidence_level"],
+      "additionalProperties": false,
+      "properties": {
+        "requested": {
+          "type": "boolean",
+          "description": "Whether independent check was requested in this session"
+        },
+        "check_type": {
+          "type": ["string", "null"],
+          "description": "Type of independent behavior requested",
+          "enum": ["explain_concept", "solve_similar_problem", "apply_to_example", "none", null]
+        },
+        "user_response": {
+          "type": ["string", "null"],
+          "description": "User's response to check request (verbatim or summary)"
+        },
+        "evidence_level": {
+          "type": "integer",
+          "description": "Evidence level classification (0=none, 1=partial, 2=single-instance-correct)",
+          "enum": [0, 1, 2]
+        },
+        "evaluation": {
+          "type": ["object", "null"],
+          "description": "What was correct/incorrect in user response",
+          "additionalProperties": false,
+          "properties": {
+            "correct_elements": {
+              "type": "array",
+              "items": {"type": "string"}
+            },
+            "incorrect_elements": {
+              "type": "array",
+              "items": {"type": "string"}
+            }
+          }
+        },
+        "checked_at": {
+          "type": ["string", "null"],
+          "description": "ISO 8601 timestamp when check completed",
+          "format": "date-time"
+        }
+      }
+    },
+    "next_action": {
+      "type": "object",
+      "description": "Recommendation for next session (Step 6 output)",
+      "required": ["recommendation", "rationale"],
+      "additionalProperties": false,
+      "properties": {
+        "recommendation": {
+          "type": "string",
+          "description": "Next action for user to take",
+          "minLength": 1
+        },
+        "rationale": {
+          "type": "string",
+          "description": "Why this next action is recommended",
+          "enum": [
+            "evidence_level_2_achieved_proceed_to_next",
+            "evidence_level_1_review_and_retry",
+            "evidence_level_0_continue_from_current",
+            "escalation_threshold_review_offline"
+          ]
+        },
+        "suggested_material_section": {
+          "type": ["string", "null"],
+          "description": "Material section to focus on next (if applicable)"
+        }
+      }
+    },
+    "session_metadata": {
+      "type": "object",
+      "description": "Session metrics for Gate 3 pilot measurement (NOT part of core state logic)",
+      "additionalProperties": false,
+      "properties": {
+        "duration_seconds": {
+          "type": ["integer", "null"],
+          "description": "Total session duration in seconds"
+        },
+        "position_recovery_seconds": {
+          "type": ["integer", "null"],
+          "description": "Time from session start to confirmed position (Gate 3 metric: < 60 target)"
+        },
+        "steps_completed": {
+          "type": "array",
+          "description": "Which flow steps completed in this session",
+          "items": {
+            "type": "integer",
+            "enum": [1, 2, 3, 4, 5, 6]
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "last_pedagogical_action": {
+            "properties": {
+              "action_type": {
+                "const": "stop_and_request_more_material"
+              },
+              "material_citations": {
+                "maxItems": 0
+              }
+            },
+            "required": ["action_type", "material_citations"]
+          }
+        },
+        "required": ["last_pedagogical_action"]
+      },
+      "then": {
+        "properties": {
+          "observed_difficulty": {
+            "properties": {
+              "material_scope_status": {
+                "enum": ["missing_required_material", "outside_supplied_corpus"]
+              }
+            },
+            "required": ["material_scope_status"]
+          },
+          "last_pedagogical_action": {
+            "properties": {
+              "action_details": {
+                "required": ["stop_reason"],
+                "properties": {
+                  "stop_reason": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            "required": ["action_details"]
+          }
+        },
+        "required": ["observed_difficulty", "last_pedagogical_action"]
+      }
+    }
+  ]
+}

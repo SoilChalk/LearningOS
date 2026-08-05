@@ -1,8 +1,8 @@
 # Learning OS Design Gates
 
-**Generated**: 2026-07-29
-**Task**: task-001-core-research
-**Status**: Stage 3 - Eight-Source Synthesis Complete
+**Protocol**: 20
+**Task**: task-002-gate-2-audit-reconciliation
+**Status**: Gate 2 Audit Reconciliation
 
 ---
 
@@ -110,35 +110,67 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ## Gate 2: First Vertical Scenario Design
 
-**Current Status**: NOT STARTED
+**Current Status**: CANDIDATE COMPLETE (awaiting independent review)
 
 ### Entry Conditions
-- [ ] Gate 1 exit conditions met
-- [ ] Provisional scenario identified from research
-- [ ] Minimum flow defined
-- [ ] Source-grounding strategy selected
-- [ ] Task boundary enforcement approach chosen
+- [x] Gate 1 exit conditions met
+- [x] Provisional scenario identified from research
+- [x] Minimum flow defined
+- [x] Source-grounding strategy selected
+- [x] Task boundary enforcement approach chosen
 
 ### Activities
-- Define complete user flow for first scenario
-- Specify source material handling
-- Design pedagogical action selection rules
-- Define minimal persistent state
-- Establish evidence collection points
-- Document what NOT to build
+- [x] Define complete user flow for first scenario
+- [x] Specify source material handling
+- [x] Design pedagogical action selection rules
+- [x] Define minimal persistent state
+- [x] Establish evidence collection points
+- [x] Document what NOT to build
 
 ### Exit Conditions
-- [ ] Scenario specification document complete
-- [ ] Entry/exit criteria for each flow step defined
-- [ ] Pedagogical action decision tree documented
-- [ ] State schema defined (current_position, observed_difficulty, evidence_level, next_action)
-- [ ] Success criteria measurable without complex learner model
+- [x] Scenario specification document complete (FIRST_VERTICAL_SCENARIO.md)
+- [x] Entry/exit criteria for each flow step defined (6 steps, each with explicit criteria)
+- [x] Pedagogical action decision tree documented (PEDAGOGICAL_ACTION_DECISION_TREE.md)
+- [x] State schema defined (MINIMAL_LEARNING_STATE.schema.json: current_position, task_boundary, observed_difficulty, last_pedagogical_action, independent_check, next_action)
+- [x] Success criteria measurable without complex learner model (evidence levels 0/1/2, no mastery inference)
+
+### Design Artifacts Created
+- **FIRST_VERTICAL_SCENARIO.md**: Complete 6-step flow (Material Position Recovery → Task Boundary Definition → Confusion Expression → Pedagogical Action → Independent Check → State Persistence); entry/exit criteria per step; failure states; measurable success criteria; explicit non-goals
+- **PEDAGOGICAL_ACTION_DECISION_TREE.md**: Six classification types (terminology gap, prerequisite deficit, procedural confusion, conceptual confusion, stuck on step, lost context); six actions (clarify term, restore prerequisite, give example, request explanation, fresh attempt, stop); escalation rules; provisional status acknowledged
+- **MINIMAL_LEARNING_STATE.schema.json**: JSON Schema Draft-07 with 11 required fields; evidence_level enum [0,1,2] only; additionalProperties: false; no speculative fields; conditional citation rules; cross-object stop-action constraint
+- **validate_task_002.py**: Python validator using standard library only; structurally verifies obstacle enum (6 + null), auxiliary status fields, Draft-07 constraints, nested object boundaries, nullable enums, citation requirements
+- **test_task_002_negative.sh**: 27 tests total (21 structural + 6 instance validation, 4 positive + 23 negative); isolated fixtures; hash verification; structural constraint validation
+
+### Validation Status
+- **Structural Validator**: 5 checks (scenario structure, decision tree, schema structure, cross-references, design constraints)
+- **Test Coverage**: 27 tests total
+  - Structural tests: 21 (1 positive + 20 negative)
+  - Instance validation tests: 6 (3 positive + 3 negative)
+- **Schema Constraints**: Obstacle classification (6 core + null), material_scope_status (3 values), articulation_status (2 values), Draft-07 if/then citation rules, top-level allOf cross-object stop rule
+- **Instance Validation**: jsonschema 4.26.0 available; tests validate complete state instances against schema
+
+### Gate 2 Status
+- **Implementation**: candidate_complete
+- **Independent Review**: accepted
+- **Independent Review Record**: protocol_20_accepted
+- **Owner Acceptance**: accepted (2026-08-06T04:12:00+08:00)
+- **Exit Conditions Accepted**: true
+- **Formal Closure**: pending PR #3 merge
+- **Next Phase**: Merge PR #3 → Gate 3 MVP Pilot (not yet authorized)
 
 ### Prohibited Activities
-- Building for multiple scenarios simultaneously
-- Implementing learner model before evidence design
-- Creating general-purpose knowledge graph
-- Developing automated review scheduler
+- [x] Building for multiple scenarios simultaneously (single scenario only)
+- [x] Implementing learner model before evidence design (state contains observable facts only)
+- [x] Creating general-purpose knowledge graph (no knowledge_graph field in schema)
+- [x] Developing automated review scheduler (next-action recommendation only, user decides when)
+
+### Documented Limitations Carried Forward
+**From Gate 1 RESEARCH_QUESTIONS.md and REFERENCE_SYSTEM_MATRIX.md:**
+- **Layer 1**: Model knowledge leakage prevention (partial: explicit failure messages); ambiguous source handling (not addressed)
+- **Layer 2**: Vocabulary/notation constraints (assumes consistent material); assessment alignment (use material's examples); academic integrity (defer to external policy)
+- **Layer 3**: Automatic obstacle detection (user MUST express confusion first); procedural vs. conceptual distinction (provisional classification)
+- **Layer 4**: "Understood" vs. "can solve" definition (evidence levels 0/1/2); single-instance vs. consistent performance (level 2 ≠ mastery); intervention effectiveness (measure in Gate 3)
+- **Layer 5**: Unified model across task types (out of scope); cross-task transfer (single task boundary); skill decomposition for unstructured tasks (structured material assumed)
 
 ---
 
@@ -148,10 +180,14 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ### Entry Conditions
 - [ ] Gate 2 exit conditions met
+- [ ] Gate 2 independent review accepted
 - [ ] Scenario specification validated
 - [ ] Success criteria defined
 - [ ] Pilot materials identified (must be real, not synthetic)
 - [ ] Evidence collection protocol ready
+
+### Blocked By
+- Gate 2 independent review pending
 
 ### Activities
 - Implement minimum flow for single scenario
@@ -254,6 +290,7 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ---
 
-**Last Updated**: 2026-07-29T19:00:00Z
-**Phase**: Gate 1 - Core Research COMPLETE
-**Next Phase**: Gate 2 - First Vertical Scenario Design (ready to begin)
+**Last Updated**: Protocol 20 owner acceptance (pending PR #3 merge)
+**Protocol**: 20
+**Phase**: Gate 2 - Owner Acceptance (accepted_pending_merge)
+**Next Phase**: PR #3 Merge → Formal Closure → Gate 3 MVP Pilot (authorization pending)
