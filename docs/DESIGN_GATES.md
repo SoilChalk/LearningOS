@@ -151,10 +151,12 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ### Gate 2 Status
 - **Implementation**: candidate_complete
-- **Independent Review**: pending
-- **Exit Conditions Accepted**: false
-- **Blocked By**: independent_review
-- **Reviewer Status**: Protocol 20 audit reconciliation complete; awaiting independent re-review
+- **Independent Review**: accepted
+- **Independent Review Record**: protocol_20_accepted
+- **Owner Acceptance**: accepted (2026-08-06T04:12:00+08:00)
+- **Exit Conditions Accepted**: true
+- **Formal Closure**: pending PR #3 merge
+- **Next Phase**: Merge PR #3 → Gate 3 MVP Pilot (not yet authorized)
 
 ### Prohibited Activities
 - [x] Building for multiple scenarios simultaneously (single scenario only)
@@ -288,7 +290,7 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ---
 
-**Last Updated**: Protocol 20 C4
+**Last Updated**: Protocol 20 owner acceptance (pending PR #3 merge)
 **Protocol**: 20
-**Phase**: Gate 2 - Audit Reconciliation (candidate_complete)
-**Next Phase**: Gate 2 Independent Review → Gate 3 MVP Pilot
+**Phase**: Gate 2 - Owner Acceptance (accepted_pending_merge)
+**Next Phase**: PR #3 Merge → Formal Closure → Gate 3 MVP Pilot (authorization pending)

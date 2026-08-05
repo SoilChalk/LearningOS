@@ -7,12 +7,12 @@ status: candidate_complete
 lifecycle:
   previous_agent_execution: completed
   technical_completion: candidate_complete
-  reviewer_acceptance: pending
-  latest_reviewer_record: protocol_20_changes_requested
-  owner_acceptance: authorized
-  lifecycle_status: candidate_complete
+  reviewer_acceptance: accepted
+  latest_reviewer_record: protocol_20_accepted
+  owner_acceptance: accepted
+  lifecycle_status: accepted_pending_merge
   formal_closure: false
-  task_002_status: candidate_complete
+  task_002_status: accepted_pending_merge
 
 predecessor:
   task_id: task-001-core-research
@@ -37,16 +37,16 @@ gate_status:
     status: formally_closed
     exit_result: met_with_documented_limitations
   gate_2_first_scenario:
-    status: candidate_complete
+    status: accepted_pending_merge
     entry_conditions_met: true
     implementation_started: true
     implementation_completed: true
-    exit_conditions_met: false
-    blocked_by: independent_review
+    exit_conditions_met: true
+    blocked_by: pr_3_merge
   gate_3_mvp_pilot:
     status: not_started
     entry_conditions_met: false
-    blocked_by: gate_2_independent_review
+    blocked_by: owner_authorization_for_gate_3
   gate_4_iteration:
     status: not_started
 
@@ -64,5 +64,5 @@ design_artifacts:
   negative_tests: scripts/test_task_002_negative.sh
 
 next_action:
-  action: "Protocol 20 audit reconciliation complete. Awaiting independent Protocol 20 re-review."
-  status: "candidate_complete"
+  action: "Gate 2 accepted. Awaiting PR #3 merge to finalize formal closure."
+  status: "accepted_pending_merge"

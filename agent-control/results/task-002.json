@@ -11,12 +11,12 @@
   "lifecycle": {
     "previous_agent_execution": "completed",
     "technical_completion": "candidate_complete",
-    "reviewer_acceptance": "pending",
-    "latest_reviewer_record": "protocol_20_changes_requested",
-    "owner_acceptance": "authorized",
-    "lifecycle_status": "candidate_complete",
+    "reviewer_acceptance": "accepted",
+    "latest_reviewer_record": "protocol_20_accepted",
+    "owner_acceptance": "accepted",
+    "lifecycle_status": "accepted_pending_merge",
     "formal_closure": false,
-    "task_002_status": "candidate_complete"
+    "task_002_status": "accepted_pending_merge"
   },
   "predecessor": {
     "protocol_19_head": "f97acff5eb8fec7d5aea6635d2d560eb825a728b",
@@ -133,7 +133,7 @@
     "nested_objects_bounded": true,
     "success_criteria_measurable_without_complex_model": true,
     "all_acceptance_commands_passed": true,
-    "independent_reviewer_accepted": false
+    "independent_reviewer_accepted": true
   },
   "design_constraints_enforced": {
     "single_scenario_only": true,
@@ -297,7 +297,7 @@
       "measurement": "Does one action per confusion resolve issue, or do most sessions require multiple iterations"
     }
   ],
-  "next_action": "Protocol 20 audit reconciliation complete. Awaiting independent Protocol 20 re-review.",
+  "next_action": "Merge PR #3 using normal merge commit, then finalize formal closure on main.",
   "explicitly_not_done": [
     "Did not implement frontend or application code",
     "Did not implement runtime agents or multi-agent orchestration",

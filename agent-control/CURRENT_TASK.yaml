@@ -218,12 +218,12 @@ completion_conditions:
 lifecycle:
   previous_agent_execution: completed
   technical_completion: candidate_complete
-  reviewer_acceptance: pending
-  latest_reviewer_record: protocol_20_changes_requested
-  owner_acceptance: authorized
-  lifecycle_status: candidate_complete
+  reviewer_acceptance: accepted
+  latest_reviewer_record: protocol_20_accepted
+  owner_acceptance: accepted
+  lifecycle_status: accepted_pending_merge
   formal_closure: false
-  task_002_status: candidate_complete
+  task_002_status: accepted_pending_merge
 
 task_001_status:
   task_id: task-001-core-research
