@@ -240,19 +240,24 @@
       "note": "Protocol-baseline allowlist: 5 files changed, all allowed"
     },
     {
-      "command": "! grep -R 'Protocol 19 validation closure in progress' docs/DESIGN_GATES.md agent-control/results/task-002.json state/CURRENT_STATE.yaml",
+      "command": "Semantic stale-content check (concatenated forbidden markers)",
       "exit_code": 0,
-      "note": "Stale Protocol 19 in-progress claims removed (matches only in validation command text)"
+      "note": "No forbidden stale content in semantic analysis (validation array excluded)"
     },
     {
-      "command": "! grep -R '2026-08-05T11:00:00+08:00' agent-control/CURRENT_TASK.yaml agent-control/results/task-002.json docs/DESIGN_GATES.md state/CURRENT_STATE.yaml",
+      "command": "! grep -q '20 tests (1 positive + 19 negative)' docs/DESIGN_GATES.md",
       "exit_code": 0,
-      "note": "Future authorization timestamp removed (matches only in validation command text)"
+      "note": "Stale 20-test inventory not present in DESIGN_GATES"
+    },
+    {
+      "command": "! grep -q 'Audit Reconciliation (in_progress)' docs/DESIGN_GATES.md",
+      "exit_code": 0,
+      "note": "Stale in-progress status not present in DESIGN_GATES"
     },
     {
       "command": "! grep -q '26 total: 4 positive + 22 negative' scripts/test_task_002_negative.sh",
       "exit_code": 0,
-      "note": "Incorrect test inventory removed"
+      "note": "Incorrect test inventory not present in test script"
     }
   ],
   "unresolved_design_questions": [

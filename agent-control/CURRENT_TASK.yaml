@@ -110,7 +110,7 @@ reconciliation_requirements:
       - lifecycle previous_agent_execution: completed
       - lifecycle technical_completion: candidate_complete
       - lifecycle reviewer_acceptance: pending
-      - lifecycle latest_reviewer_record: protocol_19_changes_requested
+      - lifecycle latest_reviewer_record: protocol_20_changes_requested
       - lifecycle formal_closure: false
 
 acceptance_commands:
@@ -141,6 +141,62 @@ acceptance_commands:
         print('\n'.join(bad))
         sys.exit(1)
     PY
+  - >
+    python3 - <<'PY'
+    import json
+    from pathlib import Path
+
+    forbidden = [
+        "Protocol 19 validation closure " + "in progress",
+        "2026-08-05T11:" + "00:00+08:00",
+    ]
+
+    current_task = Path(
+        "agent-control/CURRENT_TASK.yaml"
+    ).read_text()
+
+    result = json.loads(
+        Path("agent-control/results/task-002.json").read_text()
+    )
+    result.pop("validation", None)
+
+    texts = {
+        "CURRENT_TASK": current_task,
+        "CURRENT_STATE": Path(
+            "state/CURRENT_STATE.yaml"
+        ).read_text(),
+        "DESIGN_GATES": Path(
+            "docs/DESIGN_GATES.md"
+        ).read_text(),
+        "task-002.json semantic content": json.dumps(
+            result,
+            ensure_ascii=False,
+            sort_keys=True,
+        ),
+    }
+
+    errors = []
+    for marker in forbidden:
+        for name, text in texts.items():
+            if marker in text:
+                errors.append(f"{name}: {marker}")
+
+    if errors:
+        raise SystemExit(
+            "Forbidden stale content remains:\n"
+            + "\n".join(errors)
+        )
+
+    print("Semantic stale-content check passed")
+    PY
+  - >
+    ! grep -q \
+      '20 tests (1 positive + 19 negative)' \
+      docs/DESIGN_GATES.md
+  - >
+    ! grep -q \
+      'Audit Reconciliation (in_progress)' \
+      docs/DESIGN_GATES.md
   - >
     ! grep -q "26 total: 4 positive + 22 negative" \
       scripts/test_task_002_negative.sh
