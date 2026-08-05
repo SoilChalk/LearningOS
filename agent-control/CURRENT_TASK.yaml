@@ -221,9 +221,9 @@ lifecycle:
   reviewer_acceptance: accepted
   latest_reviewer_record: protocol_20_accepted
   owner_acceptance: accepted
-  lifecycle_status: accepted_pending_merge
-  formal_closure: false
-  task_002_status: accepted_pending_merge
+  lifecycle_status: formally_closed
+  formal_closure: true
+  task_002_status: formally_closed
 
 task_001_status:
   task_id: task-001-core-research

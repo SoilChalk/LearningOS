@@ -150,13 +150,13 @@ Design gates define entry and exit conditions for each major phase of Learning O
 - **Instance Validation**: jsonschema 4.26.0 available; tests validate complete state instances against schema
 
 ### Gate 2 Status
-- **Implementation**: candidate_complete
-- **Independent Review**: accepted
-- **Independent Review Record**: protocol_20_accepted
-- **Owner Acceptance**: accepted (2026-08-06T04:12:00+08:00)
-- **Exit Conditions Accepted**: true
-- **Formal Closure**: pending PR #3 merge
-- **Next Phase**: Merge PR #3 → Gate 3 MVP Pilot (not yet authorized)
+- **Implementation**: ✓ candidate_complete
+- **Independent Review**: ✓ accepted (protocol_20_accepted)
+- **Owner Acceptance**: ✓ accepted (2026-08-06T04:12:00+08:00)
+- **Exit Conditions Accepted**: ✓ true
+- **PR #3**: ✓ merged (8d81579, 2026-08-05T20:22:29Z)
+- **Formal Closure**: ✓ complete
+- **Next Phase**: Gate 3 MVP Pilot (requires separate owner authorization)
 
 ### Prohibited Activities
 - [x] Building for multiple scenarios simultaneously (single scenario only)
@@ -290,7 +290,7 @@ Design gates define entry and exit conditions for each major phase of Learning O
 
 ---
 
-**Last Updated**: Protocol 20 owner acceptance (pending PR #3 merge)
+**Last Updated**: Gate 2 formal closure (post-merge)
 **Protocol**: 20
-**Phase**: Gate 2 - Owner Acceptance (accepted_pending_merge)
-**Next Phase**: PR #3 Merge → Formal Closure → Gate 3 MVP Pilot (authorization pending)
+**Phase**: Gate 2 - Formally Closed
+**Next Phase**: Gate 3 MVP Pilot (requires separate owner authorization)

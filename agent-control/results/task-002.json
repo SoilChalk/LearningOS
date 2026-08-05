@@ -14,9 +14,9 @@
     "reviewer_acceptance": "accepted",
     "latest_reviewer_record": "protocol_20_accepted",
     "owner_acceptance": "accepted",
-    "lifecycle_status": "accepted_pending_merge",
-    "formal_closure": false,
-    "task_002_status": "accepted_pending_merge"
+    "lifecycle_status": "formally_closed",
+    "formal_closure": true,
+    "task_002_status": "formally_closed"
   },
   "predecessor": {
     "protocol_19_head": "f97acff5eb8fec7d5aea6635d2d560eb825a728b",
@@ -297,7 +297,7 @@
       "measurement": "Does one action per confusion resolve issue, or do most sessions require multiple iterations"
     }
   ],
-  "next_action": "Merge PR #3 using normal merge commit, then finalize formal closure on main.",
+  "next_action": "Gate 2 formally closed. Gate 3 MVP Pilot requires separate owner authorization.",
   "explicitly_not_done": [
     "Did not implement frontend or application code",
     "Did not implement runtime agents or multi-agent orchestration",
