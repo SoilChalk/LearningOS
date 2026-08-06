@@ -193,6 +193,21 @@
     "templates/MINIMAL_LEARNING_STATE.schema.json"
   ],
   "pr_cumulative_changed_path_count": 9,
+  "pr_cumulative_changed_paths_note": "Accepted technical PR paths at Protocol 20 C5 head",
+  "final_merged_pr_changed_paths": [
+    "agent-control/CURRENT_TASK.yaml",
+    "agent-control/results/task-002-owner-closure.json",
+    "agent-control/results/task-002.json",
+    "docs/DESIGN_GATES.md",
+    "docs/FIRST_VERTICAL_SCENARIO.md",
+    "docs/PEDAGOGICAL_ACTION_DECISION_TREE.md",
+    "scripts/test_task_002_negative.sh",
+    "scripts/validate_task_002.py",
+    "state/CURRENT_STATE.yaml",
+    "templates/MINIMAL_LEARNING_STATE.schema.json"
+  ],
+  "final_merged_pr_changed_path_count": 10,
+  "final_merged_pr_changed_paths_note": "Final merged PR paths after pre-merge acceptance commit added task-002-owner-closure.json",
   "validation": [
     {
       "command": "python3 -m json.tool templates/MINIMAL_LEARNING_STATE.schema.json >/dev/null",

@@ -13,7 +13,7 @@
     "technical_completion": "accepted",
     "audit_consistency": "accepted",
     "protocol_20_changed_paths": "5, verified",
-    "cumulative_pr_paths": "9, verified",
+    "accepted_technical_pr_paths_at_c5": "9, verified",
     "c5_changed_paths": "2, verified"
   },
   "owner_decision": "accepted",
@@ -63,5 +63,23 @@
       "claim learning effectiveness or architecture validation"
     ]
   },
-  "next_action": "Merge PR #3 using normal merge commit, then finalize formal closure on main"
+  "next_action": "Merge PR #3 using normal merge commit, then finalize formal closure on main",
+  "accepted_technical_pr_changed_path_count": 9,
+  "final_merged_pr_changed_path_count": 10,
+  "final_merged_pr_changed_paths": [
+    "agent-control/CURRENT_TASK.yaml",
+    "agent-control/results/task-002-owner-closure.json",
+    "agent-control/results/task-002.json",
+    "docs/DESIGN_GATES.md",
+    "docs/FIRST_VERTICAL_SCENARIO.md",
+    "docs/PEDAGOGICAL_ACTION_DECISION_TREE.md",
+    "scripts/test_task_002_negative.sh",
+    "scripts/validate_task_002.py",
+    "state/CURRENT_STATE.yaml",
+    "templates/MINIMAL_LEARNING_STATE.schema.json"
+  ],
+  "closure_added_paths": [
+    "agent-control/results/task-002-owner-closure.json"
+  ],
+  "path_accounting_note": "Accepted technical PR at C5 contained 9 files. Final merged PR contains 10 files after pre-merge acceptance commit added task-002-owner-closure.json."
 }
