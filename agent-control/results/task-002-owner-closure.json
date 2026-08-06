@@ -63,7 +63,7 @@
       "claim learning effectiveness or architecture validation"
     ]
   },
-  "next_action": "Merge PR #3 using normal merge commit, then finalize formal closure on main",
+  "next_action": "Gate 2 formally closed and archived. Gate 3 requires separate owner authorization.",
   "accepted_technical_pr_changed_path_count": 9,
   "final_merged_pr_changed_path_count": 10,
   "final_merged_pr_changed_paths": [
