@@ -53,17 +53,25 @@ safe-outputs:
     preserve-branch-name: true
     recreate-ref: true
     max: 1
-    # Scope is enforced by the LearningOS task contract (allowed_paths /
-    # forbidden_paths) and by the Reviewer workflow. The executor must be able
-    # to touch contract files, so the gh-aw protected-file gate is disabled.
-    protected-files: allowed
+    # Most conservative policy: normal LearningOS tasks must NOT modify
+    # protected files (.github/**, AGENTS.md, agent/engine instruction files,
+    # package/dependency manifests, security-sensitive config). If an
+    # authorized task genuinely needs such a file, the executor must ESCALATE
+    # to the owner instead of disabling protection.
+    protected-files: blocked
   push-to-pull-request-branch:
     target: "*"
     required-labels: [automation]
-    protected-files: allowed
+    protected-files: blocked
     max: 1
   add-comment:
     max: 3
+  # Dispatch-based loop (no PAT / CI-trigger token): after the PR exists, the
+  # executor dispatches the Reviewer via GITHUB_TOKEN workflow_dispatch.
+  dispatch-workflow:
+    workflows: [reviewer]
+    target-ref: main
+    max: 2
   noop:
 ---
 
@@ -149,6 +157,19 @@ paths, lifecycle claims per TASK_PROTOCOL.md).
   summary of changes + acceptance results + `Fixes #<issue>` if referenced.
 - `fix` mode: emit `push_to_pull_request_branch` with `pull_request_number` =
   the resolved PR, `branch` = the exact head ref, `message` = summary.
+
+## Step 8 — Dispatch the Reviewer (dispatch-based loop, no PAT)
+
+After the PR exists (implement) or is updated (fix), emit `dispatch_workflow`
+targeting workflow `reviewer` with inputs:
+
+- `implement` round: `{"task-file": "<contract path>", "pr-number": ""}` — the
+  reviewer will find the open PR via the contract's deterministic `branch:`.
+- `fix` round: `{"task-file": "<contract path>", "pr-number": "<resolved PR>"}`.
+
+This workflow_dispatch is issued by the Actions `GITHUB_TOKEN`; no
+`GH_AW_CI_TRIGGER_TOKEN` is used or needed. If the dispatch cannot be emitted,
+report it in `noop`.
 
 ## Guardrails
 
