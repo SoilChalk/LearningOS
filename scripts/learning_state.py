@@ -18,11 +18,18 @@ Design constraints (owner authorization, task-003-gate-3-state-persistence):
     (jsonschema.Draft7Validator, the same engine used by scripts/validate_task_002.py
     and scripts/test_task_002_negative.sh). The schema is never modified.
   * No learner model, no database, no scheduler, no new persistence abstraction.
+  * save_state writes atomically: content is written to a temporary file in the
+    same directory as the target and os.replace()d over it only after the
+    temporary file is fully written and closed. An existing state file is
+    therefore never truncated or left partially written by a write-phase
+    failure; on any failure the temporary file is removed.
   * Malformed or invalid state fails explicitly (LearningStateError); there is
     no silent repair, coercion, or partial write.
 """
 
 import json
+import os
+import tempfile
 from pathlib import Path
 
 
@@ -114,6 +121,11 @@ def save_state(state, filepath, schema: dict = None) -> Path:
     instance raises LearningStateError and no file is created or modified
     (no silent repair, no partial write).
 
+    Writes are atomic: content is written to a temporary file in the same
+    directory as the target and moved into place with os.replace() only after
+    the temporary file is fully written and closed. If any step fails, the
+    temporary file is removed and an existing target file is left unchanged.
+
     Args:
         state: A learning-state instance (dict) to persist.
         filepath: Destination file path (str or Path).
@@ -131,11 +143,26 @@ def save_state(state, filepath, schema: dict = None) -> Path:
 
     path = Path(filepath)
     try:
-        with open(path, "w", encoding="utf-8") as f:
+        fd, tmp_name = tempfile.mkstemp(
+            prefix=f".{path.name}.", suffix=".tmp", dir=str(path.parent)
+        )
+    except (OSError, TypeError) as exc:
+        raise LearningStateError(
+            f"failed to create a temporary file next to {path}: {exc}"
+        ) from exc
+    tmp_path = Path(tmp_name)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
             json.dump(state, f, indent=2, ensure_ascii=False)
             f.write("\n")
+        os.replace(tmp_path, path)
     except (OSError, TypeError) as exc:
         raise LearningStateError(f"failed to write state to {path}: {exc}") from exc
+    finally:
+        try:
+            tmp_path.unlink()
+        except OSError:
+            pass
     return path
 
 

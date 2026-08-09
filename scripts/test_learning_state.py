@@ -11,6 +11,8 @@ Covers the Gate 3 first-slice acceptance conditions:
   5. Malformed state fails explicitly (no silent repair).
   6. Cross-object constraints from the schema (stop_action + in_scope + empty
      citations + stop_reason) are enforced by the same validator.
+  7. save_state is atomic: a write-phase failure leaves a pre-existing target
+     file byte-for-byte unchanged and removes the temporary file.
 
 Exits 0 only when every test passes.
 """
@@ -290,6 +292,48 @@ def main():
         except ls.LearningStateError:
             record("save_state(invalid) raises LearningStateError", True)
         record("existing file bytes unchanged", path.read_bytes() == before)
+
+    # --- Test 9: atomic write — pre-existing target survives a write-phase failure ---
+    print("9. save_state is atomic on write-phase failure")
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp) / "state.json"
+        ls.save_state(valid_state(), path)
+        before = path.read_bytes()
+
+        real_replace = os.replace
+
+        def _failing_replace(src, dst):
+            raise OSError("simulated write-phase failure during os.replace")
+
+        os.replace = _failing_replace
+        try:
+            try:
+                ls.save_state(valid_state(), path)
+                record("save_state raises LearningStateError when replace fails", False)
+            except ls.LearningStateError:
+                record("save_state raises LearningStateError when replace fails", True)
+            record(
+                "pre-existing target file preserved byte-for-byte",
+                path.read_bytes() == before,
+            )
+            leftovers = sorted(
+                p.name for p in Path(tmp).iterdir() if p.name != path.name
+            )
+            record("temporary file cleaned up after failure", leftovers == [])
+        finally:
+            os.replace = real_replace
+
+        # A later save succeeds once the failure is gone.
+        ls.save_state(valid_state(), path)
+        record("save_state succeeds after simulated failure", path.read_bytes() == before)
+
+    # --- Test 10: successful save leaves no temporary file behind ---
+    print("10. Successful save leaves no temporary file behind")
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp) / "state.json"
+        ls.save_state(valid_state(), path)
+        leftovers = sorted(p.name for p in Path(tmp).iterdir() if p.name != path.name)
+        record("no temp files after successful save", leftovers == [])
 
     print()
     print(f"Tests passed: {PASS}, failed: {FAIL}")
