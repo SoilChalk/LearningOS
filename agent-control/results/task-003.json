@@ -3,7 +3,7 @@
   "task_id": "task-003-gate-3-state-persistence",
   "status": "completed",
   "branch": "agent/task-003-state-persistence",
-  "commit": "57d164c7ccb0d80ef932a2db03e734b00fcef1bc",
+  "commit": "e85f8e9ede6b2ad920d42a2ebf645595a862235a",
   "last_completed_stage": "owner_review_correction_atomic_save_applied",
   "next_action": "Reviewer review of PR #7 (fix round: atomic save_state). No merge, no new task, no gate-3 completion claim.",
   "files_changed": [
