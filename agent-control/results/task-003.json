@@ -3,9 +3,9 @@
   "task_id": "task-003-gate-3-state-persistence",
   "status": "completed",
   "branch": "agent/task-003-state-persistence",
-  "commit": "48f676f0b608eda13351e101457f77d1b3e5da29",
-  "last_completed_stage": "implementation_and_validation",
-  "next_action": "Reviewer review of PR for task-003 (Gate 3 first slice). No merge, no new task, no gate-3 completion claim.",
+  "commit": "57d164c7ccb0d80ef932a2db03e734b00fcef1bc",
+  "last_completed_stage": "owner_review_correction_atomic_save_applied",
+  "next_action": "Reviewer review of PR #7 (fix round: atomic save_state). No merge, no new task, no gate-3 completion claim.",
   "files_changed": [
     "scripts/learning_state.py",
     "scripts/test_learning_state.py",
@@ -49,13 +49,15 @@
     "unknown_field_rejected": true,
     "evidence_level_outside_012_rejected": true,
     "malformed_state_fails_explicitly_no_silent_repair": true,
-    "gate_2_validation_still_green": true
+    "gate_2_validation_still_green": true,
+    "atomic_save_no_partial_write_on_write_phase_failure": true
   },
   "unresolved_issues": [],
   "claims_requiring_review": [
     "Module validates instances against the unchanged templates/MINIMAL_LEARNING_STATE.schema.json (Draft-07) via jsonschema.Draft7Validator, the same engine used by the existing Gate 2 infrastructure.",
     "Scope is strictly the FIRST implementation slice of Gate 3 (state save/load/validation). No claim of a complete learning session, completed pilot, validated LearningOS architecture, or validated learner model.",
-    "No learner model, database, scheduler, or new persistence abstraction was added."
+    "No learner model, database, scheduler, or new persistence abstraction was added.",
+    "Owner review correction applied: save_state now writes to a temp file in the target's directory and os.replace()s it only after the temp file is fully written and closed; on any failure the temp file is removed and the pre-existing target stays byte-for-byte unchanged (verified by deterministic write-phase failure test)."
   ],
   "explicitly_not_done": [
     "Did not modify templates/MINIMAL_LEARNING_STATE.schema.json or any file under templates/",
