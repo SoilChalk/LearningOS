@@ -19,6 +19,12 @@ on:
         type: string
   pull_request:
     types: [opened, synchronize, reopened]
+  # The executor dispatches this reviewer via GITHUB_TOKEN workflow_dispatch, so
+  # the actor is github-actions[bot] (role: none). The pull_request trigger
+  # makes this an "unsafe" trigger with a default roles gate, so the Actions bot
+  # must be allowlisted here for the automated dispatch loop to activate the
+  # reviewer.
+  bots: [github-actions]
 permissions:
   contents: read
   issues: read
