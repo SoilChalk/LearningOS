@@ -1,18 +1,22 @@
 protocol_version: 20
-updated_at: "2026-08-10T00:06:39+0800"
+updated_at: "2026-08-10T00:39:09+0800"
 task_id: task-004-gate-3-thin-pilot-session-runner
 phase: gate_3_mvp_pilot
-status: ready
+status: formally_closed
 
 lifecycle:
-  previous_agent_execution: not_started
-  technical_completion: in_progress
-  reviewer_acceptance: pending
-  latest_reviewer_record: null
-  owner_acceptance: pending
-  lifecycle_status: in_progress
-  formal_closure: false
-  task_004_status: ready
+  previous_agent_execution: completed
+  technical_completion: completed
+  reviewer_acceptance: accepted
+  latest_reviewer_record: "READY (run 31324056854)"
+  owner_acceptance: accepted
+  lifecycle_status: formally_closed
+  formal_closure: true
+  task_004_status: formally_closed
+  closure_type: gate_3_standing_delegation_auto_merge
+  pull_request: 9
+  merge_commit: 774b26c1ff7fc4d410657150590b35cb4f0f11e6
+  merge_timestamp: "2026-08-09T16:38:55Z"
 
 predecessor:
   task_id: task-003-gate-3-state-persistence
@@ -64,10 +68,10 @@ design_artifacts:
   decision_tree: docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
   state_schema: templates/MINIMAL_LEARNING_STATE.schema.json
   state_module: scripts/learning_state.py
-  session_runner: scripts/pilot_session.py (task-004)
+  session_runner: scripts/pilot_session.py
   validator: scripts/validate_task_002.py
   negative_tests: scripts/test_task_002_negative.sh
 
 next_action:
-  action: "task-004-gate-3-thin-pilot-session-runner (standing delegation) — implement thin 6-step session runner, then first real-material pilot with owner as learner"
-  status: "ready"
+  action: "task-004 merged (PR #9). First real-material pilot is now runnable. Next: owner participates as learner (provide real material + learning goal). Genuine human boundary."
+  status: "formally_closed"
