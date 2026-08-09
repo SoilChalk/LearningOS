@@ -1,256 +1,79 @@
 protocol_version: 20
 
-task_id: task-002-gate-2-audit-reconciliation
-status: candidate_complete
-branch: agent/task-002-first-vertical-scenario
-result_file: agent-control/results/task-002.json
+task_id: task-003-gate-3-state-persistence
+status: ready
+branch: agent/task-003-state-persistence
+result_file: agent-control/results/task-003.json
 
 objective: >
-  Correct the remaining Protocol 19 audit inconsistencies only: record the exact
-  Protocol changed paths, correct the test inventory comments, align DESIGN_GATES
-  with candidate-complete/pending-review state, remove the future authorization
-  timestamp, restore unambiguous Gate 2 review semantics, rerun and accurately
-  record final validation.
+  Implement the minimal learning-state save/load/validation capability required
+  by FIRST_VERTICAL_SCENARIO Step 6 (State Persistence): a Python module that
+  (a) saves a valid learning-state instance as JSON, (b) loads it back with
+  round-trip equivalence, and (c) validates instances against the existing
+  templates/MINIMAL_LEARNING_STATE.schema.json (JSON Schema Draft-07; the 11
+  declared required fields; additionalProperties: false; evidence_level enum
+  0|1|2). Reuse the existing validation infrastructure and schema unchanged.
+  Do NOT redesign the schema, add a learner model, a database, a scheduler, or
+  any new persistence abstraction.
 
 owner_authorization:
-  recorded_at: "2026-08-05T02:01:00+08:00"
-  source_instruction: "Owner Authorization — Protocol 20 Audit Reconciliation"
+  recorded_at: "2026-08-09T20:40:00+08:00"
+  source_instruction: "Owner authorization — Gate 3 Minimum Viable Pilot start; first task A (State Persistence slice)"
   scope: >
-    Strictly scoped audit reconciliation for PR #3. Correct changed-path accounting,
-    test inventory comments, DESIGN_GATES status, authorization timestamp, Gate 2
-    review semantics, and validation records. No Schema redesign, validator logic
-    changes, scenario changes, Gate 3 work, pilot, or API calls.
-
-baseline:
-  commit: f97acff5eb8fec7d5aea6635d2d560eb825a728b
-  protocol: 19
-  review_status: changes_requested
+    Implement minimal state save/load/validation for the single vertical
+    scenario. This is the FIRST implementation slice of Gate 3, NOT Gate 3
+    completion. Do not claim a complete learning session, a completed pilot,
+    validated LearningOS architecture, or a validated learner model. No learner
+    model, no DB, no scheduler, no new persistence abstraction, no schema
+    redesign.
 
 allowed_paths:
-  - agent-control/CURRENT_TASK.yaml
-  - agent-control/results/task-002.json
-  - docs/DESIGN_GATES.md
-  - scripts/test_task_002_negative.sh
-  - state/CURRENT_STATE.yaml
+  - scripts/learning_state.py
+  - scripts/test_learning_state.py
+  - agent-control/results/task-003.json
 
 forbidden_paths:
-  - templates/MINIMAL_LEARNING_STATE.schema.json
-  - scripts/validate_task_002.py
-  - docs/FIRST_VERTICAL_SCENARIO.md
-  - docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
+  - templates/**
   - sources/**
-  - docs/RESEARCH_QUESTIONS.md
-  - docs/REFERENCE_SYSTEM_MATRIX.md
-  - agent-control/results/task-001*.json
-  - agent-control/VALIDATION_RECORD.txt
+  - docs/**
+  - state/**
+  - agent-control/CURRENT_TASK.yaml
   - agent-control/TASK_PROTOCOL.md
-  - AGENTS.md
+  - agent-control/VALIDATION_RECORD.txt
+  - agent-control/results/task-001*.json
+  - agent-control/results/task-002*.json
+  - scripts/validate_task_002.py
+  - scripts/test_task_002_negative.sh
   - scripts/check_control_state.py
   - scripts/test_control_state.sh
-
-reconciliation_requirements:
-  reconciliation_1_test_inventory:
-    description: Correct the static header in test_task_002_negative.sh
-    requirements:
-      - Match actual runtime inventory: 21 structural (1 pos + 20 neg), 6 instance (3 pos + 3 neg), 27 total (4 pos + 23 neg)
-      - State runtime counters are authoritative
-      - Fix skipped-file branch to not reference removed test_count variable
-      - Do not add, remove, weaken, or reorder substantive tests
-
-  reconciliation_2_protocol_changed_paths:
-    description: Use Protocol 20 baseline for changed-path accounting
-    requirements:
-      - Generate from: git diff --name-only f97acff5eb8fec7d5aea6635d2d560eb825a728b...HEAD
-      - Do not predeclare the number
-      - Record protocol_changed_paths array and protocol_changed_path_count
-      - Record pr_cumulative_changed_paths array and pr_cumulative_changed_path_count
-      - Both counts computed from arrays
-      - Remove stale claims about Protocol 19 changing seven or four files
-      - Record accurately: Protocol 19 baseline-to-final contained 6 changed paths
-
-  reconciliation_3_design_gates_alignment:
-    description: Align DESIGN_GATES with candidate-complete/pending-review state
-    requirements:
-      - Protocol: 20
-      - Phase: Gate 2 - Audit Reconciliation
-      - Implementation: candidate_complete
-      - Independent Review: pending
-      - Exit Conditions Accepted: false
-      - Blocked By: independent_review
-      - Gate 3: not_started
-      - Use Git-derived timestamp or commit SHA
-
-  reconciliation_4_gate_2_review_semantics:
-    description: Restore unambiguous Gate 2 review semantics in CURRENT_STATE.yaml
-    requirements:
-      - gate_2_first_scenario status: candidate_complete
-      - exit_conditions_met: false (not yet accepted by independent reviewer)
-      - blocked_by: independent_review
-      - gate_3_mvp_pilot status: not_started, blocked_by: gate_2_independent_review
-      - Do not mark Gate 2 formally closed or accepted
-
-  reconciliation_5_result_record:
-    description: Update task-002.json to Protocol 20
-    requirements:
-      - Protocol 20 baseline and task_id
-      - Substantive reconciliation commit with exact Git committer timestamp
-      - Exact runtime test counts: structural 21, instance 6, total 27, positive 4, negative 23
-      - Exact Protocol 20 changed-path array and count
-      - Exact cumulative PR path array and count
-      - Each final command and actual exit code
-      - Reviewer acceptance pending, Gate 2 exit not accepted, Gate 3 not started
-      - Remove stale Protocol 19 path claims and in-progress statements
-      - Remove owner authorization at future timestamp
-
-  reconciliation_6_authority_state:
-    description: Align three authority files after validation passes
-    requirements:
-      - task_id: task-002-gate-2-audit-reconciliation
-      - status: candidate_complete
-      - lifecycle previous_agent_execution: completed
-      - lifecycle technical_completion: candidate_complete
-      - lifecycle reviewer_acceptance: pending
-      - lifecycle latest_reviewer_record: protocol_20_changes_requested
-      - lifecycle formal_closure: false
+  - scripts/test_validation_negative.sh
+  - scripts/validate_source_records.py
+  - AGENTS.md
+  - README.md
+  - .github/**
 
 acceptance_commands:
-  - python3 -m json.tool templates/MINIMAL_LEARNING_STATE.schema.json >/dev/null
-  - python3 -m json.tool agent-control/results/task-002.json >/dev/null
+  - python3 -m py_compile scripts/learning_state.py
+  - python3 scripts/test_learning_state.py
   - python3 scripts/validate_task_002.py
   - bash scripts/test_task_002_negative.sh
-  - python3 scripts/check_control_state.py
-  - git diff --check
-  - grep -q '^# First Vertical Scenario' docs/FIRST_VERTICAL_SCENARIO.md
-  - grep -q '^# Pedagogical Action Decision Tree' docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
-  - >
-    python3 - <<'PY'
-    import subprocess, sys
-    allowed = {
-        'agent-control/CURRENT_TASK.yaml',
-        'docs/DESIGN_GATES.md',
-        'scripts/test_task_002_negative.sh',
-        'state/CURRENT_STATE.yaml',
-        'agent-control/results/task-002.json',
-    }
-    baseline = 'f97acff5eb8fec7d5aea6635d2d560eb825a728b'
-    changed = set(subprocess.check_output(
-        ['git', 'diff', '--name-only', f'{baseline}...HEAD'], text=True
-    ).splitlines())
-    bad = sorted(changed - allowed)
-    if bad:
-        print('\n'.join(bad))
-        sys.exit(1)
-    PY
-  - >
-    python3 - <<'PY'
-    import json
-    from pathlib import Path
-
-    forbidden = [
-        "Protocol 19 validation closure " + "in progress",
-        "2026-08-05T11:" + "00:00+08:00",
-    ]
-
-    current_task = Path(
-        "agent-control/CURRENT_TASK.yaml"
-    ).read_text()
-
-    result = json.loads(
-        Path("agent-control/results/task-002.json").read_text()
-    )
-    result.pop("validation", None)
-
-    texts = {
-        "CURRENT_TASK": current_task,
-        "CURRENT_STATE": Path(
-            "state/CURRENT_STATE.yaml"
-        ).read_text(),
-        "DESIGN_GATES": Path(
-            "docs/DESIGN_GATES.md"
-        ).read_text(),
-        "task-002.json semantic content": json.dumps(
-            result,
-            ensure_ascii=False,
-            sort_keys=True,
-        ),
-    }
-
-    errors = []
-    for marker in forbidden:
-        for name, text in texts.items():
-            if marker in text:
-                errors.append(f"{name}: {marker}")
-
-    if errors:
-        raise SystemExit(
-            "Forbidden stale content remains:\n"
-            + "\n".join(errors)
-        )
-
-    print("Semantic stale-content check passed")
-    PY
-  - >
-    ! grep -q \
-      '20 tests (1 positive + 19 negative)' \
-      docs/DESIGN_GATES.md
-  - >
-    ! grep -q \
-      'Audit Reconciliation (in_progress)' \
-      docs/DESIGN_GATES.md
-  - >
-    ! grep -q "26 total: 4 positive + 22 negative" \
-      scripts/test_task_002_negative.sh
+  - python3 -m json.tool agent-control/results/task-003.json >/dev/null
 
 completion_conditions:
-  - test inventory comments match runtime: 27 total (21 structural + 6 instance, 4 positive + 23 negative)
-  - Protocol 20 changed-path array and count accurate
-  - cumulative PR path array and count accurate
-  - DESIGN_GATES aligned to candidate_complete/pending-review
-  - Gate 2 review semantics unambiguous (exit_conditions_met: false)
-  - result record updated to Protocol 20 with accurate path accounting
-  - stale Protocol 19 claims removed
-  - future authorization timestamp removed
-  - all acceptance commands pass with exit_code 0
-  - all three authority files aligned to candidate_complete
-  - PR #3 body reflects Protocol 20
-  - PR #3 remains Draft, open, unmerged, mergeable
+  - All acceptance commands exit 0.
+  - A valid complete state instance can be saved and reloaded with round-trip
+    equivalence.
+  - Missing required field is rejected.
+  - Unknown/additional field is rejected.
+  - evidence_level outside [0,1,2] is rejected.
+  - Malformed state fails explicitly (no silent repair).
+  - Existing Gate 2 validation remains green (validate_task_002.py and
+    test_task_002_negative.sh unchanged and passing).
 
-lifecycle:
-  previous_agent_execution: completed
-  technical_completion: candidate_complete
-  reviewer_acceptance: accepted
-  latest_reviewer_record: protocol_20_accepted
-  owner_acceptance: accepted
-  lifecycle_status: formally_closed
-  formal_closure: true
-  task_002_status: formally_closed
+stop_conditions:
+  - Two consecutive tool failures (per TASK_PROTOCOL.md).
+  - A declared blocker prevents safe completion.
 
-task_001_status:
-  task_id: task-001-core-research
-  closure_result: agent-control/results/task-001-owner-closure.json
-  formal_closure: true
-  pull_request_2_merge_commit: 35d8208b0ee201c9a7035d6e75be95cabd84cd10
-  gate_1_exit: met_with_documented_limitations
-
-predecessor:
-  protocol_19_head: f97acff5eb8fec7d5aea6635d2d560eb825a728b
-  pr_number: 3
-  pr_state: draft_open_unmerged_mergeable
-
-prohibited_actions:
-  - modify_schema
-  - modify_validator_logic
-  - modify_scenario
-  - modify_decision_tree
-  - merge_pr_3
-  - mark_pr_3_ready
-  - start_gate_3
-  - conduct_pilot
-  - make_api_calls
-  - begin_another_task
-
-stop_rule:
-  blocked_condition: >
-    If any preflight condition fails (working tree not clean, task branch not at
-    f97acff, PR not mergeable), stop without writes.
-
+inputs:
+  - templates/MINIMAL_LEARNING_STATE.schema.json (read-only, do not modify)
+  - docs/FIRST_VERTICAL_SCENARIO.md (read-only context for Step 6 semantics)
