@@ -5,7 +5,13 @@
   "branch": "agent/task-003-state-persistence",
   "commit": "e85f8e9ede6b2ad920d42a2ebf645595a862235a",
   "last_completed_stage": "owner_review_correction_atomic_save_applied",
-  "next_action": "Reviewer review of PR #7 (fix round: atomic save_state). No merge, no new task, no gate-3 completion claim.",
+  "next_action": "task-003 merged (PR #7) under Gate 3 standing delegation. Next: choose minimal work closest to first real-material pilot session.",
+  "merge_status": "merged",
+  "merge_commit": "43c7e12c287e143e37a96d0b2fb6f4ba5dbb7d14",
+  "merge_timestamp": "2026-08-09T16:03:38Z",
+  "merge_method": "merge_commit",
+  "closure_type": "gate_3_standing_delegation_auto_merge",
+  "reviewer_record": "READY (run 31322456964)",
   "files_changed": [
     "scripts/learning_state.py",
     "scripts/test_learning_state.py",
@@ -34,13 +40,14 @@
     }
   ],
   "lifecycle": {
-    "previous_agent_execution": "in_progress",
-    "technical_completion": "candidate_complete",
-    "reviewer_acceptance": "pending",
-    "owner_acceptance": "pending",
-    "lifecycle_status": "submitted_for_review",
-    "formal_closure": false,
-    "task_003_status": "submitted_for_review"
+    "previous_agent_execution": "completed",
+    "technical_completion": "completed",
+    "reviewer_acceptance": "accepted",
+    "latest_reviewer_record": "READY (run 31322456964)",
+    "owner_acceptance": "accepted",
+    "lifecycle_status": "formally_closed",
+    "formal_closure": true,
+    "task_003_status": "formally_closed"
   },
   "completion_conditions_met": {
     "all_acceptance_commands_exit_0": true,

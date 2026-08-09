@@ -1,18 +1,22 @@
 protocol_version: 20
-updated_at: "2026-08-09T20:40:00+08:00"
+updated_at: "2026-08-10T00:05:00+08:00"
 task_id: task-003-gate-3-state-persistence
 phase: gate_3_mvp_pilot
-status: ready
+status: formally_closed
 
 lifecycle:
-  previous_agent_execution: not_started
-  technical_completion: in_progress
-  reviewer_acceptance: pending
-  latest_reviewer_record: null
-  owner_acceptance: pending
-  lifecycle_status: in_progress
-  formal_closure: false
-  task_003_status: ready
+  previous_agent_execution: completed
+  technical_completion: completed
+  reviewer_acceptance: accepted
+  latest_reviewer_record: "READY (run 31322456964)"
+  owner_acceptance: accepted
+  lifecycle_status: formally_closed
+  formal_closure: true
+  task_003_status: formally_closed
+  closure_type: gate_3_standing_delegation_auto_merge
+  pull_request: 7
+  merge_commit: 43c7e12c287e143e37a96d0b2fb6f4ba5dbb7d14
+  merge_timestamp: "2026-08-09T16:03:38Z"
 
 predecessor:
   task_id: task-002-gate-2-audit-reconciliation
@@ -67,5 +71,5 @@ design_artifacts:
   negative_tests: scripts/test_task_002_negative.sh
 
 next_action:
-  action: "task-003-gate-3-state-persistence (owner-authorized Gate 3 first slice) in progress"
-  status: "ready"
+  action: "task-003 merged (PR #7) under Gate 3 standing delegation. Next: choose minimal work closest to first real-material pilot session (read DESIGN_GATES.md / FIRST_VERTICAL_SCENARIO.md exit conditions)."
+  status: "formally_closed"
