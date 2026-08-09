@@ -1,36 +1,70 @@
 protocol_version: 20
 
-task_id: task-003-gate-3-state-persistence
+task_id: task-004-gate-3-thin-pilot-session-runner
 status: ready
-branch: agent/task-003-state-persistence
-result_file: agent-control/results/task-003.json
+branch: agent/task-004-thin-pilot-session-runner
+result_file: agent-control/results/task-004.json
 
 objective: >
-  Implement the minimal learning-state save/load/validation capability required
-  by FIRST_VERTICAL_SCENARIO Step 6 (State Persistence): a Python module that
-  (a) saves a valid learning-state instance as JSON, (b) loads it back with
-  round-trip equivalence, and (c) validates instances against the existing
-  templates/MINIMAL_LEARNING_STATE.schema.json (JSON Schema Draft-07; the 11
-  declared required fields; additionalProperties: false; evidence_level enum
-  0|1|2). Reuse the existing validation infrastructure and schema unchanged.
-  Do NOT redesign the schema, add a learner model, a database, a scheduler, or
-  any new persistence abstraction.
+  Implement the minimal interactive session runner for the FIRST_VERTICAL_SCENARIO
+  6-step flow, sufficient to conduct ONE real-material learning session with a
+  human learner. This is the thin vertical seam that makes the first real pilot
+  runnable — NOT a helper-module build-out, NOT a product, NOT a learner model.
 
-owner_authorization:
-  recorded_at: "2026-08-09T20:40:00+08:00"
-  source_instruction: "Owner authorization — Gate 3 Minimum Viable Pilot start; first task A (State Persistence slice)"
-  scope: >
-    Implement minimal state save/load/validation for the single vertical
-    scenario. This is the FIRST implementation slice of Gate 3, NOT Gate 3
-    completion. Do not claim a complete learning session, a completed pilot,
-    validated LearningOS architecture, or a validated learner model. No learner
-    model, no DB, no scheduler, no new persistence abstraction, no schema
-    redesign.
+  Required behavior:
+  1. Accept real course material via a thin seam (path to a text/sectioned
+     document provided at runtime; no indexing service, no vector DB, no
+     parser framework).
+  2. Step 1 Position Recovery: for a returning session load the saved
+     minimal_learning_state via scripts/learning_state.load_state and present
+     the saved position; for a new session accept a natural-language goal.
+  3. Step 2 Task Boundary: record task_boundary (material section range, task
+     type, observable completion criterion) and confirm with the user.
+  4. Step 3 Confusion Expression: accept ANY natural-language confusion
+     statement (including "I don't know where I'm confused") without rejection.
+  5. Step 4 Bounded Pedagogical Action: select ONE action using the six
+     documented decision-tree rules from docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
+     (Clarify Terminology / Restore Prerequisite / Give Bounded Example /
+     Request Explanation / Request Fresh Attempt / Stop and Request More
+     Material) and cite the relevant material section. Thin rule implementation
+     only — no automatic obstacle-type detection before the user speaks, no
+     learner model, no mastery classifier.
+  6. Step 5 Independent Check: request an observable demonstration and record
+     evidence_level 0|1|2 in the state.
+  7. Step 6 State Persistence: save the minimal state via
+     scripts/learning_state.save_state (atomic write, same-dir temp + os.replace
+     — reuse the existing module unchanged), generate a next-action
+     recommendation per FIRST_VERTICAL_SCENARIO Step 6 (evidence level 2 -> next
+     problem/concept; 1 -> review prerequisite then retry; 0 -> continue with
+     suggested action), and display a "Saved your progress" confirmation.
+  8. Distinguish factual observations from inferences in all recorded evidence
+     (no inference that the user understands a section from position
+     confirmation alone).
+
+  Reuse, do NOT rebuild: templates/MINIMAL_LEARNING_STATE.schema.json (unchanged),
+  scripts/learning_state.py (unchanged API), docs/FIRST_VERTICAL_SCENARIO.md and
+  docs/PEDAGOGICAL_ACTION_DECISION_TREE.md (authoritative behavior references).
+
+  Explicitly NOT in scope (must NOT be built): generic indexing service, vector
+  DB, learner model, automatic mastery classifier, scheduler, frontend,
+  multi-course support, generic orchestration, persistence framework, chat
+  history summarization.
+
+authorization:
+  parent_gate: "Gate 3 Minimum Viable Pilot (owner-authorized)"
+  parent_gate_message_timestamp: "2026-08-09T12:32:45.959Z"
+  delegation_source: "Gate-scoped standing delegation (owner policy message)"
+  delegation_message_timestamp: "2026-08-09T16:02:15.234Z"
+  session_id: "714c3b77-38a4-40e1-81b6-77ebe42a656a"
+  recorded_at: "2026-08-10T00:06:39+0800"
+  note: >
+    Inherited from the owner's Gate 3 authorization + standing delegation; NOT a
+    new per-task human authorization. No fabricated future timestamps.
 
 allowed_paths:
-  - scripts/learning_state.py
-  - scripts/test_learning_state.py
-  - agent-control/results/task-003.json
+  - scripts/pilot_session.py
+  - scripts/test_pilot_session.py
+  - agent-control/results/task-004.json
 
 forbidden_paths:
   - templates/**
@@ -42,6 +76,9 @@ forbidden_paths:
   - agent-control/VALIDATION_RECORD.txt
   - agent-control/results/task-001*.json
   - agent-control/results/task-002*.json
+  - agent-control/results/task-003*.json
+  - scripts/learning_state.py
+  - scripts/test_learning_state.py
   - scripts/validate_task_002.py
   - scripts/test_task_002_negative.sh
   - scripts/check_control_state.py
@@ -53,27 +90,35 @@ forbidden_paths:
   - .github/**
 
 acceptance_commands:
-  - python3 -m py_compile scripts/learning_state.py
+  - python3 -m py_compile scripts/pilot_session.py
+  - python3 scripts/test_pilot_session.py
   - python3 scripts/test_learning_state.py
   - python3 scripts/validate_task_002.py
   - bash scripts/test_task_002_negative.sh
-  - python3 -m json.tool agent-control/results/task-003.json >/dev/null
+  - python3 -m json.tool agent-control/results/task-004.json >/dev/null
 
 completion_conditions:
   - All acceptance commands exit 0.
-  - A valid complete state instance can be saved and reloaded with round-trip
-    equivalence.
-  - Missing required field is rejected.
-  - Unknown/additional field is rejected.
-  - evidence_level outside [0,1,2] is rejected.
-  - Malformed state fails explicitly (no silent repair).
-  - Existing Gate 2 validation remains green (validate_task_002.py and
-    test_task_002_negative.sh unchanged and passing).
+  - Session runner can execute all 6 scenario steps with a scripted (non-interactive)
+    input driver used by the test suite.
+  - Returning-session recovery loads a saved state via learning_state.load_state and
+    presents the saved position.
+  - Step 4 selects one of the six documented decision-tree actions and cites a
+    material section.
+  - Step 5 records evidence_level in {0,1,2}.
+  - Step 6 persists via learning_state.save_state and the saved file round-trips
+    through load_state with equivalence; next-action recommendation matches the
+    evidence level.
+  - No new learner model, DB, scheduler, indexing service, vector store, frontend,
+    or persistence framework is introduced.
+  - Existing Gate 2 and task-003 tests remain green and unchanged.
 
 stop_conditions:
   - Two consecutive tool failures (per TASK_PROTOCOL.md).
   - A declared blocker prevents safe completion.
 
 inputs:
-  - templates/MINIMAL_LEARNING_STATE.schema.json (read-only, do not modify)
-  - docs/FIRST_VERTICAL_SCENARIO.md (read-only context for Step 6 semantics)
+  - templates/MINIMAL_LEARNING_STATE.schema.json (read-only)
+  - scripts/learning_state.py (read-only, reuse unchanged)
+  - docs/FIRST_VERTICAL_SCENARIO.md (read-only behavior reference)
+  - docs/PEDAGOGICAL_ACTION_DECISION_TREE.md (read-only decision rules)

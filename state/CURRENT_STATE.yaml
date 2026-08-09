@@ -1,33 +1,29 @@
 protocol_version: 20
-updated_at: "2026-08-10T00:05:00+08:00"
-task_id: task-003-gate-3-state-persistence
+updated_at: "2026-08-10T00:06:39+0800"
+task_id: task-004-gate-3-thin-pilot-session-runner
 phase: gate_3_mvp_pilot
-status: formally_closed
+status: ready
 
 lifecycle:
-  previous_agent_execution: completed
-  technical_completion: completed
-  reviewer_acceptance: accepted
-  latest_reviewer_record: "READY (run 31322456964)"
-  owner_acceptance: accepted
-  lifecycle_status: formally_closed
-  formal_closure: true
-  task_003_status: formally_closed
-  closure_type: gate_3_standing_delegation_auto_merge
-  pull_request: 7
-  merge_commit: 43c7e12c287e143e37a96d0b2fb6f4ba5dbb7d14
-  merge_timestamp: "2026-08-09T16:03:38Z"
+  previous_agent_execution: not_started
+  technical_completion: in_progress
+  reviewer_acceptance: pending
+  latest_reviewer_record: null
+  owner_acceptance: pending
+  lifecycle_status: in_progress
+  formal_closure: false
+  task_004_status: ready
 
 predecessor:
-  task_id: task-002-gate-2-audit-reconciliation
-  technical_completion: candidate_complete
+  task_id: task-003-gate-3-state-persistence
+  technical_completion: completed
   reviewer_acceptance: accepted
   owner_acceptance: accepted
   formal_closure: true
-  closure_result: agent-control/results/task-002.json
-  pull_request: 3
-  merge_commit: 8d81579149b4a5093e1470649b6deb080a99a9b0
-  gate_2_status: formally_closed
+  closure_result: agent-control/results/task-003.json
+  pull_request: 7
+  merge_commit: 43c7e12c287e143e37a96d0b2fb6f4ba5dbb7d14
+  closure_type: gate_3_standing_delegation_auto_merge
 
 current_stage:
   stage_id: gate_3_mvp_pilot
@@ -67,9 +63,11 @@ design_artifacts:
   scenario_specification: docs/FIRST_VERTICAL_SCENARIO.md
   decision_tree: docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
   state_schema: templates/MINIMAL_LEARNING_STATE.schema.json
+  state_module: scripts/learning_state.py
+  session_runner: scripts/pilot_session.py (task-004)
   validator: scripts/validate_task_002.py
   negative_tests: scripts/test_task_002_negative.sh
 
 next_action:
-  action: "task-003 merged (PR #7) under Gate 3 standing delegation. Next: choose minimal work closest to first real-material pilot session (read DESIGN_GATES.md / FIRST_VERTICAL_SCENARIO.md exit conditions)."
-  status: "formally_closed"
+  action: "task-004-gate-3-thin-pilot-session-runner (standing delegation) — implement thin 6-step session runner, then first real-material pilot with owner as learner"
+  status: "ready"
