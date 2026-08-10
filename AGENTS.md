@@ -42,3 +42,16 @@ Before changing files:
 - Write the required result file before opening/updating the PR.
 - Do not write post-merge lifecycle bookkeeping commits to `main` (GitHub holds merge/review lifecycle).
 - Do not start another task automatically unless it is within the standing delegation scope.
+
+## Remote execution boundary
+
+GitHub Actions are GitHub-owned asynchronous execution. The local Agent must not synchronously watch remote workflows (`gh run watch`, polling loops, `sleep` + status reads, watcher daemons). The correct pattern is:
+
+```
+push / dispatch / open PR
+→ record PR number / run id / head SHA
+→ at most one non-blocking status read
+→ if the remote workflow is still running, release the foreground
+```
+
+Subsequent authoritative GitHub state is re-read only on a new wake/resume/owner interaction. No custom watcher, polling daemon, scheduler, event bus, queue, or controller.

@@ -23,6 +23,21 @@ Issue/problem
 - Post-merge lifecycle bookkeeping is **not** committed to `main`.
 - No post-merge `close(task-xxx)` / protocol-reconciliation / merge-record commits, unless the files themselves have real product-semantic changes.
 
+## Remote execution boundary
+
+GitHub Actions are GitHub-owned asynchronous execution. The local Agent must not synchronously watch remote workflows — no `gh run watch`, no polling loops, no `sleep` + status-read cycles, no watcher daemon, scheduler, event bus, queue, or controller.
+
+Correct pattern:
+
+```
+push / dispatch / open PR
+→ record PR number / run id / head SHA
+→ perform at most one non-blocking status read
+→ if the remote workflow is still running, release the foreground
+```
+
+Authoritative GitHub state is re-read only on a new wake/resume/owner interaction. This applies after merge as well: PR merge is the Git lifecycle closure; do not watch or create post-merge bookkeeping.
+
 ## Task contract
 
 `agent-control/CURRENT_TASK.yaml` is an **execution manifest** describing only the Agent execution boundary:
