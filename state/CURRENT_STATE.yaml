@@ -1,51 +1,46 @@
 protocol_version: 20
-updated_at: "2026-08-10T14:37:00+0800"
-task_id: task-005-repo-hygiene-baseline
-phase: repo_hygiene_baseline
+updated_at: "2026-08-10T15:00:00+0800"
+
+# CURRENT_STATE records product / learning-experiment state and the active
+# execution item. GitHub lifecycle (PR number, merged_at, merge SHA, review
+# records) is the authoritative change record and is NOT mirrored here.
+
+task_id: task-005-repository-baseline
 status: ready
+phase: repo_baseline_migration
 
-lifecycle:
-  previous_agent_execution: not_started
-  technical_completion: not_started
-  reviewer_acceptance: pending
-  latest_reviewer_record: pending
-  owner_acceptance: pending
-  lifecycle_status: ready
-  formal_closure: false
-  task_005_status: ready
+current_stage:
+  stage_id: git_version_management_baseline
+  started: true
+  completed: false
+  blocked: false
 
-predecessor:
-  task_id: task-004-gate-3-thin-pilot-session-runner
-  technical_completion: completed
-  reviewer_acceptance: accepted
-  owner_acceptance: accepted
-  formal_closure: true
-  closure_result: agent-control/results/task-004.json
-  pull_request: 9
-  merge_commit: 774b26c1ff7fc4d410657150590b35cb4f0f11e6
-  closure_type: gate_3_standing_delegation_auto_merge
-
-gate_status:
-  gate_1_core_research:
-    status: formally_closed
-    exit_result: met_with_documented_limitations
-  gate_2_first_scenario:
-    status: formally_closed
-    entry_conditions_met: true
-    implementation_started: true
-    implementation_completed: true
-    exit_conditions_met: true
-    blocked_by: null
+product_status:
+  product_position: "personal learning execution / friction-reduction layer"
+  interaction_surface: "VS Code chat"
   gate_3_mvp_pilot:
     status: in_progress
-    entry_conditions_met: true
     implementation_started: true
     implementation_completed: false
     exit_conditions_met: false
     blocked_by: null
-  gate_4_iteration:
-    status: not_started
+  next_product_step: "first real-material VS Code learning pilot (owner as learner) after baseline PR"
+
+scenario_boundary:
+  name: source-grounded_learning_recovery_and_independent_completion_check
+  scope: single_real_course_material_single_learning_flow
+  implementation_code_allowed: true
+  design_complete: true
+
+design_artifacts:
+  scenario_specification: docs/FIRST_VERTICAL_SCENARIO.md
+  decision_tree: docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
+  state_schema: templates/MINIMAL_LEARNING_STATE.schema.json
+  state_module: scripts/learning_state.py
+  session_runner: scripts/pilot_session.py
+  validator: scripts/validate_task_002.py
+  negative_tests: scripts/test_task_002_negative.sh
 
 next_action:
-  action: "task-005-repo-hygiene-baseline (owner-directed bounded change) — README, history doc, dev convention, PR template, deterministic CI, requirements.txt, control-state checker generalization."
-  status: "ready"
+  action: "Complete repository-baseline PR (chore/repository-baseline), then first real-material VS Code learning pilot."
+  status: "in_progress"

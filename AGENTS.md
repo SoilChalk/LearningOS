@@ -1,10 +1,19 @@
 # Agent Instructions
 
+## Model
+
+- `main` is the trusted current product state; development does not happen on it directly.
+- Meaningful changes start from a short-lived branch and land via a pull request.
+- A GitHub Issue states the human-facing problem/outcome; the task contract (`agent-control/CURRENT_TASK.yaml`) describes only the Agent execution boundary — it does not replace the Issue, the PR, or project history.
+- The PR is the primary change/review record. Deterministic CI is separate from the semantic reviewer.
+- Default merge is squash; the PR branch is deleted after merge.
+- Within the Gate-scoped standing delegation, per-task/per-PR owner authorization is not re-requested. ESCALATE only on genuine human/product/security/architecture boundaries.
+
 ## Authority order
 
-1. Repository files and Git diff
-2. Machine validation results
-3. Current GitHub task files
+1. Repository files and Git diff (including the PR)
+2. Machine validation results (deterministic CI)
+3. The task contract and current state
 4. Chat messages
 
 A chat claim of completion never overrides repository state or failed validation.
@@ -15,23 +24,21 @@ Before changing files:
 
 1. Read `AGENTS.md`.
 2. Read `agent-control/TASK_PROTOCOL.md`.
-3. Read `agent-control/CURRENT_TASK.yaml`.
-4. Read `state/CURRENT_STATE.yaml` when present.
-5. Read the result file identified by `CURRENT_TASK.yaml` or the subject task when present.
-6. List all files actually read in the first response.
-7. Compare lifecycle claims across task contract, state, and result records.
-8. Stop without writes if task contract, current state, and result records disagree on the active task or lifecycle status. Chat or compressed-context claims must never silently resolve contradictions.
-9. Confirm the current task boundary in a short structured response.
-10. Stop if the task is not `ready` or a declared blocker prevents execution.
+3. Read `agent-control/CURRENT_TASK.yaml` (execution manifest) when present.
+4. Read `state/CURRENT_STATE.yaml` (product/experiment state) when present.
+5. Check whether a GitHub Issue / open PR already describes the work.
+6. Stop without writes if the contract and state disagree on the active task or status, or the task is not ready.
 
 ## Execution rules
 
-- Execute one `task_id` at a time.
-- Modify only `allowed_paths`.
+- Work on a short-lived branch; never commit product changes directly to `main`.
+- Use meaningful commits with lightweight semantic prefixes: `feat:`, `fix:`, `test:`, `docs:`, `refactor:`, `chore:`.
+- Modify only `allowed_paths` declared in the contract.
 - Never modify or create content under `forbidden_paths`.
 - Do not import material from unrelated local repositories.
 - This repository is public; commit only content suitable for public disclosure.
-- Run every acceptance command and record its actual exit code.
+- Run every acceptance command and record its actual exit code (deterministic CI covers this).
 - Stop after two consecutive tool failures.
-- Write the required result file before claiming completion.
-- Do not start another task automatically.
+- Write the required result file before opening/updating the PR.
+- Do not write post-merge lifecycle bookkeeping commits to `main` (GitHub holds merge/review lifecycle).
+- Do not start another task automatically unless it is within the standing delegation scope.

@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Compile all Python scripts
+        run: |
+          set -e
+          for f in scripts/*.py; do
+            python3 -m py_compile "$f"
+          done
+
+      - name: Learning state tests
+        run: python3 scripts/test_learning_state.py
+
+      - name: Pilot session tests
+        run: python3 scripts/test_pilot_session.py
+
+      - name: Gate 2 design validation
+        run: python3 scripts/validate_task_002.py
+
+      - name: Source records validation
+        run: python3 scripts/validate_source_records.py
+
+      - name: Negative tests (Gate 2)
+        run: bash scripts/test_task_002_negative.sh
+
+      - name: Negative validation tests
+        run: bash scripts/test_validation_negative.sh
+
+      - name: Control state consistency
+        run: bash scripts/test_control_state.sh
+
+      - name: JSON well-formedness
+        run: |
+          set -e
+          for f in agent-control/results/*.json sources/source-ledger.json; do
+            python3 -m json.tool "$f" >/dev/null
+          done

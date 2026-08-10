@@ -1,66 +1,49 @@
 protocol_version: 20
 
-task_id: task-005-repo-hygiene-baseline
+# Execution manifest — describes ONLY the agent execution boundary for the
+# active work item. Human-facing problem/outcome lives in the Issue and PR.
+# GitHub (Issue/PR numbers, merged_at, merge SHA, review lifecycle) is the
+# authoritative change record; it is NOT duplicated here.
+
+task_id: task-005-repository-baseline
 status: ready
-branch: agent/task-005-repo-hygiene-baseline
+branch: chore/repository-baseline
 result_file: agent-control/results/task-005.json
 
 lifecycle:
-  previous_agent_execution: not_started
-  technical_completion: not_started
+  previous_agent_execution: in_progress
+  technical_completion: candidate_complete
   reviewer_acceptance: pending
   latest_reviewer_record: pending
   owner_acceptance: pending
-  lifecycle_status: ready
+  lifecycle_status: submitted_for_review
   formal_closure: false
-  task_005_status: ready
-
-objective: >
-  Bounded repository hygiene baseline so LearningOS has a clear, credible
-  software-engineering trajectory suitable for a public personal project.
-  Deliverables (no history rewrite, no governance system, no new controller):
-  1. Rewrite README.md as a public-facing, human-readable project README
-     (problem, product position = personal learning execution / friction-
-     reduction layer, real capabilities, VS Code interaction surface,
-     architecture/components, quick start, tests, maturity/limitations,
-     development status, privacy boundary). Internal Agent authority chain
-     may be linked but must be reduced to a Development/Internal section.
-  2. Add docs/PROJECT_HISTORY.md — honest retrospective reconstructed from
-     existing repository records (real Issue/PR/commit links; explicitly
-     labeled as reconstructed; no fabricated processes/dates/releases).
-  3. Add docs/DEVELOPMENT.md — very short default workflow (product issue →
-     task contract where needed → feature/fix branch → implementation →
-     deterministic CI → reviewer → correction → READY → merge); lightweight
-     semantic commit prefixes (feat:/fix:/test:/docs:/refactor:/chore:);
-     no commitlint. Existing agent/task-* branch naming stays if relied on.
-  4. Add .github/PULL_REQUEST_TEMPLATE.md — concise (Why, What changed,
-     Scope/non-goals, Validation, Evidence, Risks/limitations, Related issue).
-  5. Add deterministic GitHub Actions CI (.github/workflows/ci.yml) that runs
-     the current authoritative, stable Python/shell acceptance tests. No LLM
-     in CI, no gh-aw orchestration copy. Add minimal reproducible dependency
-     declaration (requirements.txt) with only dependencies actually used.
-  6. Make scripts/check_control_state.py and scripts/test_control_state.sh
-     task-generic (derive the task-specific lifecycle status field from
-     task_id instead of hardcoding task_002_status) and state-agnostic
-     negative mutations so the authoritative control-state test is green.
-  No LICENSE selection (owner decides separately). No retroactive releases.
+  task_005_status: submitted_for_review
 
 owner_authorization:
   recorded_at: "2026-08-10T14:37:00+0800"
-  source_instruction: "Owner-directed bounded repo-hygiene baseline (single authorization message 2026-08-10T06:29:51.772Z, session 714c3b77-38a4-40e1-81b6-77ebe42a656a): README rewrite, PROJECT_HISTORY, DEVELOPMENT, PR template, deterministic CI + requirements, control-state checker generalization; execute via normal branch -> PR -> CI/review flow; not a Gate 3 task; do not expand into governance."
+  source_instruction: "Owner-directed bounded Git/version-management baseline migration (single authorization message 2026-08-10, session 714c3b77-38a4-40e1-81b6-77ebe42a656a): adopt Issue -> short-lived branch -> meaningful commits -> PR -> deterministic CI + review -> squash merge -> clean main; remove agent-control lifecycle pollution of Git history."
   scope: >
-    Bounded repository hygiene so LearningOS has a clear, credible public
-    software-engineering trajectory. NO history rewrite, NO fabricated
-    records, NO new governance runtime/controller, NO LICENSE selection,
-    NO retroactive releases. README public-facing (problem, product position
-    = personal learning execution / friction-reduction layer, capabilities,
-    VS Code surface, architecture, quick start, tests, maturity/limitations,
-    dev status, privacy). Add docs/PROJECT_HISTORY.md (honest retrospective,
-    real records only, explicit reconstruction label), docs/DEVELOPMENT.md
-    (short default workflow + lightweight semantic prefixes), PR template
-    (concise), deterministic CI (no LLM, no gh-aw copy) + requirements.txt
-    (only used deps), and make check_control_state.py / test_control_state.sh
-    task-generic so the authoritative control-state test is green.
+    Bounded repository baseline. Repository-facing: public README,
+    docs/PROJECT_HISTORY.md (reconstructed, real records only),
+    docs/DEVELOPMENT.md (short workflow + local git config recommendation),
+    .github/PULL_REQUEST_TEMPLATE.md, deterministic .github/workflows/ci.yml
+    (no LLM), minimal requirements.txt. Agent protocol migration: rewrite
+    AGENTS.md and agent-control/TASK_PROTOCOL.md to the 16-rule new model
+    (main is trusted product state, short-lived branches, Issue = human-facing
+    problem, task contract = execution manifest only, meaningful commits,
+    PR = change/review record, CI separated from semantic reviewer, squash
+    merge default, delete branch after merge, standing delegation within Gate 3
+    scope, ESCALATE only on genuine human/product/security/architecture
+    boundaries, no post-merge lifecycle bookkeeping commits to main, no
+    GitHub lifecycle mirror in source control, CURRENT_TASK as execution
+    manifest, CURRENT_STATE as product/experiment state, agent orchestration
+    history must not crowd product history). Shrink CURRENT_TASK.yaml /
+    CURRENT_STATE.yaml accordingly and make check_control_state.py /
+    test_control_state.sh task-generic. NO history rewrite, NO commitlint /
+    Husky / semantic-release / CODE_OF_CONDUCT / governance framework / hooks
+    framework / new controller, NO retroactive releases, NO new product
+    feature.
 
 allowed_paths:
   - README.md
@@ -69,17 +52,22 @@ allowed_paths:
   - .github/PULL_REQUEST_TEMPLATE.md
   - .github/workflows/ci.yml
   - requirements.txt
+  - AGENTS.md
+  - agent-control/TASK_PROTOCOL.md
+  - agent-control/CURRENT_TASK.yaml
+  - agent-control/results/task-005.json
+  - state/CURRENT_STATE.yaml
   - scripts/check_control_state.py
   - scripts/test_control_state.sh
-  - agent-control/results/task-005.json
 
 forbidden_paths:
   - templates/**
   - sources/**
-  - state/**
-  - agent-control/CURRENT_TASK.yaml
-  - agent-control/TASK_PROTOCOL.md
-  - agent-control/VALIDATION_RECORD.txt
+  - docs/FIRST_VERTICAL_SCENARIO.md
+  - docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
+  - docs/DESIGN_GATES.md
+  - docs/REFERENCE_SYSTEM_MATRIX.md
+  - docs/RESEARCH_QUESTIONS.md
   - agent-control/results/task-001*.json
   - agent-control/results/task-002*.json
   - agent-control/results/task-003*.json
@@ -94,13 +82,8 @@ forbidden_paths:
   - scripts/test_validation_negative.sh
   - .github/workflows/executor.md
   - .github/workflows/reviewer.md
+  - .github/workflows/agentics-maintenance.yml
   - .github/workflows/*.lock.yml
-  - AGENTS.md
-  - docs/FIRST_VERTICAL_SCENARIO.md
-  - docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
-  - docs/DESIGN_GATES.md
-  - docs/REFERENCE_SYSTEM_MATRIX.md
-  - docs/RESEARCH_QUESTIONS.md
 
 acceptance_commands:
   - bash -c 'for f in scripts/*.py; do python3 -m py_compile "$f" || exit 1; done'
@@ -116,12 +99,14 @@ acceptance_commands:
 
 completion_conditions:
   - All acceptance commands exit 0.
-  - README is public-facing (not an internal agent control manual).
-  - docs/PROJECT_HISTORY.md uses only real repository records with links.
-  - docs/DEVELOPMENT.md is short and defines the default workflow.
+  - README is public-facing and current.
+  - docs/PROJECT_HISTORY.md exists with the reconstruction label and real records.
+  - docs/DEVELOPMENT.md defines the new default workflow + local git config.
   - .github/PULL_REQUEST_TEMPLATE.md exists and is concise.
-  - CI workflow exists, is deterministic, and runs no LLM.
+  - Deterministic CI workflow exists and runs no LLM.
   - requirements.txt declares only actually-used dependencies.
+  - AGENTS.md and TASK_PROTOCOL.md reflect the 16-rule model.
+  - CURRENT_TASK.yaml / CURRENT_STATE.yaml are lean (no GitHub lifecycle mirror).
   - No history rewritten, no fabricated records, no new governance runtime.
 
 stop_conditions:
@@ -129,6 +114,6 @@ stop_conditions:
   - A declared blocker prevents safe completion.
 
 inputs:
-  - Existing git history / Issues / PRs (read-only evidence for history doc)
-  - Existing scripts/* tests (read-only; only check_control_state.py and
-    test_control_state.sh may be modified per objective item 6)
+  - Existing git history / Issues / PRs (read-only evidence)
+  - Existing scripts tests (read-only; only check_control_state.py and
+    test_control_state.sh may be modified per objective)
