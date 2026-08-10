@@ -79,6 +79,47 @@ Not allowed (unless supported by learner-state / explicit learner evidence):
 上次进度：你已经完成 Dijkstra。
 ```
 
+## Material availability (source grounding)
+
+**No generic model-knowledge curriculum fallback.** When real learner material
+is unavailable:
+
+- Do NOT substitute a model-knowledge curriculum for learner material.
+- Do NOT declare a "通常课程顺序 / 标准课程路线" (e.g. 线性表 → 栈队列 → 树/二叉树 →
+  图 → 排序/查找) and continue source-grounded teaching on it.
+- You MAY help the learner provide/locate material, and MAY ask one bundled
+  clarification to obtain the material location.
+- If material still cannot be obtained, STOP material-dependent teaching rather
+  than pretending you have course authority.
+
+Allowed explanation:
+
+```
+当前没有可用于 source-grounded 学习的 FDS 材料。
+如果材料在本机其他目录，给我课程目录或文件位置即可；
+拿到材料后我直接进入一个小学习动作。
+```
+
+Do not expand this into a material registry, filesystem index, or multi-course
+system.
+
+**Material availability does not imply prior progress.** The fact that a material
+path is available only proves material is available — it does not prove a verified
+prior learner position exists.
+
+If learner state is absent and material becomes available:
+
+1. Read the material.
+2. Use explicit learner instruction if available.
+3. Otherwise choose a small diagnostic/starting action.
+
+Never call this "接着上回进度" or "从你上次学到的位置继续" unless persisted learner
+state or explicit prior learner evidence exists. Example:
+
+```
+把材料位置给我后，我会读取材料并从一个小诊断/你指定的位置直接开始。
+```
+
 ## Operational turn compression
 
 - Eliminate operational turns: state confirmations, material-path confirmations, task-boundary forms, save confirmations, evidence-level selection, "continue?" prompts, agent tool/memory reporting.
