@@ -1,40 +1,29 @@
 protocol_version: 20
-updated_at: "2026-08-10T00:39:09+0800"
-task_id: task-004-gate-3-thin-pilot-session-runner
-phase: gate_3_mvp_pilot
-status: formally_closed
+updated_at: "2026-08-10T14:37:00+0800"
+task_id: task-005-repo-hygiene-baseline
+phase: repo_hygiene_baseline
+status: ready
 
 lifecycle:
-  previous_agent_execution: completed
-  technical_completion: completed
-  reviewer_acceptance: accepted
-  latest_reviewer_record: "READY (run 31324056854)"
-  owner_acceptance: accepted
-  lifecycle_status: formally_closed
-  formal_closure: true
-  task_004_status: formally_closed
-  closure_type: gate_3_standing_delegation_auto_merge
-  pull_request: 9
-  merge_commit: 774b26c1ff7fc4d410657150590b35cb4f0f11e6
-  merge_timestamp: "2026-08-09T16:38:55Z"
+  previous_agent_execution: not_started
+  technical_completion: not_started
+  reviewer_acceptance: pending
+  latest_reviewer_record: pending
+  owner_acceptance: pending
+  lifecycle_status: ready
+  formal_closure: false
+  task_005_status: ready
 
 predecessor:
-  task_id: task-003-gate-3-state-persistence
+  task_id: task-004-gate-3-thin-pilot-session-runner
   technical_completion: completed
   reviewer_acceptance: accepted
   owner_acceptance: accepted
   formal_closure: true
-  closure_result: agent-control/results/task-003.json
-  pull_request: 7
-  merge_commit: 43c7e12c287e143e37a96d0b2fb6f4ba5dbb7d14
+  closure_result: agent-control/results/task-004.json
+  pull_request: 9
+  merge_commit: 774b26c1ff7fc4d410657150590b35cb4f0f11e6
   closure_type: gate_3_standing_delegation_auto_merge
-
-current_stage:
-  stage_id: gate_3_mvp_pilot
-  started: true
-  completed: false
-  blocked: false
-  next_stage: gate_3_first_real_session
 
 gate_status:
   gate_1_core_research:
@@ -57,21 +46,6 @@ gate_status:
   gate_4_iteration:
     status: not_started
 
-scenario_boundary:
-  name: source-grounded_learning_recovery_and_independent_completion_check
-  scope: single_real_course_material_single_learning_flow
-  implementation_code_allowed: true
-  design_complete: true
-
-design_artifacts:
-  scenario_specification: docs/FIRST_VERTICAL_SCENARIO.md
-  decision_tree: docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
-  state_schema: templates/MINIMAL_LEARNING_STATE.schema.json
-  state_module: scripts/learning_state.py
-  session_runner: scripts/pilot_session.py
-  validator: scripts/validate_task_002.py
-  negative_tests: scripts/test_task_002_negative.sh
-
 next_action:
-  action: "task-004 merged (PR #9). First real-material pilot is now runnable. Next: owner participates as learner (provide real material + learning goal). Genuine human boundary."
-  status: "formally_closed"
+  action: "task-005-repo-hygiene-baseline (owner-directed bounded change) — README, history doc, dev convention, PR template, deterministic CI, requirements.txt, control-state checker generalization."
+  status: "ready"
