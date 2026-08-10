@@ -58,3 +58,7 @@ git config --local rebase.autoStash true
 ## Control-plane note
 
 The `READY → merge → lifecycle closure` loop currently depends on a foreground local agent (`gh run watch` + manual merge). This is a known gap; prefer GitHub-native auto-merge + a reviewer-required check run if a new implementation task needs it. Per the Remote execution boundary rule, local agents never poll/wait on remote GitHub Actions.
+
+## VS Code interaction entry
+
+The LearningOS interaction entry in VS Code Chat is the native custom agent `.github/agents/learningos.agent.md` (select "LearningOS" in the agents dropdown). It encodes the one-intent → first-action discipline and reuses the existing scripts/docs; no extension or MCP server.

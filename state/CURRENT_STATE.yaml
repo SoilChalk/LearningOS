@@ -1,30 +1,30 @@
 protocol_version: 20
-updated_at: "2026-08-10T15:00:00+0800"
+updated_at: "2026-08-10T15:30:00+0800"
 
 # CURRENT_STATE records product / learning-experiment state and the active
 # execution item. GitHub lifecycle (PR number, merged_at, merge SHA, review
 # records) is the authoritative change record and is NOT mirrored here.
 
-task_id: task-005-repository-baseline
+task_id: task-006-vscode-learningos-agent
 status: ready
-phase: repo_baseline_migration
+phase: vs_code_interaction_surface
 
 current_stage:
-  stage_id: git_version_management_baseline
+  stage_id: vs_code_native_learningos_agent
   started: true
   completed: false
   blocked: false
 
 product_status:
   product_position: "personal learning execution / friction-reduction layer"
-  interaction_surface: "VS Code chat"
+  interaction_surface: "VS Code chat (native custom agent entry point)"
   gate_3_mvp_pilot:
     status: in_progress
     implementation_started: true
     implementation_completed: false
     exit_conditions_met: false
     blocked_by: null
-  next_product_step: "first real-material VS Code learning pilot (owner as learner) after baseline PR"
+  next_product_step: "first real-material VS Code learning pilot using the LearningOS custom agent (owner as learner)"
 
 scenario_boundary:
   name: source-grounded_learning_recovery_and_independent_completion_check
@@ -38,9 +38,8 @@ design_artifacts:
   state_schema: templates/MINIMAL_LEARNING_STATE.schema.json
   state_module: scripts/learning_state.py
   session_runner: scripts/pilot_session.py
-  validator: scripts/validate_task_002.py
-  negative_tests: scripts/test_task_002_negative.sh
+  interaction_agent: .github/agents/learningos.agent.md
 
 next_action:
-  action: "Complete repository-baseline PR (chore/repository-baseline), then first real-material VS Code learning pilot."
+  action: "After PR for Issue #14 merges, first real-material VS Code learning pilot using the LearningOS custom agent."
   status: "in_progress"
