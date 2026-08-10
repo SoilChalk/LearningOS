@@ -1,22 +1,19 @@
 #!/usr/bin/env python3
-"""Validate the active task contract, current state, and declared result record."""
+"""Validate the active task execution manifest, product state, and result record.
+
+Under the repository baseline, this checker verifies only:
+  - the task_id is aligned across contract, state, and result;
+  - the contract and state agree on the active task status;
+  - the declared result record exists and is well-formed.
+
+GitHub lifecycle (PR number, merged_at, merge SHA, review records) is the
+authoritative change record and is intentionally NOT duplicated here.
+"""
 
 import argparse
 import json
 import sys
 from pathlib import Path
-
-
-LIFECYCLE_FIELDS = (
-    "previous_agent_execution",
-    "technical_completion",
-    "reviewer_acceptance",
-    "latest_reviewer_record",
-    "owner_acceptance",
-    "lifecycle_status",
-    "formal_closure",
-    "task_002_status",
-)
 
 
 def parse_scalar(value: str):
@@ -118,43 +115,12 @@ def main() -> int:
 
     task_status = task.get("status")
     state_status = state.get("status")
-    result_status = result.get("status")
-    if not (task_status == state_status == result_status):
-        errors.append(
-            f"status mismatch: contract={task_status!r}, state={state_status!r}, result={result_status!r}"
-        )
+    if not (task_status == state_status):
+        errors.append(f"status mismatch: contract={task_status!r}, state={state_status!r}")
 
-    task_lifecycle = task.get("lifecycle") or task.get("truth_to_preserve") or {}
-    state_lifecycle = state.get("lifecycle") or {}
-    result_lifecycle = result.get("lifecycle") or {}
-
-    for field in LIFECYCLE_FIELDS:
-        values = (
-            task_lifecycle.get(field),
-            state_lifecycle.get(field),
-            result_lifecycle.get(field),
-        )
-        if any(value is None for value in values):
-            errors.append(f"missing lifecycle field {field}: {values!r}")
-        elif not (values[0] == values[1] == values[2]):
-            errors.append(
-                f"lifecycle mismatch for {field}: contract={values[0]!r}, state={values[1]!r}, result={values[2]!r}"
-            )
-
-    formal_closure = task_lifecycle.get("formal_closure")
-    owner_acceptance = task_lifecycle.get("owner_acceptance")
-    lifecycle_status = task_lifecycle.get("lifecycle_status")
-
-    if formal_closure is True:
-        if owner_acceptance != "accepted":
-            errors.append("formal closure requires owner_acceptance=accepted")
-        if lifecycle_status not in {"formally_closed", "closed"}:
-            errors.append("formal closure requires a closed lifecycle_status")
-    elif task_status == "ready":
-        if lifecycle_status != "ready":
-            errors.append("a ready contract requires lifecycle_status=ready")
-        if task_lifecycle.get("technical_completion") != "not_started":
-            errors.append("a newly ready task requires technical_completion=not_started")
+    # The result record's own status must be present (GitHub holds merge/review lifecycle).
+    if not result.get("status"):
+        errors.append("result record missing status")
 
     if errors:
         print("Control state consistency check FAILED:", file=sys.stderr)

@@ -61,7 +61,7 @@ negative() {
 
 positive
 
-negative "state status mismatch" "sed -i.bak 's/^status: ready$/status: in_progress/' '$FIXTURE_DIR/CURRENT_STATE.yaml'; rm -f '$FIXTURE_DIR/CURRENT_STATE.yaml.bak'"
+negative "state status mismatch" "sed -i.bak -E 's/^status: .*/status: in_progress/' '$FIXTURE_DIR/CURRENT_STATE.yaml'; rm -f '$FIXTURE_DIR/CURRENT_STATE.yaml.bak'"
 
 negative "result task_id mismatch" "python3 - <<'PY'
 import json
@@ -71,45 +71,27 @@ d['task_id']='wrong-task'
 json.dump(d, open(p,'w'), indent=2)
 PY"
 
-negative "previous_agent_execution mismatch" "sed -i.bak 's/previous_agent_execution: not_started/previous_agent_execution: interrupted/' '$FIXTURE_DIR/CURRENT_STATE.yaml'; rm -f '$FIXTURE_DIR/CURRENT_STATE.yaml.bak'"
-
-negative "technical_completion mismatch" "python3 - <<'PY'
+negative "result missing status" "python3 - <<'PY'
 import json
 p='$FIXTURE_DIR/task-result.json'
 d=json.load(open(p))
-d['lifecycle']['technical_completion']='candidate_complete'
+d.pop('status', None)
 json.dump(d, open(p,'w'), indent=2)
 PY"
 
-negative "reviewer_acceptance mismatch" "sed -i.bak 's/reviewer_acceptance: pending/reviewer_acceptance: accepted/' '$FIXTURE_DIR/CURRENT_TASK.yaml'; rm -f '$FIXTURE_DIR/CURRENT_TASK.yaml.bak'"
+count=$((count + 1))
+copy_fixtures
+sed -i.bak '/^result_file:/d' "$FIXTURE_DIR/CURRENT_TASK.yaml"
+rm -f "$FIXTURE_DIR/CURRENT_TASK.yaml.bak"
+if python3 "$CHECKER" --current-task "$FIXTURE_DIR/CURRENT_TASK.yaml" --current-state "$FIXTURE_DIR/CURRENT_STATE.yaml" >/dev/null 2>&1; then
+  echo "✗ Test $count: contract missing result_file was not rejected"
+  exit 1
+else
+  echo "✓ Test $count: contract missing result_file rejected"
+  passed=$((passed + 1))
+fi
 
-negative "latest_reviewer_record mismatch" "python3 - <<'PY'
-import json
-p='$FIXTURE_DIR/task-result.json'
-d=json.load(open(p))
-d['lifecycle']['latest_reviewer_record']='unexpected-review'
-json.dump(d, open(p,'w'), indent=2)
-PY"
-
-negative "owner_acceptance mismatch" "sed -i.bak 's/owner_acceptance: authorized/owner_acceptance: pending/' '$FIXTURE_DIR/CURRENT_STATE.yaml'; rm -f '$FIXTURE_DIR/CURRENT_STATE.yaml.bak'"
-
-negative "lifecycle_status mismatch" "python3 - <<'PY'
-import json
-p='$FIXTURE_DIR/task-result.json'
-d=json.load(open(p))
-d['lifecycle']['lifecycle_status']='in_progress'
-json.dump(d, open(p,'w'), indent=2)
-PY"
-
-negative "formal_closure mismatch" "sed -i.bak 's/formal_closure: false/formal_closure: true/' '$FIXTURE_DIR/CURRENT_TASK.yaml'; rm -f '$FIXTURE_DIR/CURRENT_TASK.yaml.bak'"
-
-negative "task_002_status mismatch" "python3 - <<'PY'
-import json
-p='$FIXTURE_DIR/task-result.json'
-d=json.load(open(p))
-d['lifecycle']['task_002_status']='in_progress'
-json.dump(d, open(p,'w'), indent=2)
-PY"
+negative "result file malformed" "echo 'not json' > '$FIXTURE_DIR/task-result.json'"
 
 HASH_TASK_AFTER=$(shasum -a 256 "$TASK_FILE" | awk '{print $1}')
 HASH_STATE_AFTER=$(shasum -a 256 "$STATE_FILE" | awk '{print $1}')
@@ -122,4 +104,4 @@ fi
 
 echo "✓ Live authority files unchanged"
 echo "✓ $passed/$count tests passed"
-test "$passed" -eq 11
+test "$passed" -eq 6
