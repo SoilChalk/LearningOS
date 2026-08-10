@@ -59,6 +59,8 @@ allowed_paths:
   - state/CURRENT_STATE.yaml
   - scripts/check_control_state.py
   - scripts/test_control_state.sh
+  - .gitattributes
+  - .gitignore
 
 forbidden_paths:
   - templates/**

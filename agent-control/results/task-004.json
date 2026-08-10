@@ -1,7 +1,7 @@
 {
   "protocol_version": 20,
   "task_id": "task-004-gate-3-thin-pilot-session-runner",
-  "status": "formally_closed",
+  "status": "completed",
   "branch": "agent/task-004-thin-pilot-session-runner",
   "commit": "385cb8d476978ce655e9bf8844189472e2bac277",
   "last_completed_stage": "implementation_tests_green_result_recorded",
