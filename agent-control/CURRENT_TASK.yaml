@@ -5,10 +5,10 @@ protocol_version: 20
 # GitHub (Issue/PR numbers, merged_at, merge SHA, review lifecycle) is the
 # authoritative change record; it is NOT duplicated here.
 
-task_id: task-005-repository-baseline
+task_id: task-006-vscode-learningos-agent
 status: ready
-branch: chore/repository-baseline
-result_file: agent-control/results/task-005.json
+branch: feat/vscode-learningos-agent
+result_file: agent-control/results/task-006.json
 
 lifecycle:
   previous_agent_execution: in_progress
@@ -18,49 +18,30 @@ lifecycle:
   owner_acceptance: pending
   lifecycle_status: submitted_for_review
   formal_closure: false
-  task_005_status: submitted_for_review
+  task_006_status: submitted_for_review
 
 owner_authorization:
-  recorded_at: "2026-08-10T14:37:00+0800"
-  source_instruction: "Owner-directed bounded Git/version-management baseline migration (single authorization message 2026-08-10, session 714c3b77-38a4-40e1-81b6-77ebe42a656a): adopt Issue -> short-lived branch -> meaningful commits -> PR -> deterministic CI + review -> squash merge -> clean main; remove agent-control lifecycle pollution of Git history."
+  recorded_at: "2026-08-10T15:30:00+0800"
+  source_instruction: "Issue #14 (VS Code-native LearningOS interaction surface) under the Gate-scoped standing delegation + new Git workflow (Issue -> branch -> PR -> CI -> review -> squash). One learner intent -> first real learning action."
   scope: >
-    Bounded repository baseline. Repository-facing: public README,
-    docs/PROJECT_HISTORY.md (reconstructed, real records only),
-    docs/DEVELOPMENT.md (short workflow + local git config recommendation),
-    .github/PULL_REQUEST_TEMPLATE.md, deterministic .github/workflows/ci.yml
-    (no LLM), minimal requirements.txt. Agent protocol migration: rewrite
-    AGENTS.md and agent-control/TASK_PROTOCOL.md to the 16-rule new model
-    (main is trusted product state, short-lived branches, Issue = human-facing
-    problem, task contract = execution manifest only, meaningful commits,
-    PR = change/review record, CI separated from semantic reviewer, squash
-    merge default, delete branch after merge, standing delegation within Gate 3
-    scope, ESCALATE only on genuine human/product/security/architecture
-    boundaries, no post-merge lifecycle bookkeeping commits to main, no
-    GitHub lifecycle mirror in source control, CURRENT_TASK as execution
-    manifest, CURRENT_STATE as product/experiment state, agent orchestration
-    history must not crowd product history). Shrink CURRENT_TASK.yaml /
-    CURRENT_STATE.yaml accordingly and make check_control_state.py /
-    test_control_state.sh task-generic. NO history rewrite, NO commitlint /
-    Husky / semantic-release / CODE_OF_CONDUCT / governance framework / hooks
-    framework / new controller, NO retroactive releases, NO new product
-    feature.
+    Add a perceivable, native LearningOS entry point in VS Code Chat via a
+    custom agent (.github/agents/learningos.agent.md). No extension, WebView,
+    telemetry, MCP server, scheduler, knowledge graph, learner model, or
+    custom orchestration. The agent encodes the friction-reduction interaction
+    discipline (one intent -> first action; silent operational work; bundled
+    clarification only when it materially changes 10-20 min; never answer the
+    independent question for the learner) and reuses existing
+    scripts/learning_state.py, scripts/pilot_session.py, docs, and state.
+    Update CURRENT_TASK.yaml / CURRENT_STATE.yaml execution/product state in
+    this branch/PR (supersede task-005 snapshot); no main bootstrap commit.
 
 allowed_paths:
-  - README.md
-  - docs/PROJECT_HISTORY.md
-  - docs/DEVELOPMENT.md
-  - .github/PULL_REQUEST_TEMPLATE.md
-  - .github/workflows/ci.yml
-  - requirements.txt
-  - AGENTS.md
-  - agent-control/TASK_PROTOCOL.md
+  - .github/agents/learningos.agent.md
   - agent-control/CURRENT_TASK.yaml
-  - agent-control/results/task-005.json
+  - agent-control/TASK_PROTOCOL.md
+  - agent-control/results/task-006.json
   - state/CURRENT_STATE.yaml
-  - scripts/check_control_state.py
-  - scripts/test_control_state.sh
-  - .gitattributes
-  - .gitignore
+  - docs/DEVELOPMENT.md
 
 forbidden_paths:
   - templates/**
@@ -70,10 +51,13 @@ forbidden_paths:
   - docs/DESIGN_GATES.md
   - docs/REFERENCE_SYSTEM_MATRIX.md
   - docs/RESEARCH_QUESTIONS.md
+  - docs/PROJECT_HISTORY.md
+  - README.md
   - agent-control/results/task-001*.json
   - agent-control/results/task-002*.json
   - agent-control/results/task-003*.json
   - agent-control/results/task-004*.json
+  - agent-control/results/task-005*.json
   - scripts/learning_state.py
   - scripts/test_learning_state.py
   - scripts/pilot_session.py
@@ -82,10 +66,16 @@ forbidden_paths:
   - scripts/test_task_002_negative.sh
   - scripts/validate_source_records.py
   - scripts/test_validation_negative.sh
+  - scripts/check_control_state.py
+  - scripts/test_control_state.sh
   - .github/workflows/executor.md
   - .github/workflows/reviewer.md
   - .github/workflows/agentics-maintenance.yml
   - .github/workflows/*.lock.yml
+  - AGENTS.md
+  - .gitignore
+  - .gitattributes
+  - requirements.txt
 
 acceptance_commands:
   - bash -c 'for f in scripts/*.py; do python3 -m py_compile "$f" || exit 1; done'
@@ -96,26 +86,25 @@ acceptance_commands:
   - bash scripts/test_task_002_negative.sh
   - bash scripts/test_validation_negative.sh
   - bash scripts/test_control_state.sh
-  - python3 -m json.tool agent-control/results/task-005.json >/dev/null
+  - python3 -m json.tool agent-control/results/task-006.json >/dev/null
   - python3 -m json.tool sources/source-ledger.json >/dev/null
 
 completion_conditions:
   - All acceptance commands exit 0.
-  - README is public-facing and current.
-  - docs/PROJECT_HISTORY.md exists with the reconstruction label and real records.
-  - docs/DEVELOPMENT.md defines the new default workflow + local git config.
-  - .github/PULL_REQUEST_TEMPLATE.md exists and is concise.
-  - Deterministic CI workflow exists and runs no LLM.
-  - requirements.txt declares only actually-used dependencies.
-  - AGENTS.md and TASK_PROTOCOL.md reflect the 16-rule model.
-  - CURRENT_TASK.yaml / CURRENT_STATE.yaml are lean (no GitHub lifecycle mirror).
-  - No history rewritten, no fabricated records, no new governance runtime.
+  - .github/agents/learningos.agent.md exists with valid frontmatter and the
+    interaction discipline encoded.
+  - No extension / WebView / telemetry / MCP / scheduler / learner model added.
+  - CURRENT_TASK.yaml / CURRENT_STATE.yaml updated on the branch (not main) to
+    the new execution/product state.
+  - Existing tests unchanged and green.
 
 stop_conditions:
   - Two consecutive tool failures (per TASK_PROTOCOL.md).
   - A declared blocker prevents safe completion.
 
 inputs:
-  - Existing git history / Issues / PRs (read-only evidence)
-  - Existing scripts tests (read-only; only check_control_state.py and
-    test_control_state.sh may be modified per objective)
+  - Issue #14 (authoritative problem/outcome)
+  - VS Code custom-agent docs (native surface reference)
+  - scripts/learning_state.py, scripts/pilot_session.py (read-only reuse)
+  - docs/FIRST_VERTICAL_SCENARIO.md, docs/PEDAGOGICAL_ACTION_DECISION_TREE.md
+    (read-only reference)

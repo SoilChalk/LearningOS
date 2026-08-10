@@ -1,0 +1,34 @@
+{
+  "protocol_version": 20,
+  "task_id": "task-006-vscode-learningos-agent",
+  "status": "submitted_for_review",
+  "branch": "feat/vscode-learningos-agent",
+  "commit": "pending",
+  "last_completed_stage": "custom_agent_defined",
+  "next_action": "Reviewer review of Issue #14 PR; squash merge; then first real-material VS Code pilot using LearningOS custom agent.",
+  "files_changed": [
+    ".github/agents/learningos.agent.md",
+    "agent-control/CURRENT_TASK.yaml",
+    "agent-control/results/task-006.json",
+    "state/CURRENT_STATE.yaml",
+    "docs/DEVELOPMENT.md"
+  ],
+  "validation": [],
+  "unresolved_issues": [],
+  "claims_requiring_review": [
+    "Native VS Code custom agent (.github/agents/learningos.agent.md) is the thinnest no-extension adapter; no extension/MCP/WebView added."
+  ],
+  "explicitly_not_done": [
+    "No custom VS Code extension",
+    "No WebView/sidebar",
+    "No telemetry",
+    "No idle/activity detection",
+    "No ambient nudging",
+    "No MCP server",
+    "No curriculum DB/scraper",
+    "No scheduler",
+    "No knowledge graph",
+    "No learner model",
+    "No custom orchestration/controller"
+  ]
+}
